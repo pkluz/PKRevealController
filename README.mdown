@@ -6,14 +6,14 @@ A Facebook inspired custom iOS ViewControllerContainer that enables to have a UI
 Info
 =======
 
-- The code does _not_ make use ARC, but it is fairly easily ported.
+- The code does _not_ make use of ARC, but it is fairly easy to port.
 - The sample project is universal, thus it works both on iPhone/iPod and iPad.
 
 How-To
 =======
 
 1. Copy the 'ZUUIRevealController.h/.m', 'FrontViewController.h/.m' and 'RearViewController.h/.m' along with their respective XIB files into your new project.
-2. Check out the example project's AppDelegate.m to see how to initialize the hierachy properly and do the same in your projects AppDelegate (or whereever you want to have the RevealViewController).
+2. Check out the example project's AppDelegate.m to see how to initialize the hierarchy properly and do the same in your projects AppDelegate (or wherever you want to have the RevealViewController).
 3. ???
 4. Profit.
 
