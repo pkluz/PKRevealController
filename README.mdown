@@ -1,7 +1,7 @@
 ZUUIRevealController
 =======
 
-A Facebook inspired custom iOS ViewControllerContainer that enables to have a UIViewController on top of another. The rear view can be reveal either by slowly panning the finger across the front view's NavigationBar, by quickly flicking it left or right or simply by tapping the 'Reveal' button.
+A Facebook inspired custom iOS ViewControllerContainer that enables to have a UIViewController on top of another. The rear view can be revealed either by slowly panning the finger across the front view's NavigationBar, by quickly flicking it left or right or simply by tapping the 'Reveal' button.
 
 Features
 =======
