@@ -8,7 +8,7 @@ Features
 
 - Makes use of iOS 5's new UIViewController containment.
 - High attention to detail (carefully executed animations, code generated shadows, slowing-overdraw with bounce-back).
-- Universal code (iPad & iPhone).
+- Universal code (iPad & iPhone) working both in landscape and portrait.
 - Dynamic edges and trigger levels via defines. - Easily adjustable.
 - Highly flexible. - Barely any adjustments needed to get started in an existing project.**
 - Behaves almost exactly like the Facebook implementation.
