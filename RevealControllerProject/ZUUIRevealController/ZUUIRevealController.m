@@ -91,10 +91,10 @@
 		self = [super initWithNibName:@"ZUUIRevealController_iPad" bundle:nil];
 	}
 	
-    if (nil != self)
-    {
-        self.frontViewController = aFrontViewController;
-        self.rearViewController = aBackViewController;
+	if (nil != self)
+	{
+		self.frontViewController = aFrontViewController;
+		self.rearViewController = aBackViewController;
 		
 		if ([self conformsToProtocol:@protocol(ZUUIRevealControllerDelegate)] && [self.frontViewController isKindOfClass:[FrontViewController class]])
 		{
@@ -104,9 +104,9 @@
 		{
 			return nil;
 		}
-    }
+	}
 	
-    return self;
+	return self;
 }
 
 #pragma mark - ZUUIRevealViewControllerDelegate Protocol
