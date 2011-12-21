@@ -122,16 +122,16 @@
 			if ([recognizer velocityInView:self.view].x > 0.0f)
 			{
 				[UIView animateWithDuration:0.15f animations:^
-				{
-					self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-				}];
+				 {
+					 self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+				 }];
 			}
 			else
 			{
 				[UIView animateWithDuration:0.15f animations:^
-				{
-					self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-				}];
+				 {
+					 self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+				 }];
 			}
 		}
 		// Case - Slow pan/drag ended:
@@ -142,16 +142,16 @@
 			if (self.frontView.frame.origin.x >= dynamicTriggerLevel && self.frontView.frame.origin.x != REVEAL_EDGE)
 			{
 				[UIView animateWithDuration:0.15f animations:^
-				{
-					self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-				}];
+				 {
+					 self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+				 }];
 			}
 			else if (self.frontView.frame.origin.x < dynamicTriggerLevel && self.frontView.frame.origin.x != 0.0f)
 			{
 				[UIView animateWithDuration:0.15f animations:^
-				{
-					self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-				}];
+				 {
+					 self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+				 }];
 			}
 		}
 		
@@ -203,18 +203,18 @@
 	if (FrontViewPositionLeft == self.currentFrontViewPosition)
 	{
 		[UIView animateWithDuration:0.25f animations:^
-		{
-			self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-		}];
+		 {
+			 self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+		 }];
 		
 		self.currentFrontViewPosition = FrontViewPositionRight;
 	}
 	else
 	{
 		[UIView animateWithDuration:0.25f animations:^
-		{
-			self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-		}];
+		 {
+			 self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+		 }];
 		
 		self.currentFrontViewPosition = FrontViewPositionLeft;
 	}
