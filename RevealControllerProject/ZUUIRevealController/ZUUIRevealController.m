@@ -252,7 +252,7 @@
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
+	[super viewDidLoad];
 	
 	UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:self.frontView.bounds];
 	self.frontView.layer.masksToBounds = NO;
@@ -273,31 +273,31 @@
 	
 	// Add the rear view controller to the hierarchy.
 	[self addChildViewController:self.rearViewController];
-    [self.rearView addSubview:self.rearViewController.view];
-    [self.rearViewController didMoveToParentViewController:self];
-	
+	[self.rearView addSubview:self.rearViewController.view];
+	[self.rearViewController didMoveToParentViewController:self];
+
 	// Add the front view controller to the hierarchy.
 	[self addChildViewController:self.frontViewController];
-    [self.frontView addSubview:self.frontViewController.view];
-    [self.frontViewController didMoveToParentViewController:self];
+	[self.frontView addSubview:self.frontViewController.view];
+	[self.frontViewController didMoveToParentViewController:self];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
 	// Remove the rear view controller from the hierarchy.
-    [self.rearViewController.view removeFromSuperview];
-    [self.rearViewController removeFromParentViewController];
+	[self.rearViewController.view removeFromSuperview];
+	[self.rearViewController removeFromParentViewController];
 	
 	// Remove the front view controller from the hierarchy.
-    [self.frontViewController.view removeFromSuperview];
-    [self.frontViewController removeFromParentViewController];
+	[self.frontViewController.view removeFromSuperview];
+	[self.frontViewController removeFromParentViewController];
 	
 	[super viewDidDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+	return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 #pragma mark - Memory Management
@@ -308,7 +308,7 @@
 	[rearViewController release], self.rearViewController = nil;
 	[frontView release], self.frontView = nil;
 	[rearView release], self.rearView = nil;
-	
+
 	[super dealloc];
 }
 
