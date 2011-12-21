@@ -10,18 +10,10 @@ Features
 - High attention to detail (carefully executed animations, code generated shadows, slowing-overdraw with bounce-back).
 - Universal code (iPad & iPhone).
 - Dynamic edges and trigger levels via defines. - Easily adjustable.
-- Highly flexible. - Barely any adjustments needed to get started in an existing project.*
+- Highly flexible. - Barely any adjustments needed to get started in an existing project.**
 - Behaves almost exactly like the Facebook implementation.
 
-* Simply set your existing "rootViewController" as the "FrontViewController". Implement the protocol. Style a rear view controller. -> Everything works.
-
-How-To
-=======
-
-1. Copy the 'ZUUIRevealController.h/.m', 'FrontViewController.h/.m' and 'RearViewController.h/.m' along with their respective XIB files into your new project.
-2. Check out the example project's AppDelegate.m to see how to initialize the hierarchy properly and do the same in your projects AppDelegate (or wherever you want to have the RevealViewController).
-3. ???
-4. Profit.
+** Simply set your existing "rootViewController" as the "FrontViewController". Implement the protocol. Style a rear view controller. -> Everything works.
 
 Coming Soon
 =======
