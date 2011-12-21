@@ -48,6 +48,22 @@
 @synthesize delegate;
 @synthesize navigationBarPanGestureRecognizer;
 
+#pragma mark - Initialization
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+	
+	if (nil != self)
+	{
+		UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognizedOnNavBar:)];
+		self.navigationBarPanGestureRecognizer = panGestureRecognizer;
+		[panGestureRecognizer release];
+	}
+	
+	return self;
+}
+
 #pragma mark - IBActions
 
 - (IBAction)tellDelegateToToggleReveal:(id)sender
@@ -58,18 +74,22 @@
 #pragma mark - UIGestureRecognizer Callbacks
 
 - (void)panGestureRecognizedOnNavBar:(UIPanGestureRecognizer *)recognizer
-{	
+{
 	[self.delegate delegateRecognizedPanGesture:recognizer];
 }
 
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidLoad];
-	
-	self.navigationBarPanGestureRecognizer = [[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognizedOnNavBar:)] autorelease];
+	[super viewWillAppear:animated];
 	[self.navigationBar addGestureRecognizer:self.navigationBarPanGestureRecognizer];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+	[super viewDidDisappear:animated];
+	[self.navigationBar removeGestureRecognizer:self.navigationBarPanGestureRecognizer];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -81,11 +101,10 @@
 
 - (void)dealloc
 {
-	[self.navigationBar removeGestureRecognizer:self.navigationBarPanGestureRecognizer];
-	
 	[navigationBar release], self.navigationBar = nil;
 	[navigationBarPanGestureRecognizer release], self.navigationBarPanGestureRecognizer = nil;
 	self.delegate = nil;
+
 	[super dealloc];
 }
 

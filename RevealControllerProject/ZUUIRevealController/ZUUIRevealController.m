@@ -284,6 +284,8 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+	[super viewDidDisappear:animated];
+	
 	// Remove the rear view controller from the hierarchy.
 	[self.rearViewController.view removeFromSuperview];
 	[self.rearViewController removeFromParentViewController];
@@ -291,8 +293,6 @@
 	// Remove the front view controller from the hierarchy.
 	[self.frontViewController.view removeFromSuperview];
 	[self.frontViewController removeFromParentViewController];
-	
-	[super viewDidDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

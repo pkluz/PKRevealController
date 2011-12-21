@@ -34,7 +34,7 @@
 
 typedef enum
 {
-    FrontViewPositionLeft,
+	FrontViewPositionLeft,
 	FrontViewPositionRight
 } FrontViewPosition;
 

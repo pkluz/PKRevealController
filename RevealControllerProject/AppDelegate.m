@@ -44,22 +44,26 @@
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
 	
+	FrontViewController *frontViewController;
+	RearViewController *rearViewController;
+	
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
 	{
-		FrontViewController *frontViewController = [[FrontViewController alloc] initWithNibName:@"FrontViewController_iPhone" bundle:nil];
-		RearViewController *rearViewController = [[RearViewController alloc] initWithNibName:@"RearViewController_iPhone" bundle:nil];
-	    self.viewController = [[[ZUUIRevealController alloc] initWithFrontViewController:frontViewController rearViewController:rearViewController] autorelease];
-		[frontViewController release];
-		[rearViewController release];
+		frontViewController = [[FrontViewController alloc] initWithNibName:@"FrontViewController_iPhone" bundle:nil];
+		rearViewController = [[RearViewController alloc] initWithNibName:@"RearViewController_iPhone" bundle:nil];
 	}
 	else
 	{
-		FrontViewController *frontViewController = [[FrontViewController alloc] initWithNibName:@"FrontViewController_iPad" bundle:nil];
-		RearViewController *rearViewController = [[RearViewController alloc] initWithNibName:@"RearViewController_iPad" bundle:nil];
-	    self.viewController = [[[ZUUIRevealController alloc] initWithFrontViewController:frontViewController rearViewController:rearViewController] autorelease];
-		[frontViewController release];
-		[rearViewController release];
+		frontViewController = [[FrontViewController alloc] initWithNibName:@"FrontViewController_iPad" bundle:nil];
+		rearViewController = [[RearViewController alloc] initWithNibName:@"RearViewController_iPad" bundle:nil];
 	}
+	
+	ZUUIRevealController *revealController = [[ZUUIRevealController alloc] initWithFrontViewController:frontViewController rearViewController:rearViewController];
+	self.viewController = revealController;
+	
+	[frontViewController release];
+	[rearViewController release];
+	[revealController release];
 	
 	self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
