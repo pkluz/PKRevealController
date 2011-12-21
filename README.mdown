@@ -3,11 +3,17 @@ ZUUIRevealController
 
 A Facebook inspired custom iOS ViewControllerContainer that enables to have a UIViewController on top of another. The rear view can be reveal either by slowly panning the finger across the front view's NavigationBar, by quickly flicking it left or right or simply by tapping the 'Reveal' button.
 
-Info
+Features
 =======
 
-- The code does _not_ make use of ARC, but it is fairly easy to port.
-- The sample project is universal, thus it works both on iPhone/iPod and iPad.
+- Makes use of iOS 5's new UIViewController containment.
+- High attention to detail (carefully executed animations, code generated shadows, slowing-overdraw with bounce-back).
+- Universal code (iPad & iPhone).
+- Dynamic edges and trigger levels via defines. - Easily adjustable.
+- Highly flexible. - Barely any adjustments needed to get started in an existing project.*
+- Behaves almost exactly like the Facebook implementation.
+
+* Simply set your existing "rootViewController" as the "FrontViewController". Implement the protocol. Style a rear view controller. -> Everything works.
 
 How-To
 =======
