@@ -134,7 +134,6 @@
 				}];
 			}
 		}
-		
 		// Case - Slow pan/drag ended:
 		else
 		{

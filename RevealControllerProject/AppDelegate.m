@@ -49,12 +49,16 @@
 		FrontViewController *frontViewController = [[FrontViewController alloc] initWithNibName:@"FrontViewController_iPhone" bundle:nil];
 		RearViewController *rearViewController = [[RearViewController alloc] initWithNibName:@"RearViewController_iPhone" bundle:nil];
 	    self.viewController = [[[ZUUIRevealController alloc] initWithFrontViewController:frontViewController rearViewController:rearViewController] autorelease];
+		[frontViewController release];
+		[rearViewController release];
 	}
 	else
 	{
 		FrontViewController *frontViewController = [[FrontViewController alloc] initWithNibName:@"FrontViewController_iPad" bundle:nil];
 		RearViewController *rearViewController = [[RearViewController alloc] initWithNibName:@"RearViewController_iPad" bundle:nil];
 	    self.viewController = [[[ZUUIRevealController alloc] initWithFrontViewController:frontViewController rearViewController:rearViewController] autorelease];
+		[frontViewController release];
+		[rearViewController release];
 	}
 	
 	self.window.rootViewController = self.viewController;
