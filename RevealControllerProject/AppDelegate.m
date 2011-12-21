@@ -42,7 +42,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+	self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
 	
 	FrontViewController *frontViewController;
 	RearViewController *rearViewController;
@@ -66,8 +66,8 @@
 	[revealController release];
 	
 	self.window.rootViewController = self.viewController;
-    [self.window makeKeyAndVisible];
-    return YES;
+	[self.window makeKeyAndVisible];
+	return YES;
 }
 
 #pragma mark - Memory management
@@ -76,7 +76,8 @@
 {
 	[window release], self.window = nil;
 	[viewController release], self.viewController = nil;
-    [super dealloc];
+	
+	[super dealloc];
 }
 
 @end
