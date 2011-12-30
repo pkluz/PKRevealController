@@ -115,7 +115,6 @@
 				5E605BB814A081F900853025 /* AppDelegate.h */,
 				5E605BB914A081F900853025 /* AppDelegate.m */,
 				5E1EFE2114A0BA65008062C1 /* RevealController */,
-				5EDB650D14ADDC7800613D7E /* ExampleController */,
 				5E605BB014A081F900853025 /* Supporting Files */,
 			);
 			path = RevealControllerProject;
@@ -130,13 +129,6 @@
 				5E605BB714A081F900853025 /* Project-Prefix.pch */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		5EDB650D14ADDC7800613D7E /* ExampleController */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = ExampleController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
