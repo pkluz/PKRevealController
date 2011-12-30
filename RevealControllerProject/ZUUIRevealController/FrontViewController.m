@@ -80,7 +80,7 @@
 	
 	self.title = NSLocalizedString(@"Front View", @"FrontView");
 	
-	if ([self.navigationController.parentViewController conformsToProtocol:@protocol(ZUUIRevealControllerDelegate)])
+	if ([self.navigationController.parentViewController respondsToSelector:@selector(revealGesture:)] && [self.navigationController.parentViewController respondsToSelector:@selector(revealToggle:)])
 	{
 		// Check if a UIPanGestureRecognizer already sits atop our NavigationBar.
 		if (![[self.navigationController.navigationBar gestureRecognizers] containsObject:self.navigationBarPanGestureRecognizer])
@@ -116,6 +116,42 @@
 	UIViewController *stubController = [[UIViewController alloc] init];
 	[self.navigationController pushViewController:stubController animated:YES];
 	[stubController release];
+}
+
+#pragma - ZUUIRevealControllerDelegate Protocol.
+
+/*
+ * All of the methods below are optional. You can use them to control the behavior of the ZUUIRevealController, 
+ * or react to certain events.
+ */
+- (BOOL)revealController:(ZUUIRevealController *)revealController shouldRevealRearViewController:(UIViewController *)rearViewController
+{
+	return YES;
+}
+
+- (BOOL)revealController:(ZUUIRevealController *)revealController shouldHideRearViewController:(UIViewController *)rearViewController 
+{
+	return YES;
+}
+
+- (void)revealController:(ZUUIRevealController *)revealController willRevealRearViewController:(UIViewController *)rearViewController 
+{
+	NSLog(@"%@", NSStringFromSelector(_cmd));
+}
+
+- (void)revealController:(ZUUIRevealController *)revealController didRevealRearViewController:(UIViewController *)rearViewController
+{
+	NSLog(@"%@", NSStringFromSelector(_cmd));
+}
+
+- (void)revealController:(ZUUIRevealController *)revealController willHideRearViewController:(UIViewController *)rearViewController
+{
+	NSLog(@"%@", NSStringFromSelector(_cmd));
+}
+
+- (void)revealController:(ZUUIRevealController *)revealController didHideRearViewController:(UIViewController *)rearViewController 
+{
+	NSLog(@"%@", NSStringFromSelector(_cmd));
 }
 
 #pragma mark - Memory Management

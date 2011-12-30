@@ -33,6 +33,6 @@
 #import <UIKit/UIKit.h>
 #import "ZUUIRevealController.h"
 
-@interface FrontViewController : UIViewController <UIGestureRecognizerDelegate>
+@interface FrontViewController : UIViewController <UIGestureRecognizerDelegate, ZUUIRevealControllerDelegate>
 
 @end

@@ -60,6 +60,10 @@
 @interface ZUUIRevealController()
 
 // Private Properties:
+@property (retain, nonatomic, readwrite) UIViewController *frontViewController;
+@property (retain, nonatomic, readwrite) UIViewController *rearViewController;
+@property (retain, nonatomic, readwrite) IBOutlet UIView *frontView;
+@property (retain, nonatomic, readwrite) IBOutlet UIView *rearView;
 @property (assign, nonatomic) float previousPanOffset;
 @property (assign, nonatomic) FrontViewPosition currentFrontViewPosition;
 
@@ -72,11 +76,11 @@
 
 @synthesize previousPanOffset = _previousPanOffset;
 @synthesize currentFrontViewPosition = _currentFrontViewPosition;
-
 @synthesize frontViewController = _frontViewController;
 @synthesize rearViewController = _rearViewController;
 @synthesize frontView = _frontView;
 @synthesize rearView = _rearView;
+@synthesize delegate = _delegate;
 
 #pragma mark - Initialization
 
@@ -100,22 +104,81 @@
 	return self;
 }
 
-#pragma mark - ZUUIRevealViewControllerDelegate Protocol
+#pragma mark - Reveal Callbacks
 
 // Slowly reveal or hide the rear view based on the translation of the finger.
 - (void)revealGesture:(UIPanGestureRecognizer *)recognizer
-{
-	// Case - Pan input ended.
+{	
+	// 1. Ask the delegate (if appropriate) if we are allowed to do the particular interaction:
+	if ([self.delegate conformsToProtocol:@protocol(ZUUIRevealControllerDelegate)])
+	{
+		// Case a): We're going to be revealing since we're hidden now.
+		if (FrontViewPositionLeft == self.currentFrontViewPosition)
+		{
+			if ([self.delegate respondsToSelector:@selector(revealController:shouldRevealRearViewController:)])
+			{
+				if (![self.delegate revealController:self shouldRevealRearViewController:self.rearViewController])
+				{
+					return;
+				}
+			}
+		}
+		// Case b): We're going to be hiding, since we're revealed now.
+		else
+		{
+			if ([self.delegate respondsToSelector:@selector(revealController:shouldHideRearViewController:)])
+			{
+				if (![self.delegate revealController:self shouldHideRearViewController:self.rearViewController])
+				{
+					return;
+				}
+			}
+		}
+	}
+	
+	// 2. Now that we've know we're here, we check whether we're just about to _START_ an interaction,...
+	if (UIGestureRecognizerStateBegan == [recognizer state])
+	{
+		// Check if a delegate exists
+		if ([self.delegate conformsToProtocol:@protocol(ZUUIRevealControllerDelegate)])
+		{
+			// Determine whether we're going to be revealing or hiding.
+			if (FrontViewPositionLeft == self.currentFrontViewPosition)
+			{
+				if ([self.delegate respondsToSelector:@selector(revealController:willRevealRearViewController:)])
+				{
+					[self.delegate revealController:self willRevealRearViewController:self.rearViewController];
+				}
+			}
+			else
+			{
+				if ([self.delegate respondsToSelector:@selector(revealController:willHideRearViewController:)])
+				{
+					[self.delegate revealController:self willHideRearViewController:self.rearViewController];
+				}
+			}
+		}
+	}
+	
+	// 3. ...or maybe the interaction already _ENDED_?
 	if (UIGestureRecognizerStateEnded == [recognizer state])
 	{
-		// Case - Quick finger flick fast enough to cause instant change:
+		// Case a): Quick finger flick fast enough to cause instant change:
 		if (fabs([recognizer velocityInView:self.view].x) > VELOCITY_REQUIRED_FOR_QUICK_FLICK)
 		{
 			if ([recognizer velocityInView:self.view].x > 0.0f)
-			{
+			{				
 				[UIView animateWithDuration:0.15f animations:^
 				 {
 					 self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+				 }
+				completion:^(BOOL finished)
+				 {
+					 // Dispatch message to delegate, telling it the 'rearView' _DID_ reveal, if appropriate:
+					 if ([self.delegate respondsToSelector:@selector(revealController:didRevealRearViewController:)])
+					 {
+						 [self.delegate revealController:self didRevealRearViewController:self.rearViewController];
+					 }
 				 }];
 			}
 			else
@@ -123,10 +186,18 @@
 				[UIView animateWithDuration:0.15f animations:^
 				 {
 					 self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+				 }
+				 completion:^(BOOL finished)
+				 {
+					 // Dispatch message to delegate, telling it the 'rearView' _DID_ hide, if appropriate:
+					 if ([self.delegate respondsToSelector:@selector(revealController:didHideRearViewController:)])
+					 {
+						 [self.delegate revealController:self didHideRearViewController:self.rearViewController];
+					 }
 				 }];
 			}
 		}
-		// Case - Slow pan/drag ended:
+		// Case b) Slow pan/drag ended:
 		else
 		{
 			float dynamicTriggerLevel = (FrontViewPositionLeft == self.currentFrontViewPosition) ? REVEAL_VIEW_TRIGGER_LEVEL_LEFT : REVEAL_VIEW_TRIGGER_LEVEL_RIGHT;
@@ -136,6 +207,14 @@
 				[UIView animateWithDuration:0.15f animations:^
 				 {
 					 self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+				 }
+				 completion:^(BOOL finished)
+				 {
+					 // Dispatch message to delegate, telling it the 'rearView' _DID_ reveal, if appropriate:
+					 if ([self.delegate respondsToSelector:@selector(revealController:didRevealRearViewController:)])
+					 {
+						 [self.delegate revealController:self didRevealRearViewController:self.rearViewController];
+					 }
 				 }];
 			}
 			else if (self.frontView.frame.origin.x < dynamicTriggerLevel && self.frontView.frame.origin.x != 0.0f)
@@ -143,6 +222,14 @@
 				[UIView animateWithDuration:0.15f animations:^
 				 {
 					 self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+				 }
+				 completion:^(BOOL finished)
+				 {
+					 // Dispatch message to delegate, telling it the 'rearView' _DID_ hide, if appropriate:
+					 if ([self.delegate respondsToSelector:@selector(revealController:didHideRearViewController:)])
+					 {
+						 [self.delegate revealController:self didHideRearViewController:self.rearViewController];
+					 }
 				 }];
 			}
 		}
@@ -160,7 +247,7 @@
 		return;
 	}
 	
-	// Case - Slow pan/drag in progress from either the left or the right:
+	// 4. None of the above? That means it's _IN PROGRESS_!
 	if (FrontViewPositionLeft == self.currentFrontViewPosition)
 	{
 		if ([recognizer translationInView:self.view].x < 0.0f)
@@ -193,21 +280,67 @@
 
 // Instantaneously toggle the rear view's visibility.
 - (void)revealToggle:(id)sender
-{
+{	
 	if (FrontViewPositionLeft == self.currentFrontViewPosition)
-	{
+	{ 
+		// Check if a delegate exists and if so, whether it is fine for us to revealing the rear view.
+		if ([self.delegate respondsToSelector:@selector(revealController:shouldRevealRearViewController:)])
+		{
+			if (![self.delegate revealController:self shouldRevealRearViewController:self.rearViewController])
+			{
+				return;
+			}
+		}
+		
+		// Dispatch message to delegate, telling it the 'rearView' _WILL_ reveal, if appropriate:
+		if ([self.delegate respondsToSelector:@selector(revealController:willRevealRearViewController:)])
+		{
+			[self.delegate revealController:self willRevealRearViewController:self.rearViewController];
+		}
+		
 		[UIView animateWithDuration:0.25f animations:^
 		 {
 			 self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+		 }
+		 completion:^(BOOL finished)
+		 {
+			 // Dispatch message to delegate, telling it the 'rearView' _DID_ reveal, if appropriate:
+			 if ([self.delegate respondsToSelector:@selector(revealController:didRevealRearViewController:)])
+			 {
+				 [self.delegate revealController:self didRevealRearViewController:self.rearViewController];
+			 }
 		 }];
 		
 		self.currentFrontViewPosition = FrontViewPositionRight;
 	}
 	else
 	{
+		// Check if a delegate exists and if so, whether it is fine for us to hiding the rear view.
+		if ([self.delegate respondsToSelector:@selector(revealController:shouldHideRearViewController:)])
+		{
+			if (![self.delegate revealController:self shouldHideRearViewController:self.rearViewController])
+			{
+				return;
+			}
+		}
+		
+		// Dispatch message to delegate, telling it the 'rearView' _WILL_ hide, if appropriate:
+		if ([self.delegate respondsToSelector:@selector(revealController:willHideRearViewController:)])
+		{
+			[self.delegate revealController:self willHideRearViewController:self.rearViewController];
+		}
+		
 		[UIView animateWithDuration:0.25f animations:^
 		 {
 			 self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+		 }
+		 completion:^(BOOL finished)
+		 {
+			 // Dispatch message to delegate, telling it the 'rearView' _DID_ hide, if appropriate:
+			 if ([self.delegate respondsToSelector:@selector(revealController:didHideRearViewController:)])
+			 {
+				 [self.delegate revealController:self didHideRearViewController:self.rearViewController];
+			 }
 		 }];
 		
 		self.currentFrontViewPosition = FrontViewPositionLeft;

@@ -38,23 +38,40 @@ typedef enum
 	FrontViewPositionRight
 } FrontViewPosition;
 
-@protocol ZUUIRevealControllerDelegate<NSObject>
+@protocol ZUUIRevealControllerDelegate;
 
-@required
+@interface ZUUIRevealController : UIViewController <UITableViewDelegate>
+
+// Public Properties:
+@property (retain, nonatomic, readonly) UIViewController *frontViewController;
+@property (retain, nonatomic, readonly) UIViewController *rearViewController;
+@property (retain, nonatomic, readonly) IBOutlet UIView *frontView;
+@property (retain, nonatomic, readonly) IBOutlet UIView *rearView;
+@property (assign, nonatomic) id<ZUUIRevealControllerDelegate> delegate;
+
+// Public Methods:
+- (id)initWithFrontViewController:(UIViewController *)aFrontViewController rearViewController:(UIViewController *)aBackViewController;
 - (void)revealGesture:(UIPanGestureRecognizer *)recognizer;
 - (void)revealToggle:(id)sender;
 
 @end
 
-@interface ZUUIRevealController : UIViewController <ZUUIRevealControllerDelegate>
+// ZUUIRevealControllerDelegate Protocol.
+@protocol ZUUIRevealControllerDelegate<NSObject>
 
-// Public Properties:
-@property (retain, nonatomic) UIViewController *frontViewController;
-@property (retain, nonatomic) UIViewController *rearViewController;
-@property (retain, nonatomic) IBOutlet UIView *frontView;
-@property (retain, nonatomic) IBOutlet UIView *rearView;
+@optional
 
-// Public Methods:
-- (id)initWithFrontViewController:(UIViewController *)aFrontViewController rearViewController:(UIViewController *)aBackViewController;
+- (BOOL)revealController:(ZUUIRevealController *)revealController shouldRevealRearViewController:(UIViewController *)rearViewController;
+- (BOOL)revealController:(ZUUIRevealController *)revealController shouldHideRearViewController:(UIViewController *)rearViewController;
+
+/* 
+ * IMPORTANT: It is not guaranteed that 'didReveal...' will be called after 'willReveal...'. The user 
+ * might not have panned far enough for a reveal to be triggered! Thus 'didHide...' will be called!
+ */
+- (void)revealController:(ZUUIRevealController *)revealController willRevealRearViewController:(UIViewController *)rearViewController;
+- (void)revealController:(ZUUIRevealController *)revealController didRevealRearViewController:(UIViewController *)rearViewController;
+
+- (void)revealController:(ZUUIRevealController *)revealController willHideRearViewController:(UIViewController *)rearViewController;
+- (void)revealController:(ZUUIRevealController *)revealController didHideRearViewController:(UIViewController *)rearViewController;
 
 @end

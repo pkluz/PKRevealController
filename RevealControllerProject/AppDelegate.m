@@ -63,6 +63,13 @@
 	ZUUIRevealController *revealController = [[ZUUIRevealController alloc] initWithFrontViewController:navigationController rearViewController:rearViewController];
 	self.viewController = revealController;
 	
+	/* 
+	 * NOTE: Assigning the frontViewController as the delegate to receive certain events. This of course
+	 * requires the delegate to conform to a protocol (ZUUIRevealControllerDelegate). See the header for
+	 * more information on the callbacks that are available.
+	 */
+	revealController.delegate = frontViewController;
+	
 	[navigationController release];
 	[frontViewController release];
 	[rearViewController release];
