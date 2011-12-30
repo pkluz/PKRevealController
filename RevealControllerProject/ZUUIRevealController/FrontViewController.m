@@ -70,8 +70,8 @@
  * self.navigationController.parentViewController TO: self.parentViewController
  *
  * Note that self.navigationController is equal to self.parentViewController. Thus you could generalize
- * the code even more by calling self.parentViewController.parentViewController. But in order to make 
- * the code easier to understand I decided to go with self.navigationController approach.
+ * the code even more by calling self.parentViewController.parentViewController. In order to make 
+ * the code easier to understand I decided to go with self.navigationController.
  *
  */
 - (void)viewWillAppear:(BOOL)animated
