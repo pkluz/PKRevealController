@@ -8,21 +8,19 @@ A Facebook inspired custom iOS ViewControllerContainer that enables to have a UI
 Features
 =======
 
-- Makes use of iOS 5's new UIViewController containment.
-- High attention to detail (dynamically generated shadows, slowing-overdraw with bounce-back, "magnetic edges" with carefully executed animations).
-- Easy-to-read code with low complexity.
-- Universal (iPad & iPhone) working both in landscape and portrait.
-- Dynamic edges and trigger levels via defines. - Easily adjustable.
-- Highly flexible. - Barely any adjustments needed to get started in an existing project.**
+- Uses iOS 5 new UIViewController containment.
+- High attention to detail. (Dynamically generated shadows, slowing-overdraw with bounce-back, "Magnetic Edges" with carefully executed animations).
+- Highly flexible. - Very low coupling.
+- Elegant protocol. Receive callbacks when certain events (are about to) occur or control the entire flow!
+- Easily adjustable settings via defines. (Trigger levels for "Magnetic Edges", velocity for "instant reveal" etc.)
+- Universal (iPad & iPhone) working both in landscape and portrait mode.
+- Easy to read code with low complexity.
 - Behaves almost exactly like the Facebook implementation.
 
-** Simply set your existing "rootViewController" as the "FrontViewController". Implement the protocol. Style a rear view controller. -> Everything works.
-
-Coming Soon
+Mantra
 =======
 
-- Both right and left sided reveals with either the same or a different view on each side. (See path.com implementation)
-- Smoother 'overdraw' function if panned further than the predefined edge.
+*It's all about the details.*
 
 License
 =======
@@ -42,4 +40,4 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 Contact
 =======
 
-If for whatever reason you feel the need to get in touch with me, feel free to message me at: Philip.Kluz@zuui.org
+If for whatever reason you feel the need to get in touch with me, feel free to message me at: Philip.Kluz@zuui.org or follow me on Twitter: twitter.com/pkluz
