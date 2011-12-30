@@ -38,6 +38,7 @@
 @property (retain, nonatomic) UIPanGestureRecognizer *navigationBarPanGestureRecognizer;
 
 // Private Methods:
+- (IBAction)pushExample:(id)sender;
 
 @end
 
@@ -81,30 +82,48 @@
 	
 	if ([self.navigationController.parentViewController conformsToProtocol:@protocol(ZUUIRevealControllerDelegate)])
 	{
-		// Adding the UIPanGestureRecognizer to the NavigationBar:
-		UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self.navigationController.parentViewController action:@selector(revealGesture:)];
-		self.navigationBarPanGestureRecognizer = panGestureRecognizer;
-		[panGestureRecognizer release];
+		// Check if a UIPanGestureRecognizer already sits atop our NavigationBar.
+		if (![[self.navigationController.navigationBar gestureRecognizers] containsObject:self.navigationBarPanGestureRecognizer])
+		{
+			// If not, allocate one and add it.
+			UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self.navigationController.parentViewController action:@selector(revealGesture:)];
+			self.navigationBarPanGestureRecognizer = panGestureRecognizer;
+			[panGestureRecognizer release];
+			
+			[self.navigationController.navigationBar addGestureRecognizer:self.navigationBarPanGestureRecognizer];
+		}
 		
-		// Adding the "Reveal" UIButton to the NavigationBar:
-		UIBarButtonItem *revealButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Reveal", @"Reveal") style:UIBarButtonItemStylePlain target:self.navigationController.parentViewController action:@selector(revealToggle:)];
-		self.navigationItem.leftBarButtonItem = revealButton;
-		[revealButton release];
+		// Check if we have a revealButton already.
+		if (![self.navigationItem leftBarButtonItem])
+		{
+			// If not, allocate one and add it.
+			UIBarButtonItem *revealButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Reveal", @"Reveal") style:UIBarButtonItemStylePlain target:self.navigationController.parentViewController action:@selector(revealToggle:)];
+			self.navigationItem.leftBarButtonItem = revealButton;
+			[revealButton release];
+		}
 	}
-	
-	[self.navigationController.navigationBar addGestureRecognizer:self.navigationBarPanGestureRecognizer];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
 	[super viewDidDisappear:animated];
-	[self.navigationController.navigationBar removeGestureRecognizer:self.navigationBarPanGestureRecognizer];
+}
+
+#pragma mark - Example Code
+
+- (void)pushExample:(id)sender
+{
+	UIViewController *stub = [[UIViewController alloc] init];
+	stub.view.backgroundColor = [UIColor lightGrayColor];
+	[self.navigationController pushViewController:stub animated:YES];
+	[stub release];
 }
 
 #pragma mark - Memory Management
 
 - (void)dealloc
 {
+	[self.navigationController.navigationBar removeGestureRecognizer:self.navigationBarPanGestureRecognizer];
 	[_navigationBarPanGestureRecognizer release], self.navigationBarPanGestureRecognizer = nil;
 
 	[super dealloc];

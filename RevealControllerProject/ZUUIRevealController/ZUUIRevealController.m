@@ -156,6 +156,7 @@
 		{
 			self.currentFrontViewPosition = FrontViewPositionRight;
 		}
+		
 		return;
 	}
 	
