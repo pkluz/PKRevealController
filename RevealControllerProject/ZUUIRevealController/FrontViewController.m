@@ -104,19 +104,18 @@
 	}
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-	[super viewDidDisappear:animated];
+	return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 #pragma mark - Example Code
 
 - (void)pushExample:(id)sender
 {
-	UIViewController *stub = [[UIViewController alloc] init];
-	stub.view.backgroundColor = [UIColor lightGrayColor];
-	[self.navigationController pushViewController:stub animated:YES];
-	[stub release];
+	UIViewController *stubController = [[UIViewController alloc] init];
+	[self.navigationController pushViewController:stubController animated:YES];
+	[stubController release];
 }
 
 #pragma mark - Memory Management
