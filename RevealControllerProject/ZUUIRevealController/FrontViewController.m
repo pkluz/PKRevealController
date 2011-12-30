@@ -38,72 +38,74 @@
 @property (retain, nonatomic) UIPanGestureRecognizer *navigationBarPanGestureRecognizer;
 
 // Private Methods:
-- (void)panGestureRecognizedOnNavBar:(UIPanGestureRecognizer *)recognizer;
 
 @end
 
 @implementation FrontViewController
 
-@synthesize navigationBar;
-@synthesize delegate;
-@synthesize navigationBarPanGestureRecognizer;
-
-#pragma mark - Initialization
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-	
-	if (nil != self)
-	{
-		UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognizedOnNavBar:)];
-		self.navigationBarPanGestureRecognizer = panGestureRecognizer;
-		[panGestureRecognizer release];
-	}
-	
-	return self;
-}
-
-#pragma mark - IBActions
-
-- (IBAction)tellDelegateToToggleReveal:(id)sender
-{
-	[self.delegate delegateRequestedToToggleReveal:sender];
-}
-
-#pragma mark - UIGestureRecognizer Callbacks
-
-- (void)panGestureRecognizedOnNavBar:(UIPanGestureRecognizer *)recognizer
-{
-	[self.delegate delegateRecognizedPanGesture:recognizer];
-}
+@synthesize navigationBarPanGestureRecognizer = _navigationBarPanGestureRecognizer;
 
 #pragma mark - View lifecycle
 
+/*
+ * The following lines are crucial to understanding how the ZUUIRevealController works.
+ *
+ * In this example, the FrontViewController is contained inside of a UINavigationController.
+ * And the UINavigationController is contained inside of a ZUUIRevealController. Thus the
+ * following hierarchy is created:
+ *
+ * - ZUUIRevealController is parent of:
+ * - - UINavigationController is parent of:
+ * - - - FrontViewController
+ *
+ * If you don't want the UINavigationController in between (which is totally fine) all you need to
+ * do is to adjust the if-condition below in a way to suit your needs. If the hierarchy were to look 
+ * like this:
+ *
+ * - ZUUIRevealController is parent of:
+ * - - FrontViewController
+ * 
+ * Without a UINavigationController in between, you'd need to change:
+ * self.navigationController.parentViewController TO: self.parentViewController
+ *
+ * Note that self.navigationController is equal to self.parentViewController. Thus you could generalize
+ * the code even more by calling self.parentViewController.parentViewController. But in order to make 
+ * the code easier to understand I decided to go with self.navigationController approach.
+ *
+ */
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	[self.navigationBar addGestureRecognizer:self.navigationBarPanGestureRecognizer];
+	
+	self.title = NSLocalizedString(@"Front View", @"FrontView");
+	
+	if ([self.navigationController.parentViewController conformsToProtocol:@protocol(ZUUIRevealControllerDelegate)])
+	{
+		// Adding the UIPanGestureRecognizer to the NavigationBar:
+		UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self.navigationController.parentViewController action:@selector(revealGesture:)];
+		self.navigationBarPanGestureRecognizer = panGestureRecognizer;
+		[panGestureRecognizer release];
+		
+		// Adding the "Reveal" UIButton to the NavigationBar:
+		UIBarButtonItem *revealButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Reveal", @"Reveal") style:UIBarButtonItemStylePlain target:self.navigationController.parentViewController action:@selector(revealToggle:)];
+		self.navigationItem.leftBarButtonItem = revealButton;
+		[revealButton release];
+	}
+	
+	[self.navigationController.navigationBar addGestureRecognizer:self.navigationBarPanGestureRecognizer];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
 	[super viewDidDisappear:animated];
-	[self.navigationBar removeGestureRecognizer:self.navigationBarPanGestureRecognizer];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-	return (interfaceOrientation == UIInterfaceOrientationPortrait);
+	[self.navigationController.navigationBar removeGestureRecognizer:self.navigationBarPanGestureRecognizer];
 }
 
 #pragma mark - Memory Management
 
 - (void)dealloc
 {
-	[navigationBar release], self.navigationBar = nil;
-	[navigationBarPanGestureRecognizer release], self.navigationBarPanGestureRecognizer = nil;
-	self.delegate = nil;
+	[_navigationBarPanGestureRecognizer release], self.navigationBarPanGestureRecognizer = nil;
 
 	[super dealloc];
 }

@@ -70,13 +70,13 @@
 
 @implementation ZUUIRevealController
 
-@synthesize previousPanOffset;
-@synthesize currentFrontViewPosition;
+@synthesize previousPanOffset = _previousPanOffset;
+@synthesize currentFrontViewPosition = _currentFrontViewPosition;
 
-@synthesize frontViewController;
-@synthesize rearViewController;
-@synthesize frontView;
-@synthesize rearView;
+@synthesize frontViewController = _frontViewController;
+@synthesize rearViewController = _rearViewController;
+@synthesize frontView = _frontView;
+@synthesize rearView = _rearView;
 
 #pragma mark - Initialization
 
@@ -95,15 +95,6 @@
 	{
 		self.frontViewController = aFrontViewController;
 		self.rearViewController = aBackViewController;
-		
-		if ([self conformsToProtocol:@protocol(ZUUIRevealControllerDelegate)] && [self.frontViewController isKindOfClass:[FrontViewController class]])
-		{
-			((FrontViewController *)self.frontViewController).delegate = self;
-		}
-		else
-		{
-			return nil;
-		}
 	}
 	
 	return self;
@@ -111,7 +102,8 @@
 
 #pragma mark - ZUUIRevealViewControllerDelegate Protocol
 
-- (void)delegateRecognizedPanGesture:(UIPanGestureRecognizer *)recognizer
+// Slowly reveal or hide the rear view based on the translation of the finger.
+- (void)revealGesture:(UIPanGestureRecognizer *)recognizer
 {
 	// Case - Pan input ended.
 	if (UIGestureRecognizerStateEnded == [recognizer state])
@@ -198,7 +190,8 @@
 	}
 }
 
-- (void)delegateRequestedToToggleReveal:(id)sender
+// Instantaneously toggle the rear view's visibility.
+- (void)revealToggle:(id)sender
 {
 	if (FrontViewPositionLeft == self.currentFrontViewPosition)
 	{
@@ -254,6 +247,12 @@
 {
 	[super viewDidLoad];
 	
+	/* Create a fancy shadow aroung the frontView.
+	 *
+	 * Note: UIBezierPath needed because shadows are evil. If you don't use the path, you might not
+	 * not notice a difference at first, but the keen eye will (even on an iPhone 4S) observe that 
+	 * the interface rotation _WILL_ lag slightly and feel less fluid than with the path.
+	 */
 	UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:self.frontView.bounds];
 	self.frontView.layer.masksToBounds = NO;
 	self.frontView.layer.shadowColor = [UIColor blackColor].CGColor;
@@ -295,19 +294,19 @@
 	[self.frontViewController removeFromParentViewController];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-	return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+	return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 #pragma mark - Memory Management
 
 - (void)dealloc
 {
-	[frontViewController release], self.frontViewController = nil;
-	[rearViewController release], self.rearViewController = nil;
-	[frontView release], self.frontView = nil;
-	[rearView release], self.rearView = nil;
+	[_frontViewController release], self.frontViewController = nil;
+	[_rearViewController release], self.rearViewController = nil;
+	[_frontView release], self.frontView = nil;
+	[_rearView release], self.rearView = nil;
 
 	[super dealloc];
 }

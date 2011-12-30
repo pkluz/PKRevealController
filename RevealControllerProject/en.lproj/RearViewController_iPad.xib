@@ -72,7 +72,7 @@
 						<array key="IBUIItems">
 							<object class="IBUINavigationItem" id="848892053">
 								<reference key="IBUINavigationBar" ref="218491043"/>
-								<string key="IBUITitle">Title</string>
+								<string key="IBUITitle">RearView</string>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 							</object>
 						</array>

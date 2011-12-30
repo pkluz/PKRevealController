@@ -35,11 +35,4 @@
 
 @interface FrontViewController : UIViewController <UIGestureRecognizerDelegate>
 
-// Public Properties:
-@property (retain, nonatomic) IBOutlet UINavigationBar *navigationBar;
-@property (assign, nonatomic) id<ZUUIRevealControllerDelegate> delegate;
-
-// Public Methods:
-- (IBAction)tellDelegateToToggleReveal:(id)sender;
-
 @end

@@ -42,18 +42,4 @@
 
 @implementation RearViewController
 
-#pragma mark - View lifecycle
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-	return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
-#pragma mark - Memory Management
-
-- (void)dealloc
-{
-	[super dealloc];
-}
-
 @end

@@ -37,8 +37,8 @@
 
 @implementation AppDelegate
 
-@synthesize window;
-@synthesize viewController;
+@synthesize window = _window;
+@synthesize viewController = _viewController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -58,9 +58,12 @@
 		rearViewController = [[RearViewController alloc] initWithNibName:@"RearViewController_iPad" bundle:nil];
 	}
 	
-	ZUUIRevealController *revealController = [[ZUUIRevealController alloc] initWithFrontViewController:frontViewController rearViewController:rearViewController];
+	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:frontViewController];
+	
+	ZUUIRevealController *revealController = [[ZUUIRevealController alloc] initWithFrontViewController:navigationController rearViewController:rearViewController];
 	self.viewController = revealController;
 	
+	[navigationController release];
 	[frontViewController release];
 	[rearViewController release];
 	[revealController release];
@@ -74,8 +77,8 @@
 
 - (void)dealloc
 {
-	[window release], self.window = nil;
-	[viewController release], self.viewController = nil;
+	[_window release], self.window = nil;
+	[_viewController release], self.viewController = nil;
 	
 	[super dealloc];
 }

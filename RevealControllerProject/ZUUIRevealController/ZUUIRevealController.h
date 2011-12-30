@@ -41,8 +41,8 @@ typedef enum
 @protocol ZUUIRevealControllerDelegate<NSObject>
 
 @required
-- (void)delegateRecognizedPanGesture:(UIPanGestureRecognizer *)recognizer;
-- (void)delegateRequestedToToggleReveal:(id)sender;
+- (void)revealGesture:(UIPanGestureRecognizer *)recognizer;
+- (void)revealToggle:(id)sender;
 
 @end
 
