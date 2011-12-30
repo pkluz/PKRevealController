@@ -11,7 +11,7 @@ Features
 - Uses iOS 5 new UIViewController containment.
 - High attention to detail. (Dynamically generated shadows, slowing-overdraw with bounce-back, "Magnetic Edges" with carefully executed animations).
 - Highly flexible. - Very low coupling.
-- Elegant protocol. Receive callbacks when certain events (are about to) occur or control the entire flow!
+- Elegant protocol. Receive callbacks when certain events (are about to) occur and control the entire flow!
 - Easily adjustable settings via defines. (Trigger levels for "Magnetic Edges", velocity for "instant reveal" etc.)
 - Universal (iPad & iPhone) working both in landscape and portrait mode.
 - Easy to read code with low complexity.
