@@ -114,6 +114,7 @@
 - (void)pushExample:(id)sender
 {
 	UIViewController *stubController = [[UIViewController alloc] init];
+	stubController.view.backgroundColor = [UIColor whiteColor];
 	[self.navigationController pushViewController:stubController animated:YES];
 	[stubController release];
 }

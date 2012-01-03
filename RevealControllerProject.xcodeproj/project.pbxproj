@@ -20,8 +20,6 @@
 		5E605BB414A081F900853025 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5E605BB214A081F900853025 /* InfoPlist.strings */; };
 		5E605BB614A081F900853025 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E605BB514A081F900853025 /* main.m */; };
 		5E605BBA14A081F900853025 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E605BB914A081F900853025 /* AppDelegate.m */; };
-		5E605BC014A081F900853025 /* ZUUIRevealController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E605BBE14A081F900853025 /* ZUUIRevealController_iPhone.xib */; };
-		5E605BC314A081F900853025 /* ZUUIRevealController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E605BC114A081F900853025 /* ZUUIRevealController_iPad.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,8 +43,6 @@
 		5E605BB714A081F900853025 /* Project-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Project-Prefix.pch"; sourceTree = "<group>"; };
 		5E605BB814A081F900853025 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5E605BB914A081F900853025 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		5E605BBF14A081F900853025 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ZUUIRevealController_iPhone.xib; sourceTree = "<group>"; };
-		5E605BC214A081F900853025 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ZUUIRevealController_iPad.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,8 +64,6 @@
 			children = (
 				5E1EFE1C14A0BA57008062C1 /* ZUUIRevealController.h */,
 				5E1EFE1D14A0BA57008062C1 /* ZUUIRevealController.m */,
-				5E605BBE14A081F900853025 /* ZUUIRevealController_iPhone.xib */,
-				5E605BC114A081F900853025 /* ZUUIRevealController_iPad.xib */,
 				5E1EFE1814A0BA57008062C1 /* FrontViewController.h */,
 				5E1EFE1914A0BA57008062C1 /* FrontViewController.m */,
 				5E1EFE0C14A0BA4F008062C1 /* FrontViewController_iPad.xib */,
@@ -182,8 +176,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5E605BB414A081F900853025 /* InfoPlist.strings in Resources */,
-				5E605BC014A081F900853025 /* ZUUIRevealController_iPhone.xib in Resources */,
-				5E605BC314A081F900853025 /* ZUUIRevealController_iPad.xib in Resources */,
 				5E1EFE1414A0BA4F008062C1 /* FrontViewController_iPad.xib in Resources */,
 				5E1EFE1514A0BA4F008062C1 /* FrontViewController_iPhone.xib in Resources */,
 				5E1EFE1614A0BA4F008062C1 /* RearViewController_iPad.xib in Resources */,
@@ -247,22 +239,6 @@
 				5E605BB314A081F900853025 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		5E605BBE14A081F900853025 /* ZUUIRevealController_iPhone.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5E605BBF14A081F900853025 /* en */,
-			);
-			name = ZUUIRevealController_iPhone.xib;
-			sourceTree = "<group>";
-		};
-		5E605BC114A081F900853025 /* ZUUIRevealController_iPad.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5E605BC214A081F900853025 /* en */,
-			);
-			name = ZUUIRevealController_iPad.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

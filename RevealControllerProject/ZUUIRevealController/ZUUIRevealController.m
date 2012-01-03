@@ -62,8 +62,8 @@
 // Private Properties:
 @property (retain, nonatomic, readwrite) UIViewController *frontViewController;
 @property (retain, nonatomic, readwrite) UIViewController *rearViewController;
-@property (retain, nonatomic, readwrite) IBOutlet UIView *frontView;
-@property (retain, nonatomic, readwrite) IBOutlet UIView *rearView;
+@property (retain, nonatomic) UIView *frontView;
+@property (retain, nonatomic) UIView *rearView;
 @property (assign, nonatomic) float previousPanOffset;
 @property (assign, nonatomic) FrontViewPosition currentFrontViewPosition;
 
@@ -86,14 +86,7 @@
 
 - (id)initWithFrontViewController:(UIViewController *)aFrontViewController rearViewController:(UIViewController *)aBackViewController
 {
-	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-	{
-		self = [super initWithNibName:@"ZUUIRevealController_iPhone" bundle:nil];
-	}
-	else
-	{
-		self = [super initWithNibName:@"ZUUIRevealController_iPad" bundle:nil];
-	}
+	self = [super init];
 	
 	if (nil != self)
 	{
@@ -380,6 +373,15 @@
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
+	
+	self.frontView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
+	self.rearView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
+	
+	self.frontView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
+	self.rearView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
+	
+	[self.view addSubview:self.rearView];
+	[self.view addSubview:self.frontView];
 	
 	/* Create a fancy shadow aroung the frontView.
 	 *

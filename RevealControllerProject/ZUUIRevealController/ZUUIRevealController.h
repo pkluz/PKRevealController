@@ -45,8 +45,6 @@ typedef enum
 // Public Properties:
 @property (retain, nonatomic, readonly) UIViewController *frontViewController;
 @property (retain, nonatomic, readonly) UIViewController *rearViewController;
-@property (retain, nonatomic, readonly) IBOutlet UIView *frontView;
-@property (retain, nonatomic, readonly) IBOutlet UIView *rearView;
 @property (assign, nonatomic) id<ZUUIRevealControllerDelegate> delegate;
 
 // Public Methods:
