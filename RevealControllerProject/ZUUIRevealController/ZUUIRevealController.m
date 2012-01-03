@@ -54,8 +54,6 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "ZUUIRevealController.h"
-#import "FrontViewController.h"
-#import "RearViewController.h"
 
 @interface ZUUIRevealController()
 
