@@ -17,6 +17,10 @@ Features
 - Easy to read code with low complexity.
 - Behaves almost exactly like the Facebook implementation.
 
+Screencast
+=======
+On my blog: http://nehira.com/articles/2012/01/3.html
+
 Mantra
 =======
 
