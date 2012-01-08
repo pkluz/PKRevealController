@@ -58,8 +58,6 @@
 @interface ZUUIRevealController()
 
 // Private Properties:
-@property (retain, nonatomic, readwrite) UIViewController *frontViewController;
-@property (retain, nonatomic, readwrite) UIViewController *rearViewController;
 @property (retain, nonatomic) UIView *frontView;
 @property (retain, nonatomic) UIView *rearView;
 @property (assign, nonatomic) float previousPanOffset;
