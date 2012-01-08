@@ -43,8 +43,8 @@ typedef enum
 @interface ZUUIRevealController : UIViewController <UITableViewDelegate>
 
 // Public Properties:
-@property (retain, nonatomic, readonly) UIViewController *frontViewController;
-@property (retain, nonatomic, readonly) UIViewController *rearViewController;
+@property (retain, nonatomic) IBOutlet UIViewController *frontViewController;
+@property (retain, nonatomic) IBOutlet UIViewController *rearViewController;
 @property (assign, nonatomic) id<ZUUIRevealControllerDelegate> delegate;
 
 // Public Methods:
