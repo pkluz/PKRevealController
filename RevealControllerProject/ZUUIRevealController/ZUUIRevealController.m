@@ -61,7 +61,6 @@
 @property (retain, nonatomic) UIView *frontView;
 @property (retain, nonatomic) UIView *rearView;
 @property (assign, nonatomic) float previousPanOffset;
-@property (assign, nonatomic) FrontViewPosition currentFrontViewPosition;
 
 // Private Methods:
 - (CGFloat)calculateOffsetForTranslationInView:(CGFloat)x;
