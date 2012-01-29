@@ -39,18 +39,25 @@ typedef enum
 } FrontViewPosition;
 
 @protocol ZUUIRevealControllerDelegate;
+@protocol ZUUIRevealControllerFullscreenDelegate;
 
-@interface ZUUIRevealController : UIViewController <UITableViewDelegate>
+@interface ZUUIRevealController : UIViewController <UITableViewDelegate>{
+    BOOL isFullscreen;
+}
 
 // Public Properties:
-@property (retain, nonatomic) IBOutlet UIViewController *frontViewController;
-@property (retain, nonatomic) IBOutlet UIViewController *rearViewController;
+@property (strong, nonatomic) IBOutlet UIViewController *frontViewController;
+@property (strong, nonatomic) IBOutlet UIViewController *rearViewController;
 @property (assign, nonatomic) id<ZUUIRevealControllerDelegate> delegate;
+@property (assign, nonatomic) id<ZUUIRevealControllerFullscreenDelegate> fullscreenDelegate;
 
 // Public Methods:
 - (id)initWithFrontViewController:(UIViewController *)aFrontViewController rearViewController:(UIViewController *)aBackViewController;
 - (void)revealGesture:(UIPanGestureRecognizer *)recognizer;
 - (void)revealToggle:(id)sender;
+- (void)toogleRearFullscreen;
+- (void)fitFullscreenToOrientation:(NSNumber *)orientation;
+- (void)updateFrontView:(UIViewController *)controller;
 
 @end
 
@@ -72,4 +79,16 @@ typedef enum
 - (void)revealController:(ZUUIRevealController *)revealController willHideRearViewController:(UIViewController *)rearViewController;
 - (void)revealController:(ZUUIRevealController *)revealController didHideRearViewController:(UIViewController *)rearViewController;
 
+@end
+
+// ZUUIRevealControllerFullscreenDelegate Protocol.
+@protocol ZUUIRevealControllerFullscreenDelegate<NSObject>
+
+@optional
+
+- (void)revealController:(ZUUIRevealController *)revealController willFullscreenRearViewController:(UIViewController *)rearViewController;
+- (void)revealController:(ZUUIRevealController *)revealController didFullscreenRearViewController:(UIViewController *)rearViewController;
+
+- (void)revealController:(ZUUIRevealController *)revealController willNormalizeRearViewController:(UIViewController *)rearViewController;
+- (void)revealController:(ZUUIRevealController *)revealController didNormalizeRearViewController:(UIViewController *)rearViewController;
 @end

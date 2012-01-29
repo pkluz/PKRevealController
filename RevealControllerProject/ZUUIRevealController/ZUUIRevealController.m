@@ -1,6 +1,7 @@
 /* 
  
  Copyright (c) 2011, Philip Kluz (Philip.Kluz@zuui.org)
+ Copyright (c) 2012, Tobias Tiemerding (Convert to ARC, Fullscreen of Background, Performance)
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -30,16 +31,11 @@
  
  */
 
-/*
- * NOTE: Before editing the values below make sure they make 'sense'. Unexpected behavior might occur if for instance the 'REVEAL_EDGE'
- *		 were to be lower than the left trigger level...
- */
-
 // 'REVEAL_EDGE' defines the point on the x-axis up to which the rear view is shown.
-#define REVEAL_EDGE 260.0f
+#define REVEAL_EDGE 230.0f
 
 // 'REVEAL_EDGE_OVERDRAW' defines the maximum offset that can occur after the 'REVEAL_EDGE' has been reached.
-#define REVEAL_EDGE_OVERDRAW 60.0f
+#define REVEAL_EDGE_OVERDRAW 10.0f
 
 // 'REVEAL_VIEW_TRIGGER_LEVEL_LEFT' defines the least amount of offset that needs to be panned until the front view snaps to the right edge.
 #define REVEAL_VIEW_TRIGGER_LEVEL_LEFT 125.0f
@@ -52,7 +48,6 @@
 
 // Required for the shadow cast by the front view.
 #import <QuartzCore/QuartzCore.h>
-
 #import "ZUUIRevealController.h"
 
 @interface ZUUIRevealController()
@@ -77,17 +72,17 @@
 @synthesize frontView = _frontView;
 @synthesize rearView = _rearView;
 @synthesize delegate = _delegate;
+@synthesize fullscreenDelegate = _fullscreenDelegate;
 
 #pragma mark - Initialization
 
-- (id)initWithFrontViewController:(UIViewController *)aFrontViewController rearViewController:(UIViewController *)aBackViewController
+- (id)initWithFrontViewController:(UIViewController *)frontViewController rearViewController:(UIViewController *)backViewController
 {
 	self = [super init];
 	
-	if (nil != self)
-	{
-		self.frontViewController = aFrontViewController;
-		self.rearViewController = aBackViewController;
+	if (nil != self){
+		self.frontViewController = frontViewController;
+		self.rearViewController = backViewController;
 	}
 	
 	return self;
@@ -226,10 +221,12 @@
 		// Now adjust the current state enum.
 		if (self.frontView.frame.origin.x == 0.0f)
 		{
+            ((UINavigationController *)self.frontViewController).topViewController.view.userInteractionEnabled = YES;
 			self.currentFrontViewPosition = FrontViewPositionLeft;
 		}
 		else
 		{
+            ((UINavigationController *)self.frontViewController).topViewController.view.userInteractionEnabled = NO;
 			self.currentFrontViewPosition = FrontViewPositionRight;
 		}
 		
@@ -255,12 +252,9 @@
 		{
 			float offset = [self calculateOffsetForTranslationInView:([recognizer translationInView:self.view].x+REVEAL_EDGE)];
 			self.frontView.frame = CGRectMake(offset, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-		}
-		else if ([recognizer translationInView:self.view].x > -REVEAL_EDGE)
-		{
+		} else if ([recognizer translationInView:self.view].x > -REVEAL_EDGE) {
 			self.frontView.frame = CGRectMake([recognizer translationInView:self.view].x+REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-		}
-		else
+		} else
 		{
 			self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 		}
@@ -270,70 +264,107 @@
 // Instantaneously toggle the rear view's visibility.
 - (void)revealToggle:(id)sender
 {	
-	if (FrontViewPositionLeft == self.currentFrontViewPosition)
-	{ 
+	if (FrontViewPositionLeft == self.currentFrontViewPosition){ 
+        ((UINavigationController *)self.frontViewController).topViewController.view.userInteractionEnabled = NO;
 		// Check if a delegate exists and if so, whether it is fine for us to revealing the rear view.
 		if ([self.delegate respondsToSelector:@selector(revealController:shouldRevealRearViewController:)])
-		{
 			if (![self.delegate revealController:self shouldRevealRearViewController:self.rearViewController])
-			{
 				return;
-			}
-		}
 		
 		// Dispatch message to delegate, telling it the 'rearView' _WILL_ reveal, if appropriate:
 		if ([self.delegate respondsToSelector:@selector(revealController:willRevealRearViewController:)])
-		{
 			[self.delegate revealController:self willRevealRearViewController:self.rearViewController];
-		}
-		
-		[UIView animateWithDuration:0.25f animations:^
-		 {
+        
+        [UIView animateWithDuration:0.25f delay:0.0f options:UIViewAnimationCurveEaseInOut animations:^{
 			 self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-		 }
-		 completion:^(BOOL finished)
-		 {
-			 // Dispatch message to delegate, telling it the 'rearView' _DID_ reveal, if appropriate:
-			 if ([self.delegate respondsToSelector:@selector(revealController:didRevealRearViewController:)])
-			 {
-				 [self.delegate revealController:self didRevealRearViewController:self.rearViewController];
-			 }
-		 }];
+        } completion:^(BOOL finished) {
+            // Dispatch message to delegate, telling it the 'rearView' _DID_ reveal, if appropriate:
+            if ([self.delegate respondsToSelector:@selector(revealController:didRevealRearViewController:)])
+                [self.delegate revealController:self didRevealRearViewController:self.rearViewController];
+        }];
 		
 		self.currentFrontViewPosition = FrontViewPositionRight;
-	}
-	else
-	{
-		// Check if a delegate exists and if so, whether it is fine for us to hiding the rear view.
+	} else {
+        ((UINavigationController *)self.frontViewController).topViewController.view.userInteractionEnabled = YES;
+        // Check if a delegate exists and if so, whether it is fine for us to hiding the rear view.
 		if ([self.delegate respondsToSelector:@selector(revealController:shouldHideRearViewController:)])
-		{
-			if (![self.delegate revealController:self shouldHideRearViewController:self.rearViewController])
-			{
-				return;
-			}
-		}
+            if (![self.delegate revealController:self shouldHideRearViewController:self.rearViewController])
+                return;
 		
 		// Dispatch message to delegate, telling it the 'rearView' _WILL_ hide, if appropriate:
 		if ([self.delegate respondsToSelector:@selector(revealController:willHideRearViewController:)])
-		{
 			[self.delegate revealController:self willHideRearViewController:self.rearViewController];
-		}
 		
-		[UIView animateWithDuration:0.25f animations:^
-		 {
+		[UIView animateWithDuration:0.25f delay:0.0f options:UIViewAnimationCurveEaseOut animations:^{
 			 self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-		 }
-		 completion:^(BOOL finished)
-		 {
-			 // Dispatch message to delegate, telling it the 'rearView' _DID_ hide, if appropriate:
-			 if ([self.delegate respondsToSelector:@selector(revealController:didHideRearViewController:)])
-			 {
-				 [self.delegate revealController:self didHideRearViewController:self.rearViewController];
-			 }
-		 }];
+        } completion:^(BOOL finished) {
+            // Dispatch message to delegate, telling it the 'rearView' _DID_ hide, if appropriate:
+            if ([self.delegate respondsToSelector:@selector(revealController:didHideRearViewController:)])
+                [self.delegate revealController:self didHideRearViewController:self.rearViewController];
+        }];
 		
 		self.currentFrontViewPosition = FrontViewPositionLeft;
 	}
+}
+
+// Instantaneously toggle the rear view's visibility.
+- (void)fitFullscreenToOrientation:(NSNumber *)orientation
+{
+    [UIView animateWithDuration:0.25f delay:0.0f options:UIViewAnimationCurveEaseOut animations:^{
+        self.frontView.frame = CGRectMake([orientation intValue] == 0 ? 322.5f : 482.5f , 0.0f, 
+                                          self.frontView.frame.size.width, self.frontView.frame.size.height);
+    } completion:^(BOOL finished) {}];
+}
+
+
+// Instantaneously toggle the rear view's fullscreen visibility.
+- (void)toogleRearFullscreen
+{
+    if(!isFullscreen){
+        // Dispatch message to delegate, telling it the 'rearView' _WILL_ fullscreen, if appropriate:
+        if ([self.fullscreenDelegate respondsToSelector:@selector(revealController:willFullscreenRearViewController:)])
+			[self.fullscreenDelegate revealController:self willFullscreenRearViewController:self.rearViewController];
+        
+        [UIView animateWithDuration:0.25f delay:0.0f options:UIViewAnimationCurveEaseOut animations:^{
+            self.frontView.frame = CGRectMake(self.interfaceOrientation == UIInterfaceOrientationPortrait ? 322.5f : 482.5f , 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+        } completion:^(BOOL finished) {
+            // Dispatch message to delegate, telling it the 'rearView' _DID_ reveal, if appropriate:
+            if ([self.fullscreenDelegate respondsToSelector:@selector(revealController:didFullscreenRearViewController:)])
+                [self.fullscreenDelegate revealController:self didFullscreenRearViewController:self.rearViewController];
+        }];
+        
+        isFullscreen = YES;
+    } else {
+        // Dispatch message to delegate, telling it the 'rearView' _WILL_ normalize, if appropriate:
+        if ([self.fullscreenDelegate respondsToSelector:@selector(revealController:willNormalizeRearViewController:)])
+			[self.fullscreenDelegate revealController:self willNormalizeRearViewController:self.rearViewController];
+        
+        // Get old edge position.
+        float edge = FrontViewPositionRight == self.currentFrontViewPosition ? REVEAL_EDGE : 0.0f;
+        
+        [UIView animateWithDuration:0.25f delay:0.0f options:UIViewAnimationCurveEaseOut animations:^{
+            self.frontView.frame = CGRectMake(edge, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+        } completion:^(BOOL finished) {
+            // Dispatch message to delegate, telling it the 'rearView' _DID_ reveal, if appropriate:
+            if ([self.fullscreenDelegate respondsToSelector:@selector(revealController:didNormalizeRearViewController:)])
+                [self.fullscreenDelegate revealController:self didNormalizeRearViewController:self.rearViewController];
+        }];
+        
+        isFullscreen = NO;
+    }
+}
+
+// Set a new frontview
+- (void)updateFrontView:(UIViewController *)controller
+{
+    // Remove old front view controller from hierachy.
+    [self.frontViewController removeFromParentViewController];
+    [self.frontViewController.view removeFromSuperview];
+    // Add the front view controller to the hierarchy.
+    self.frontViewController = controller;
+	[self addChildViewController:self.frontViewController];
+	[self.frontView addSubview:self.frontViewController.view];
+	[self.frontViewController didMoveToParentViewController:self];
 }
 
 #pragma mark - Helper
@@ -346,20 +377,14 @@
 	CGFloat result;
 	
 	if (x <= REVEAL_EDGE)
-	{
 		// Translate linearly.
 		result = x;
-	}
 	else if (x <= REVEAL_EDGE+(M_PI*REVEAL_EDGE_OVERDRAW/2.0f))
-	{
 		// and eventually slow translation slowly.
 		result = REVEAL_EDGE_OVERDRAW*sin((x-REVEAL_EDGE)/REVEAL_EDGE_OVERDRAW)+REVEAL_EDGE;
-	}
 	else
-	{
 		// ...until we hit the limit.
 		result = REVEAL_EDGE+REVEAL_EDGE_OVERDRAW;
-	}
 	
 	return result;
 }
@@ -370,8 +395,8 @@
 {
 	[super viewDidLoad];
 	
-	self.frontView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
-	self.rearView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
+	self.frontView = [[UIView alloc] initWithFrame:self.view.bounds];
+	self.rearView = [[UIView alloc] initWithFrame:self.view.bounds];
 	
 	self.frontView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 	self.rearView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
@@ -390,8 +415,18 @@
 	self.frontView.layer.shadowColor = [UIColor blackColor].CGColor;
 	self.frontView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
 	self.frontView.layer.shadowOpacity = 1.0f;
-	self.frontView.layer.shadowRadius = 2.5f;
+	self.frontView.layer.shadowRadius = 3.5f;
 	self.frontView.layer.shadowPath = shadowPath.CGPath;
+    
+    
+    /* Add gesture regocnizer.
+	 *
+     * If the user swipes left or right the view appears / disappears.
+	 */
+    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] 
+                                                    initWithTarget:self 
+                                                    action:@selector(revealGesture:)];
+    [self.frontView addGestureRecognizer:panGestureRecognizer];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -411,13 +446,15 @@
 	[self addChildViewController:self.frontViewController];
 	[self.frontView addSubview:self.frontViewController.view];
 	[self.frontViewController didMoveToParentViewController:self];
+
+    isFullscreen = NO;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
 	[super viewDidDisappear:animated];
 	
-	// Remove the rear view controller from the hierarchy.
+	// Remove the rear view controller from the hi0ierarchy.
 	[self.rearViewController.view removeFromSuperview];
 	[self.rearViewController removeFromParentViewController];
 	
@@ -429,18 +466,6 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
 	return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-}
-
-#pragma mark - Memory Management
-
-- (void)dealloc
-{
-	[_frontViewController release], self.frontViewController = nil;
-	[_rearViewController release], self.rearViewController = nil;
-	[_frontView release], self.frontView = nil;
-	[_rearView release], self.rearView = nil;
-
-	[super dealloc];
 }
 
 @end
