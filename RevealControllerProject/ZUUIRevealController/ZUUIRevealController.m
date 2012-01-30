@@ -394,6 +394,13 @@
 	self.frontView.layer.shadowPath = shadowPath.CGPath;
 }
 
+- (void)viewDidUnload
+{
+    // release views as they will be repopulated in viewDidLoad/viewWillAppear
+    self.frontView = nil;
+    self.rearView = nil;
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
@@ -435,10 +442,10 @@
 
 - (void)dealloc
 {
-	[_frontViewController release], self.frontViewController = nil;
-	[_rearViewController release], self.rearViewController = nil;
-	[_frontView release], self.frontView = nil;
-	[_rearView release], self.rearView = nil;
+	[_frontViewController release], _frontViewController = nil;
+	[_rearViewController release], _rearViewController = nil;
+	[_frontView release], _frontView = nil;
+	[_rearView release], _rearView = nil;
 
 	[super dealloc];
 }
