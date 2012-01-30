@@ -47,6 +47,8 @@ typedef enum
 @property (retain, nonatomic) IBOutlet UIViewController *rearViewController;
 @property (assign, nonatomic) id<ZUUIRevealControllerDelegate> delegate;
 
+@property (assign, nonatomic) FrontViewPosition currentFrontViewPosition;
+
 // Public Methods:
 - (id)initWithFrontViewController:(UIViewController *)aFrontViewController rearViewController:(UIViewController *)aBackViewController;
 - (void)revealGesture:(UIPanGestureRecognizer *)recognizer;

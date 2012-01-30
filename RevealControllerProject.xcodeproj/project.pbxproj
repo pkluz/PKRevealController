@@ -11,8 +11,6 @@
 		5E1EFE1514A0BA4F008062C1 /* FrontViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E1EFE0E14A0BA4F008062C1 /* FrontViewController_iPhone.xib */; };
 		5E1EFE1614A0BA4F008062C1 /* RearViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E1EFE1014A0BA4F008062C1 /* RearViewController_iPad.xib */; };
 		5E1EFE1714A0BA4F008062C1 /* RearViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E1EFE1214A0BA4F008062C1 /* RearViewController_iPhone.xib */; };
-		5E1EFE1E14A0BA57008062C1 /* FrontViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E1EFE1914A0BA57008062C1 /* FrontViewController.m */; };
-		5E1EFE1F14A0BA57008062C1 /* RearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E1EFE1B14A0BA57008062C1 /* RearViewController.m */; };
 		5E1EFE2014A0BA57008062C1 /* ZUUIRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E1EFE1D14A0BA57008062C1 /* ZUUIRevealController.m */; };
 		5E605BAA14A081F900853025 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E605BA914A081F900853025 /* UIKit.framework */; };
 		5E605BAC14A081F900853025 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E605BAB14A081F900853025 /* Foundation.framework */; };
@@ -20,6 +18,9 @@
 		5E605BB414A081F900853025 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5E605BB214A081F900853025 /* InfoPlist.strings */; };
 		5E605BB614A081F900853025 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E605BB514A081F900853025 /* main.m */; };
 		5E605BBA14A081F900853025 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E605BB914A081F900853025 /* AppDelegate.m */; };
+		5EF3AA5F14D73A1C00FDD48F /* FrontViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EF3AA5A14D73A1C00FDD48F /* FrontViewController.m */; };
+		5EF3AA6014D73A1C00FDD48F /* RearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EF3AA5C14D73A1C00FDD48F /* RearViewController.m */; };
+		5EF3AA6114D73A1C00FDD48F /* RevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EF3AA5E14D73A1C00FDD48F /* RevealController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,10 +28,6 @@
 		5E1EFE0F14A0BA4F008062C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/FrontViewController_iPhone.xib; sourceTree = "<group>"; };
 		5E1EFE1114A0BA4F008062C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RearViewController_iPad.xib; sourceTree = "<group>"; };
 		5E1EFE1314A0BA4F008062C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RearViewController_iPhone.xib; sourceTree = "<group>"; };
-		5E1EFE1814A0BA57008062C1 /* FrontViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FrontViewController.h; path = ZUUIRevealController/FrontViewController.h; sourceTree = "<group>"; };
-		5E1EFE1914A0BA57008062C1 /* FrontViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FrontViewController.m; path = ZUUIRevealController/FrontViewController.m; sourceTree = "<group>"; };
-		5E1EFE1A14A0BA57008062C1 /* RearViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RearViewController.h; path = ZUUIRevealController/RearViewController.h; sourceTree = "<group>"; };
-		5E1EFE1B14A0BA57008062C1 /* RearViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RearViewController.m; path = ZUUIRevealController/RearViewController.m; sourceTree = "<group>"; };
 		5E1EFE1C14A0BA57008062C1 /* ZUUIRevealController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUUIRevealController.h; path = ZUUIRevealController/ZUUIRevealController.h; sourceTree = "<group>"; };
 		5E1EFE1D14A0BA57008062C1 /* ZUUIRevealController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZUUIRevealController.m; path = ZUUIRevealController/ZUUIRevealController.m; sourceTree = "<group>"; };
 		5E605BA514A081F900853025 /* RevealControllerProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RevealControllerProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -43,6 +40,12 @@
 		5E605BB714A081F900853025 /* Project-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Project-Prefix.pch"; sourceTree = "<group>"; };
 		5E605BB814A081F900853025 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5E605BB914A081F900853025 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		5EF3AA5914D73A1C00FDD48F /* FrontViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FrontViewController.h; path = Example/FrontViewController.h; sourceTree = "<group>"; };
+		5EF3AA5A14D73A1C00FDD48F /* FrontViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FrontViewController.m; path = Example/FrontViewController.m; sourceTree = "<group>"; };
+		5EF3AA5B14D73A1C00FDD48F /* RearViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RearViewController.h; path = Example/RearViewController.h; sourceTree = "<group>"; };
+		5EF3AA5C14D73A1C00FDD48F /* RearViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RearViewController.m; path = Example/RearViewController.m; sourceTree = "<group>"; };
+		5EF3AA5D14D73A1C00FDD48F /* RevealController.h */ = {isa = PBXFileReference; fileEncoding = 4; name = RevealController.h; path = Example/RevealController.h; sourceTree = "<group>"; };
+		5EF3AA5E14D73A1C00FDD48F /* RevealController.m */ = {isa = PBXFileReference; fileEncoding = 4; name = RevealController.m; path = Example/RevealController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,21 +62,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5E1EFE2114A0BA65008062C1 /* RevealController */ = {
+		5E1EFE2114A0BA65008062C1 /* Example */ = {
 			isa = PBXGroup;
 			children = (
-				5E1EFE1C14A0BA57008062C1 /* ZUUIRevealController.h */,
-				5E1EFE1D14A0BA57008062C1 /* ZUUIRevealController.m */,
-				5E1EFE1814A0BA57008062C1 /* FrontViewController.h */,
-				5E1EFE1914A0BA57008062C1 /* FrontViewController.m */,
+				5EF3AA5D14D73A1C00FDD48F /* RevealController.h */,
+				5EF3AA5E14D73A1C00FDD48F /* RevealController.m */,
+				5EF3AA5914D73A1C00FDD48F /* FrontViewController.h */,
+				5EF3AA5A14D73A1C00FDD48F /* FrontViewController.m */,
 				5E1EFE0C14A0BA4F008062C1 /* FrontViewController_iPad.xib */,
 				5E1EFE0E14A0BA4F008062C1 /* FrontViewController_iPhone.xib */,
-				5E1EFE1A14A0BA57008062C1 /* RearViewController.h */,
-				5E1EFE1B14A0BA57008062C1 /* RearViewController.m */,
+				5EF3AA5B14D73A1C00FDD48F /* RearViewController.h */,
+				5EF3AA5C14D73A1C00FDD48F /* RearViewController.m */,
 				5E1EFE1014A0BA4F008062C1 /* RearViewController_iPad.xib */,
 				5E1EFE1214A0BA4F008062C1 /* RearViewController_iPhone.xib */,
 			);
-			name = RevealController;
+			name = Example;
 			sourceTree = "<group>";
 		};
 		5E605B9A14A081F900853025 = {
@@ -108,7 +111,8 @@
 			children = (
 				5E605BB814A081F900853025 /* AppDelegate.h */,
 				5E605BB914A081F900853025 /* AppDelegate.m */,
-				5E1EFE2114A0BA65008062C1 /* RevealController */,
+				5E1EFE2114A0BA65008062C1 /* Example */,
+				5EF3AA4914D738BB00FDD48F /* ZUUIRevealController */,
 				5E605BB014A081F900853025 /* Supporting Files */,
 			);
 			path = RevealControllerProject;
@@ -123,6 +127,15 @@
 				5E605BB714A081F900853025 /* Project-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5EF3AA4914D738BB00FDD48F /* ZUUIRevealController */ = {
+			isa = PBXGroup;
+			children = (
+				5E1EFE1C14A0BA57008062C1 /* ZUUIRevealController.h */,
+				5E1EFE1D14A0BA57008062C1 /* ZUUIRevealController.m */,
+			);
+			name = ZUUIRevealController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -192,9 +205,10 @@
 			files = (
 				5E605BB614A081F900853025 /* main.m in Sources */,
 				5E605BBA14A081F900853025 /* AppDelegate.m in Sources */,
-				5E1EFE1E14A0BA57008062C1 /* FrontViewController.m in Sources */,
-				5E1EFE1F14A0BA57008062C1 /* RearViewController.m in Sources */,
 				5E1EFE2014A0BA57008062C1 /* ZUUIRevealController.m in Sources */,
+				5EF3AA5F14D73A1C00FDD48F /* FrontViewController.m in Sources */,
+				5EF3AA6014D73A1C00FDD48F /* RearViewController.m in Sources */,
+				5EF3AA6114D73A1C00FDD48F /* RevealController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

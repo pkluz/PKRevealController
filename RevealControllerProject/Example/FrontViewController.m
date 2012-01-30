@@ -119,48 +119,12 @@
 	[stubController release];
 }
 
-#pragma - ZUUIRevealControllerDelegate Protocol.
-
-/*
- * All of the methods below are optional. You can use them to control the behavior of the ZUUIRevealController, 
- * or react to certain events.
- */
-- (BOOL)revealController:(ZUUIRevealController *)revealController shouldRevealRearViewController:(UIViewController *)rearViewController
-{
-	return YES;
-}
-
-- (BOOL)revealController:(ZUUIRevealController *)revealController shouldHideRearViewController:(UIViewController *)rearViewController 
-{
-	return YES;
-}
-
-- (void)revealController:(ZUUIRevealController *)revealController willRevealRearViewController:(UIViewController *)rearViewController 
-{
-	NSLog(@"%@", NSStringFromSelector(_cmd));
-}
-
-- (void)revealController:(ZUUIRevealController *)revealController didRevealRearViewController:(UIViewController *)rearViewController
-{
-	NSLog(@"%@", NSStringFromSelector(_cmd));
-}
-
-- (void)revealController:(ZUUIRevealController *)revealController willHideRearViewController:(UIViewController *)rearViewController
-{
-	NSLog(@"%@", NSStringFromSelector(_cmd));
-}
-
-- (void)revealController:(ZUUIRevealController *)revealController didHideRearViewController:(UIViewController *)rearViewController 
-{
-	NSLog(@"%@", NSStringFromSelector(_cmd));
-}
-
 #pragma mark - Memory Management
 
 - (void)dealloc
 {
 	[self.navigationController.navigationBar removeGestureRecognizer:self.navigationBarPanGestureRecognizer];
-	[_navigationBarPanGestureRecognizer release], self.navigationBarPanGestureRecognizer = nil;
+	[_navigationBarPanGestureRecognizer release], _navigationBarPanGestureRecognizer = nil;
 
 	[super dealloc];
 }

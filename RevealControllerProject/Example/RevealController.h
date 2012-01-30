@@ -31,12 +31,11 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "ZUUIRevealController.h"
 
-@class RevealController;
+@class FrontViewController;
+@class RearViewController;
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
-
-@property (retain, nonatomic) UIWindow *window;
-@property (retain, nonatomic) RevealController *viewController;
+@interface RevealController : ZUUIRevealController <ZUUIRevealControllerDelegate>
 
 @end

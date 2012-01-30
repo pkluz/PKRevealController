@@ -396,7 +396,6 @@
 
 - (void)viewDidUnload
 {
-    // release views as they will be repopulated in viewDidLoad/viewWillAppear
     self.frontView = nil;
     self.rearView = nil;
 }
