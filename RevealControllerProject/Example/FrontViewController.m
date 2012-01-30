@@ -125,7 +125,6 @@
 {
 	[self.navigationController.navigationBar removeGestureRecognizer:self.navigationBarPanGestureRecognizer];
 	[_navigationBarPanGestureRecognizer release], _navigationBarPanGestureRecognizer = nil;
-
 	[super dealloc];
 }
 

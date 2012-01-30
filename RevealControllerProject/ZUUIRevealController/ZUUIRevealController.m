@@ -422,7 +422,6 @@
 	{
 		[self.frontViewController didMoveToParentViewController:self];
 	}	
-
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -442,7 +441,6 @@
 	{
 		[self.frontViewController removeFromParentViewController];		
 	}	
-
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
@@ -458,7 +456,6 @@
 	[_rearViewController release], _rearViewController = nil;
 	[_frontView release], _frontView = nil;
 	[_rearView release], _rearView = nil;
-
 	[super dealloc];
 }
 

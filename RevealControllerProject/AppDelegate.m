@@ -80,7 +80,6 @@
 {
 	[_window release], _window = nil;
 	[_viewController release], _viewController = nil;
-	
 	[super dealloc];
 }
 
