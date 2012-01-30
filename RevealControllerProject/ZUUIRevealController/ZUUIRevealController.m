@@ -61,7 +61,6 @@
 @property (retain, nonatomic) UIView *frontView;
 @property (retain, nonatomic) UIView *rearView;
 @property (assign, nonatomic) float previousPanOffset;
-@property (assign, nonatomic) FrontViewPosition currentFrontViewPosition;
 
 // Private Methods:
 - (CGFloat)calculateOffsetForTranslationInView:(CGFloat)x;
@@ -412,12 +411,18 @@
 	// Add the rear view controller to the hierarchy.
 	[self addChildViewController:self.rearViewController];
 	[self.rearView addSubview:self.rearViewController.view];
-	[self.rearViewController didMoveToParentViewController:self];
+	if ([self.rearViewController respondsToSelector:@selector(didMoveToParentViewController:)]) {
+		[self.rearViewController didMoveToParentViewController:self];		
+	}
+
 
 	// Add the front view controller to the hierarchy.
 	[self addChildViewController:self.frontViewController];
 	[self.frontView addSubview:self.frontViewController.view];
-	[self.frontViewController didMoveToParentViewController:self];
+	if ([self.frontViewController respondsToSelector:@selector(didMoveToParentViewController:)]) {
+		[self.frontViewController didMoveToParentViewController:self];
+	}	
+
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -426,11 +431,17 @@
 	
 	// Remove the rear view controller from the hierarchy.
 	[self.rearViewController.view removeFromSuperview];
-	[self.rearViewController removeFromParentViewController];
+	if ([self.rearViewController respondsToSelector:@selector(removeFromParentViewController:)]) {
+		[self.rearViewController removeFromParentViewController];
+	}
+
 	
 	// Remove the front view controller from the hierarchy.
 	[self.frontViewController.view removeFromSuperview];
-	[self.frontViewController removeFromParentViewController];
+	if ([self.frontViewController respondsToSelector:@selector(removeFromParentViewController:)]) {
+		[self.frontViewController removeFromParentViewController];		
+	}	
+
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
