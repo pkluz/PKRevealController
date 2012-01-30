@@ -410,15 +410,16 @@
 	// Add the rear view controller to the hierarchy.
 	[self addChildViewController:self.rearViewController];
 	[self.rearView addSubview:self.rearViewController.view];
-	if ([self.rearViewController respondsToSelector:@selector(didMoveToParentViewController:)]) {
+	if ([self.rearViewController respondsToSelector:@selector(didMoveToParentViewController:)])
+	{
 		[self.rearViewController didMoveToParentViewController:self];		
 	}
-
 
 	// Add the front view controller to the hierarchy.
 	[self addChildViewController:self.frontViewController];
 	[self.frontView addSubview:self.frontViewController.view];
-	if ([self.frontViewController respondsToSelector:@selector(didMoveToParentViewController:)]) {
+	if ([self.frontViewController respondsToSelector:@selector(didMoveToParentViewController:)])
+	{
 		[self.frontViewController didMoveToParentViewController:self];
 	}	
 
@@ -430,14 +431,15 @@
 	
 	// Remove the rear view controller from the hierarchy.
 	[self.rearViewController.view removeFromSuperview];
-	if ([self.rearViewController respondsToSelector:@selector(removeFromParentViewController:)]) {
+	if ([self.rearViewController respondsToSelector:@selector(removeFromParentViewController:)])
+	{
 		[self.rearViewController removeFromParentViewController];
 	}
-
 	
 	// Remove the front view controller from the hierarchy.
 	[self.frontViewController.view removeFromSuperview];
-	if ([self.frontViewController respondsToSelector:@selector(removeFromParentViewController:)]) {
+	if ([self.frontViewController respondsToSelector:@selector(removeFromParentViewController:)])
+	{
 		[self.frontViewController removeFromParentViewController];		
 	}	
 
