@@ -359,17 +359,6 @@
 	self.frontView.layer.shadowOpacity = 1.0f;
 	self.frontView.layer.shadowRadius = 2.5f;
 	self.frontView.layer.shadowPath = shadowPath.CGPath;
-}
-
-- (void)viewDidUnload
-{
-    self.frontView = nil;
-    self.rearView = nil;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
 	
 	// Init the position with only the front view visible.
 	self.previousPanOffset = 0.0f;
@@ -382,20 +371,19 @@
 	{
 		[self.rearViewController didMoveToParentViewController:self];		
 	}
-
+	
 	// Add the front view controller to the hierarchy.
 	[self addChildViewController:self.frontViewController];
 	[self.frontView addSubview:self.frontViewController.view];
+	
 	if ([self.frontViewController respondsToSelector:@selector(didMoveToParentViewController:)])
 	{
 		[self.frontViewController didMoveToParentViewController:self];
 	}	
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+- (void)viewDidUnload
 {
-	[super viewDidDisappear:animated];
-	
 	// Remove the rear view controller from the hierarchy.
 	[self.rearViewController.view removeFromSuperview];
 	if ([self.rearViewController respondsToSelector:@selector(removeFromParentViewController:)])
@@ -409,6 +397,9 @@
 	{
 		[self.frontViewController removeFromParentViewController];		
 	}	
+	
+	self.frontView = nil;
+    self.rearView = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
