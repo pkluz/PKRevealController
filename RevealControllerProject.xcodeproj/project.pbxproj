@@ -12,10 +12,10 @@
 		5E1EFE1614A0BA4F008062C1 /* RearViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E1EFE1014A0BA4F008062C1 /* RearViewController_iPad.xib */; };
 		5E1EFE1714A0BA4F008062C1 /* RearViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E1EFE1214A0BA4F008062C1 /* RearViewController_iPhone.xib */; };
 		5E1EFE2014A0BA57008062C1 /* ZUUIRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E1EFE1D14A0BA57008062C1 /* ZUUIRevealController.m */; };
-		5E5A2CFA14E0CBD00042AE1E /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E5A2CF714E0CBD00042AE1E /* MapViewController.m */; };
-		5E5A2CFB14E0CBD00042AE1E /* MapViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E5A2CF814E0CBD00042AE1E /* MapViewController_iPhone.xib */; };
-		5E5A2CFC14E0CBD00042AE1E /* MapViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E5A2CF914E0CBD00042AE1E /* MapViewController_iPad.xib */; };
 		5E5A2D0014E0CD8D0042AE1E /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E5A2CFF14E0CD8D0042AE1E /* MapKit.framework */; };
+		5E5A2D0314E0D1590042AE1E /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E5A2D0214E0D1590042AE1E /* MapViewController.m */; };
+		5E5A2D0814E0D1600042AE1E /* MapViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E5A2D0414E0D1600042AE1E /* MapViewController_iPad.xib */; };
+		5E5A2D0914E0D1600042AE1E /* MapViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E5A2D0614E0D1600042AE1E /* MapViewController_iPhone.xib */; };
 		5E605BAA14A081F900853025 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E605BA914A081F900853025 /* UIKit.framework */; };
 		5E605BAC14A081F900853025 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E605BAB14A081F900853025 /* Foundation.framework */; };
 		5E605BAE14A081F900853025 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E605BAD14A081F900853025 /* CoreGraphics.framework */; };
@@ -34,11 +34,11 @@
 		5E1EFE1314A0BA4F008062C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RearViewController_iPhone.xib; sourceTree = "<group>"; };
 		5E1EFE1C14A0BA57008062C1 /* ZUUIRevealController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUUIRevealController.h; path = ZUUIRevealController/ZUUIRevealController.h; sourceTree = "<group>"; };
 		5E1EFE1D14A0BA57008062C1 /* ZUUIRevealController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZUUIRevealController.m; path = ZUUIRevealController/ZUUIRevealController.m; sourceTree = "<group>"; };
-		5E5A2CF614E0CBD00042AE1E /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
-		5E5A2CF714E0CBD00042AE1E /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
-		5E5A2CF814E0CBD00042AE1E /* MapViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapViewController_iPhone.xib; sourceTree = "<group>"; };
-		5E5A2CF914E0CBD00042AE1E /* MapViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapViewController_iPad.xib; sourceTree = "<group>"; };
 		5E5A2CFF14E0CD8D0042AE1E /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		5E5A2D0114E0D1590042AE1E /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapViewController.h; path = Example/MapViewController.h; sourceTree = "<group>"; };
+		5E5A2D0214E0D1590042AE1E /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapViewController.m; path = Example/MapViewController.m; sourceTree = "<group>"; };
+		5E5A2D0514E0D1600042AE1E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MapViewController_iPad.xib; sourceTree = "<group>"; };
+		5E5A2D0714E0D1600042AE1E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MapViewController_iPhone.xib; sourceTree = "<group>"; };
 		5E605BA514A081F900853025 /* RevealControllerProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RevealControllerProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E605BA914A081F900853025 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		5E605BAB14A081F900853025 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -109,10 +109,10 @@
 		5E5A2CF514E0CB9E0042AE1E /* MapViewController (Front) */ = {
 			isa = PBXGroup;
 			children = (
-				5E5A2CF614E0CBD00042AE1E /* MapViewController.h */,
-				5E5A2CF714E0CBD00042AE1E /* MapViewController.m */,
-				5E5A2CF814E0CBD00042AE1E /* MapViewController_iPhone.xib */,
-				5E5A2CF914E0CBD00042AE1E /* MapViewController_iPad.xib */,
+				5E5A2D0114E0D1590042AE1E /* MapViewController.h */,
+				5E5A2D0214E0D1590042AE1E /* MapViewController.m */,
+				5E5A2D0414E0D1600042AE1E /* MapViewController_iPad.xib */,
+				5E5A2D0614E0D1600042AE1E /* MapViewController_iPhone.xib */,
 			);
 			name = "MapViewController (Front)";
 			sourceTree = "<group>";
@@ -232,8 +232,8 @@
 				5E1EFE1514A0BA4F008062C1 /* FrontViewController_iPhone.xib in Resources */,
 				5E1EFE1614A0BA4F008062C1 /* RearViewController_iPad.xib in Resources */,
 				5E1EFE1714A0BA4F008062C1 /* RearViewController_iPhone.xib in Resources */,
-				5E5A2CFB14E0CBD00042AE1E /* MapViewController_iPhone.xib in Resources */,
-				5E5A2CFC14E0CBD00042AE1E /* MapViewController_iPad.xib in Resources */,
+				5E5A2D0814E0D1600042AE1E /* MapViewController_iPad.xib in Resources */,
+				5E5A2D0914E0D1600042AE1E /* MapViewController_iPhone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,7 +250,7 @@
 				5EF3AA5F14D73A1C00FDD48F /* FrontViewController.m in Sources */,
 				5EF3AA6014D73A1C00FDD48F /* RearViewController.m in Sources */,
 				5EF3AA6114D73A1C00FDD48F /* RevealController.m in Sources */,
-				5E5A2CFA14E0CBD00042AE1E /* MapViewController.m in Sources */,
+				5E5A2D0314E0D1590042AE1E /* MapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,6 +287,22 @@
 				5E1EFE1314A0BA4F008062C1 /* en */,
 			);
 			name = RearViewController_iPhone.xib;
+			sourceTree = "<group>";
+		};
+		5E5A2D0414E0D1600042AE1E /* MapViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5E5A2D0514E0D1600042AE1E /* en */,
+			);
+			name = MapViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+		5E5A2D0614E0D1600042AE1E /* MapViewController_iPhone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5E5A2D0714E0D1600042AE1E /* en */,
+			);
+			name = MapViewController_iPhone.xib;
 			sourceTree = "<group>";
 		};
 		5E605BB214A081F900853025 /* InfoPlist.strings */ = {
