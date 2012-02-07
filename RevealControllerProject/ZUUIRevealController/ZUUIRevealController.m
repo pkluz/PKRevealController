@@ -67,6 +67,14 @@
 - (void)_revealAnimation;
 - (void)_concealAnimation;
 
+- (void)_addFrontViewControllerToHierarchy:(UIViewController *)frontViewController;
+- (void)_addRearViewControllerToHierarchy:(UIViewController *)rearViewController;
+- (void)_removeFrontViewControllerFromHierarchy:(UIViewController *)frontViewController;
+- (void)_removeRearViewControllerFromHierarchy:(UIViewController *)rearViewController;
+
+- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated;
+- (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController;
+
 @end
 
 @implementation ZUUIRevealController
@@ -87,8 +95,8 @@
 	
 	if (nil != self)
 	{
-		self.frontViewController = aFrontViewController;
-		self.rearViewController = aBackViewController;
+		_frontViewController = [aFrontViewController retain];
+		_rearViewController = [aBackViewController retain];
 	}
 	
 	return self;
@@ -271,6 +279,42 @@
 	}
 }
 
+- (void)setFrontViewController:(UIViewController *)frontViewController
+{
+	[self setFrontViewController:frontViewController animated:NO];
+}
+
+- (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated
+{
+	if (nil != frontViewController)
+	{
+		[self _swapCurrentFrontViewControllerWith:frontViewController animated:animated];
+	}
+}
+
+- (void)setRearViewController:(UIViewController *)rearViewController
+{
+	if (nil != rearViewController)
+	{
+		if (self.currentFrontViewPosition == FrontViewPositionRight)
+		{
+			[UIView animateWithDuration:0.25f animations:^
+			{
+				self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+			}
+			completion:^(BOOL finished)
+			{
+				[self _performRearViewControllerSwap:rearViewController];
+				[self _revealAnimation];
+			}];
+		}
+		else
+		{
+			[self _performRearViewControllerSwap:rearViewController];
+		}
+	}
+}
+
 #pragma mark - Helper
 
 - (void)_revealAnimation
@@ -331,6 +375,122 @@
 	return result;
 }
 
+- (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController
+{
+	[self _removeRearViewControllerFromHierarchy:self.rearViewController];
+	
+	[_rearViewController release];
+	_rearViewController = [newRearViewController retain];
+	
+	[self _addRearViewControllerToHierarchy:newRearViewController];
+}
+
+- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated
+{
+	if ([self.delegate respondsToSelector:@selector(revealController:willSwapToFrontViewController:)])
+	{
+		[self.delegate revealController:self willSwapToFrontViewController:newFrontViewController];
+	}
+	
+	CGFloat xSwapOffsetExpanded;
+	CGFloat xSwapOffsetNormal;
+	
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+	{
+		xSwapOffsetExpanded = [[UIScreen mainScreen] bounds].size.width;
+		xSwapOffsetNormal = 0.0f;
+	}
+	else
+	{
+		xSwapOffsetExpanded = self.frontView.frame.origin.x+40.0f;
+		xSwapOffsetNormal = self.frontView.frame.origin.x;
+	}
+	
+	if (animated)
+	{
+		[UIView animateWithDuration:0.15f delay:0.0f options:UIViewAnimationCurveEaseOut animations:^{
+			self.frontView.frame = CGRectMake(xSwapOffsetExpanded, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+		}
+		completion:^(BOOL finished)
+		{
+			[self _removeFrontViewControllerFromHierarchy:self.frontViewController];
+			 
+			[_frontViewController release];
+			_frontViewController = [newFrontViewController retain];
+			 
+			[self _addFrontViewControllerToHierarchy:newFrontViewController];
+			 
+			[UIView animateWithDuration:0.225f delay:0.0f options:UIViewAnimationCurveEaseIn animations:^{
+				self.frontView.frame = CGRectMake(xSwapOffsetNormal, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+			}
+			completion:^(BOOL finished)
+			{
+				[self revealToggle:self];
+				  
+				if ([self.delegate respondsToSelector:@selector(revealController:didSwapToFrontViewController:)])
+				{
+					[self.delegate revealController:self didSwapToFrontViewController:newFrontViewController];
+				}
+			}];
+		}];
+	}
+	else
+	{
+		[self _removeFrontViewControllerFromHierarchy:self.frontViewController];
+		[self _addFrontViewControllerToHierarchy:newFrontViewController];
+		
+		[_frontViewController release];
+		_frontViewController = [newFrontViewController retain];
+		
+		if ([self.delegate respondsToSelector:@selector(revealController:didSwapToFrontViewController:)])
+		{
+			[self.delegate revealController:self didSwapToFrontViewController:newFrontViewController];
+		}
+	}
+}
+
+#pragma mark - UIViewController Containment
+
+- (void)_addFrontViewControllerToHierarchy:(UIViewController *)frontViewController
+{
+	[self addChildViewController:frontViewController];
+	[self.frontView addSubview:frontViewController.view];
+		
+	if ([frontViewController respondsToSelector:@selector(didMoveToParentViewController:)])
+	{
+		[frontViewController didMoveToParentViewController:self];
+	}
+}
+
+- (void)_addRearViewControllerToHierarchy:(UIViewController *)rearViewController
+{
+	[self addChildViewController:rearViewController];
+	[self.rearView addSubview:rearViewController.view];
+		
+	if ([rearViewController respondsToSelector:@selector(didMoveToParentViewController:)])
+	{
+		[rearViewController didMoveToParentViewController:self];
+	}
+}
+
+- (void)_removeFrontViewControllerFromHierarchy:(UIViewController *)frontViewController
+{
+	[frontViewController.view removeFromSuperview];
+	if ([frontViewController respondsToSelector:@selector(removeFromParentViewController:)])
+	{
+		[frontViewController removeFromParentViewController];		
+	}
+}
+
+- (void)_removeRearViewControllerFromHierarchy:(UIViewController *)rearViewController
+{
+	[rearViewController.view removeFromSuperview];
+	if ([rearViewController respondsToSelector:@selector(removeFromParentViewController:)])
+	{
+		[rearViewController removeFromParentViewController];
+	}
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -364,39 +524,14 @@
 	self.previousPanOffset = 0.0f;
 	self.currentFrontViewPosition = FrontViewPositionLeft;
 	
-	// Add the rear view controller to the hierarchy.
-	[self addChildViewController:self.rearViewController];
-	[self.rearView addSubview:self.rearViewController.view];
-	if ([self.rearViewController respondsToSelector:@selector(didMoveToParentViewController:)])
-	{
-		[self.rearViewController didMoveToParentViewController:self];		
-	}
-	
-	// Add the front view controller to the hierarchy.
-	[self addChildViewController:self.frontViewController];
-	[self.frontView addSubview:self.frontViewController.view];
-	
-	if ([self.frontViewController respondsToSelector:@selector(didMoveToParentViewController:)])
-	{
-		[self.frontViewController didMoveToParentViewController:self];
-	}	
+	[self _addRearViewControllerToHierarchy:self.rearViewController];
+	[self _addFrontViewControllerToHierarchy:self.frontViewController];	
 }
 
 - (void)viewDidUnload
 {
-	// Remove the rear view controller from the hierarchy.
-	[self.rearViewController.view removeFromSuperview];
-	if ([self.rearViewController respondsToSelector:@selector(removeFromParentViewController:)])
-	{
-		[self.rearViewController removeFromParentViewController];
-	}
-	
-	// Remove the front view controller from the hierarchy.
-	[self.frontViewController.view removeFromSuperview];
-	if ([self.frontViewController respondsToSelector:@selector(removeFromParentViewController:)])
-	{
-		[self.frontViewController removeFromParentViewController];		
-	}	
+	[self _removeRearViewControllerFromHierarchy:self.frontViewController];
+	[self _removeFrontViewControllerFromHierarchy:self.frontViewController];
 	
 	self.frontView = nil;
     self.rearView = nil;

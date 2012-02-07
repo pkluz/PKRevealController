@@ -53,6 +53,11 @@ typedef enum
 - (void)revealGesture:(UIPanGestureRecognizer *)recognizer;
 - (void)revealToggle:(id)sender;
 
+- (void)setFrontViewController:(UIViewController *)frontViewController;
+- (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated;
+
+- (void)setRearViewController:(UIViewController *)rearViewController;
+
 @end
 
 // ZUUIRevealControllerDelegate Protocol.
@@ -72,5 +77,10 @@ typedef enum
 
 - (void)revealController:(ZUUIRevealController *)revealController willHideRearViewController:(UIViewController *)rearViewController;
 - (void)revealController:(ZUUIRevealController *)revealController didHideRearViewController:(UIViewController *)rearViewController;
+
+#pragma mark - New in 0.9.5
+
+- (void)revealController:(ZUUIRevealController *)revealController willSwapToFrontViewController:(UIViewController *)frontViewController;
+- (void)revealController:(ZUUIRevealController *)revealController didSwapToFrontViewController:(UIViewController *)frontViewController;
 
 @end
