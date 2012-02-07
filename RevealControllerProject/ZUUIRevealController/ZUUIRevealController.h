@@ -56,8 +56,6 @@ typedef enum
 - (void)setFrontViewController:(UIViewController *)frontViewController;
 - (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated;
 
-- (void)setRearViewController:(UIViewController *)rearViewController;
-
 @end
 
 // ZUUIRevealControllerDelegate Protocol.

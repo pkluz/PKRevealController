@@ -37,12 +37,6 @@
 
 @implementation RevealController
 
-/*
- * As you can see below, using the ZUUIRevealController is nothing different from how you'd use a
- * standard container like UINavigationController or similar. You simply subclass the container
- * and you're ready to go!
- */
-
 #pragma mark - Initialization
 
 - (id)initWithFrontViewController:(UIViewController *)aFrontViewController rearViewController:(UIViewController *)aBackViewController
@@ -91,6 +85,13 @@
 - (void)revealController:(ZUUIRevealController *)revealController didHideRearViewController:(UIViewController *)rearViewController 
 {
 	NSLog(@"%@", NSStringFromSelector(_cmd));
+}
+
+#pragma mark - View lifecycle
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+	return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 @end

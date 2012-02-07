@@ -32,6 +32,10 @@
 
 #import "RearViewController.h"
 
+#import "RevealController.h"
+#import "FrontViewController.h"
+#import "MapViewController.h"
+
 @interface RearViewController()
 
 // Private Properties:
@@ -42,9 +46,98 @@
 
 @implementation RearViewController
 
+@synthesize rearTableView = _rearTableView;
+
+#pragma marl - UITableView Data Source
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+	return 2;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	static NSString *cellIdentifier = @"Cell";
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	
+	if (nil == cell)
+	{
+		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier] autorelease];
+	}
+	
+	if (indexPath.row == 0)
+	{
+		cell.textLabel.text = @"Front View Controller";
+	}
+	else
+	{
+		cell.textLabel.text = @"Map View Controller";
+	}
+	
+	return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	RevealController *revealController = [self.parentViewController isKindOfClass:[RevealController class]] ? (RevealController *)self.parentViewController : nil;
+	
+	if (indexPath.row == 0)
+	{
+		if (![revealController.frontViewController isKindOfClass:[FrontViewController class]])
+		{
+			FrontViewController *frontViewController;
+			
+			if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+			{
+				frontViewController = [[FrontViewController alloc] initWithNibName:@"FrontViewController_iPhone" bundle:nil];
+			}
+			else
+			{
+				frontViewController = [[FrontViewController alloc] initWithNibName:@"FrontViewController_iPad" bundle:nil];
+			}
+			
+			UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:frontViewController];
+			[frontViewController release];
+			[revealController setFrontViewController:navigationController animated:NO];
+			[navigationController release];
+		}
+	}
+	else
+	{
+		if (![revealController.frontViewController isKindOfClass:[MapViewController class]])
+		{
+			MapViewController *mapViewController;
+			
+			if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+			{
+				mapViewController = [[MapViewController alloc] initWithNibName:@"MapViewController_iPhone" bundle:nil];
+			}
+			else
+			{
+				mapViewController = [[MapViewController alloc] initWithNibName:@"MapViewController_iPad" bundle:nil];
+			}
+			
+			UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:mapViewController];
+			[mapViewController release];
+			[revealController setFrontViewController:navigationController animated:NO];
+			[navigationController release];
+		}
+	}
+}
+
+#pragma mark - View lifecycle
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
 	return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+}
+
+#pragma mark - Memory Management
+
+- (void)dealloc
+{
+	[_rearTableView release], _rearTableView = nil;
+	[super dealloc];
 }
 
 @end

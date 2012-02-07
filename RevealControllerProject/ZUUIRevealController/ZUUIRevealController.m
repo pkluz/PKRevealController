@@ -73,7 +73,10 @@
 - (void)_removeRearViewControllerFromHierarchy:(UIViewController *)rearViewController;
 
 - (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated;
-- (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController;
+
+// Work in progress:
+// - (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController;
+// - (void)setRearViewController:(UIViewController *)rearViewController; // Delegate Call.
 
 @end
 
@@ -286,12 +289,18 @@
 
 - (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated
 {
-	if (nil != frontViewController)
+	if (nil != frontViewController && _frontViewController == frontViewController)
+	{
+		[self revealToggle:nil];
+	}
+	else if (nil != frontViewController)
 	{
 		[self _swapCurrentFrontViewControllerWith:frontViewController animated:animated];
 	}
 }
 
+/*
+ // This code is experimental. It works but is not recommended for usage yet.
 - (void)setRearViewController:(UIViewController *)rearViewController
 {
 	if (nil != rearViewController)
@@ -314,6 +323,7 @@
 		}
 	}
 }
+*/
 
 #pragma mark - Helper
 
@@ -375,6 +385,8 @@
 	return result;
 }
 
+/*
+// This code is experimental. It works but is not recommended for usage yet.
 - (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController
 {
 	[self _removeRearViewControllerFromHierarchy:self.rearViewController];
@@ -384,6 +396,7 @@
 	
 	[self _addRearViewControllerToHierarchy:newRearViewController];
 }
+*/
 
 - (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated
 {
@@ -402,7 +415,7 @@
 	}
 	else
 	{
-		xSwapOffsetExpanded = self.frontView.frame.origin.x+40.0f;
+		xSwapOffsetExpanded = self.frontView.frame.origin.x;
 		xSwapOffsetNormal = self.frontView.frame.origin.x;
 	}
 	
@@ -446,6 +459,8 @@
 		{
 			[self.delegate revealController:self didSwapToFrontViewController:newFrontViewController];
 		}
+		
+		[self revealToggle:self];
 	}
 }
 
