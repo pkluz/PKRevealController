@@ -491,7 +491,7 @@
 - (void)_removeFrontViewControllerFromHierarchy:(UIViewController *)frontViewController
 {
 	[frontViewController.view removeFromSuperview];
-	if ([frontViewController respondsToSelector:@selector(removeFromParentViewController:)])
+	if ([frontViewController respondsToSelector:@selector(removeFromParentViewController)])
 	{
 		[frontViewController removeFromParentViewController];		
 	}
@@ -500,7 +500,7 @@
 - (void)_removeRearViewControllerFromHierarchy:(UIViewController *)rearViewController
 {
 	[rearViewController.view removeFromSuperview];
-	if ([rearViewController respondsToSelector:@selector(removeFromParentViewController:)])
+	if ([rearViewController respondsToSelector:@selector(removeFromParentViewController)])
 	{
 		[rearViewController removeFromParentViewController];
 	}
