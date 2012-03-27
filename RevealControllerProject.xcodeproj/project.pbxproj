@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		12410CC7152137DD00DE1CD9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E605BAB14A081F900853025 /* Foundation.framework */; };
+		12410CD11521386400DE1CD9 /* ZUUIRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E1EFE1D14A0BA57008062C1 /* ZUUIRevealController.m */; };
+		12410CD21521386E00DE1CD9 /* ZUUIRevealController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5E1EFE1C14A0BA57008062C1 /* ZUUIRevealController.h */; };
 		5E1EFE1414A0BA4F008062C1 /* FrontViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E1EFE0C14A0BA4F008062C1 /* FrontViewController_iPad.xib */; };
 		5E1EFE1514A0BA4F008062C1 /* FrontViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E1EFE0E14A0BA4F008062C1 /* FrontViewController_iPhone.xib */; };
 		5E1EFE1614A0BA4F008062C1 /* RearViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E1EFE1014A0BA4F008062C1 /* RearViewController_iPad.xib */; };
@@ -28,12 +31,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		12410CC6152137DD00DE1CD9 /* libZUUIRevealController.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libZUUIRevealController.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		12410CCA152137DD00DE1CD9 /* ZUUIRevealController-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZUUIRevealController-Prefix.pch"; sourceTree = "<group>"; };
 		5E1EFE0D14A0BA4F008062C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/FrontViewController_iPad.xib; sourceTree = "<group>"; };
 		5E1EFE0F14A0BA4F008062C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/FrontViewController_iPhone.xib; sourceTree = "<group>"; };
 		5E1EFE1114A0BA4F008062C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RearViewController_iPad.xib; sourceTree = "<group>"; };
 		5E1EFE1314A0BA4F008062C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RearViewController_iPhone.xib; sourceTree = "<group>"; };
-		5E1EFE1C14A0BA57008062C1 /* ZUUIRevealController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUUIRevealController.h; path = ZUUIRevealController/ZUUIRevealController.h; sourceTree = "<group>"; };
-		5E1EFE1D14A0BA57008062C1 /* ZUUIRevealController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZUUIRevealController.m; path = ZUUIRevealController/ZUUIRevealController.m; sourceTree = "<group>"; };
+		5E1EFE1C14A0BA57008062C1 /* ZUUIRevealController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZUUIRevealController.h; sourceTree = "<group>"; };
+		5E1EFE1D14A0BA57008062C1 /* ZUUIRevealController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZUUIRevealController.m; sourceTree = "<group>"; };
 		5E5A2CFF14E0CD8D0042AE1E /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		5E5A2D0114E0D1590042AE1E /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapViewController.h; path = Example/MapViewController.h; sourceTree = "<group>"; };
 		5E5A2D0214E0D1590042AE1E /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapViewController.m; path = Example/MapViewController.m; sourceTree = "<group>"; };
@@ -58,6 +63,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		12410CC3152137DD00DE1CD9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12410CC7152137DD00DE1CD9 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5E605BA214A081F900853025 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -72,6 +85,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		12410CC8152137DD00DE1CD9 /* ZUUIRevealController */ = {
+			isa = PBXGroup;
+			children = (
+				5E1EFE1C14A0BA57008062C1 /* ZUUIRevealController.h */,
+				5E1EFE1D14A0BA57008062C1 /* ZUUIRevealController.m */,
+				12410CC9152137DD00DE1CD9 /* Supporting Files */,
+			);
+			path = ZUUIRevealController;
+			sourceTree = "<group>";
+		};
+		12410CC9152137DD00DE1CD9 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				12410CCA152137DD00DE1CD9 /* ZUUIRevealController-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		5E1EFE2114A0BA65008062C1 /* Example */ = {
 			isa = PBXGroup;
 			children = (
@@ -121,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				5E605BAF14A081F900853025 /* RevealControllerProject */,
+				12410CC8152137DD00DE1CD9 /* ZUUIRevealController */,
 				5E605BA814A081F900853025 /* Frameworks */,
 				5E605BA614A081F900853025 /* Products */,
 			);
@@ -130,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				5E605BA514A081F900853025 /* RevealControllerProject.app */,
+				12410CC6152137DD00DE1CD9 /* libZUUIRevealController.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -151,7 +184,6 @@
 				5E605BB814A081F900853025 /* AppDelegate.h */,
 				5E605BB914A081F900853025 /* AppDelegate.m */,
 				5E1EFE2114A0BA65008062C1 /* Example */,
-				5EF3AA4914D738BB00FDD48F /* ZUUIRevealController */,
 				5E605BB014A081F900853025 /* Supporting Files */,
 			);
 			path = RevealControllerProject;
@@ -168,18 +200,37 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		5EF3AA4914D738BB00FDD48F /* ZUUIRevealController */ = {
-			isa = PBXGroup;
-			children = (
-				5E1EFE1C14A0BA57008062C1 /* ZUUIRevealController.h */,
-				5E1EFE1D14A0BA57008062C1 /* ZUUIRevealController.m */,
-			);
-			name = ZUUIRevealController;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		12410CC4152137DD00DE1CD9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12410CD21521386E00DE1CD9 /* ZUUIRevealController.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		12410CC5152137DD00DE1CD9 /* ZUUIRevealController */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 12410CCE152137DD00DE1CD9 /* Build configuration list for PBXNativeTarget "ZUUIRevealController" */;
+			buildPhases = (
+				12410CC2152137DD00DE1CD9 /* Sources */,
+				12410CC3152137DD00DE1CD9 /* Frameworks */,
+				12410CC4152137DD00DE1CD9 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ZUUIRevealController;
+			productName = ZUUIRevealController;
+			productReference = 12410CC6152137DD00DE1CD9 /* libZUUIRevealController.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		5E605BA414A081F900853025 /* RevealControllerProject */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5E605BC614A081F900853025 /* Build configuration list for PBXNativeTarget "RevealControllerProject" */;
@@ -218,6 +269,7 @@
 			projectRoot = "";
 			targets = (
 				5E605BA414A081F900853025 /* RevealControllerProject */,
+				12410CC5152137DD00DE1CD9 /* ZUUIRevealController */,
 			);
 		};
 /* End PBXProject section */
@@ -240,6 +292,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		12410CC2152137DD00DE1CD9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12410CD11521386400DE1CD9 /* ZUUIRevealController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5E605BA114A081F900853025 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -316,6 +376,40 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		12410CCF152137DD00DE1CD9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					armv6,
+					armv7,
+				);
+				DSTROOT = /tmp/ZUUIRevealController.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ZUUIRevealController/ZUUIRevealController-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		12410CD0152137DD00DE1CD9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					armv6,
+					armv7,
+				);
+				DSTROOT = /tmp/ZUUIRevealController.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ZUUIRevealController/ZUUIRevealController-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		5E605BC414A081F900853025 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -335,7 +429,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -353,7 +447,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -390,6 +484,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		12410CCE152137DD00DE1CD9 /* Build configuration list for PBXNativeTarget "ZUUIRevealController" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				12410CCF152137DD00DE1CD9 /* Debug */,
+				12410CD0152137DD00DE1CD9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		5E605B9F14A081F900853025 /* Build configuration list for PBXProject "RevealControllerProject" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
