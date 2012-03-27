@@ -426,12 +426,18 @@
 		}
 		completion:^(BOOL finished)
 		{
+            // Manually forward the view methods to the child view controllers
+            [self.frontViewController viewWillDisappear:animated];
 			[self _removeFrontViewControllerFromHierarchy:self.frontViewController];
-			 
+            [self.frontViewController viewDidDisappear:animated];
+            
+			[newFrontViewController retain]; 
 			[_frontViewController release];
-			_frontViewController = [newFrontViewController retain];
-			 
+			_frontViewController = newFrontViewController;
+			
+            [newFrontViewController viewWillAppear:animated];
 			[self _addFrontViewControllerToHierarchy:newFrontViewController];
+            [newFrontViewController viewDidAppear:animated];
 			 
 			[UIView animateWithDuration:0.225f delay:0.0f options:UIViewAnimationCurveEaseIn animations:^{
 				self.frontView.frame = CGRectMake(xSwapOffsetNormal, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
@@ -449,11 +455,18 @@
 	}
 	else
 	{
-		[self _removeFrontViewControllerFromHierarchy:self.frontViewController];
-		[self _addFrontViewControllerToHierarchy:newFrontViewController];
-		
-		[_frontViewController release];
-		_frontViewController = [newFrontViewController retain];
+        // Manually forward the view methods to the child view controllers
+        [self.frontViewController viewWillDisappear:animated];
+        [self _removeFrontViewControllerFromHierarchy:self.frontViewController];
+        [self.frontViewController viewDidDisappear:animated];
+        
+        [newFrontViewController retain]; 
+        [_frontViewController release];
+        _frontViewController = newFrontViewController;
+        
+        [newFrontViewController viewWillAppear:animated];
+        [self _addFrontViewControllerToHierarchy:newFrontViewController];
+        [newFrontViewController viewDidAppear:animated];
 		
 		if ([self.delegate respondsToSelector:@selector(revealController:didSwapToFrontViewController:)])
 		{
@@ -504,6 +517,69 @@
 	{
 		[rearViewController removeFromParentViewController];
 	}
+}
+
+#pragma mark - View Event Forwarding
+
+/*
+ *
+ *   If you override automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers and return NO, you  
+ *   are responsible for forwarding the following methods to child view controllers at the appropriate times:
+ *   
+ *   viewWillAppear:
+ *   viewDidAppear:
+ *   viewWillDisappear:
+ *   viewDidDisappear:
+ *   willRotateToInterfaceOrientation:duration:
+ *   willAnimateRotationToInterfaceOrientation:duration:
+ *   didRotateFromInterfaceOrientation:
+ *
+ */
+
+- (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers {
+    return NO;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.frontViewController viewWillAppear:animated];
+    [self.rearViewController viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.frontViewController viewDidAppear:animated];
+    [self.rearViewController viewDidAppear:animated];    
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.frontViewController viewWillDisappear:animated];
+    [self.rearViewController viewWillDisappear:animated];    
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [self.frontViewController viewDidDisappear:animated];
+    [self.rearViewController viewDidDisappear:animated];
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [self.frontViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [self.rearViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];    
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [self.frontViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [self.rearViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    [self.frontViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    [self.rearViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
 #pragma mark - View lifecycle
