@@ -9,6 +9,7 @@ Features
 =======
 
 - Uses iOS 5 new UIViewController containment.
+- ...but now also works on iOS 4!
 - High attention to detail. (Dynamically generated shadows, slowing-overdraw with bounce-back, "Magnetic Edges" with carefully executed animations).
 - Highly flexible. - Very low coupling.
 - Elegant protocol. Receive callbacks when certain events (are about to) occur and control the entire flow!
@@ -20,6 +21,10 @@ Features
 Screencast
 =======
 On my blog: http://nehira.com/articles/2012/01/3.html
+
+Contributors
+=======
+At this point I'd like to thank [all of you](https://github.com/pkluz/ZUUIRevealController/contributors "Contributors") for helping me out on this project :) - Cheers!
 
 Mantra
 =======
