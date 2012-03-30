@@ -69,8 +69,7 @@
 
 - (void)_addFrontViewControllerToHierarchy:(UIViewController *)frontViewController;
 - (void)_addRearViewControllerToHierarchy:(UIViewController *)rearViewController;
-- (void)_removeFrontViewControllerFromHierarchy:(UIViewController *)frontViewController;
-- (void)_removeRearViewControllerFromHierarchy:(UIViewController *)rearViewController;
+- (void)_removeViewControllerFromHierarchy:(UIViewController *)frontViewController;
 
 - (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated;
 
@@ -424,7 +423,7 @@
 		{
             // Manually forward the view methods to the child view controllers
             [self.frontViewController viewWillDisappear:animated];
-			[self _removeFrontViewControllerFromHierarchy:self.frontViewController];
+			[self _removeViewControllerFromHierarchy:self.frontViewController];
             [self.frontViewController viewDidDisappear:animated];
             
 			[newFrontViewController retain]; 
@@ -455,7 +454,7 @@
 	{
         // Manually forward the view methods to the child view controllers
         [self.frontViewController viewWillDisappear:animated];
-        [self _removeFrontViewControllerFromHierarchy:self.frontViewController];
+        [self _removeViewControllerFromHierarchy:self.frontViewController];
         [self.frontViewController viewDidDisappear:animated];
         
         [newFrontViewController retain]; 
@@ -503,21 +502,12 @@
 	}
 }
 
-- (void)_removeFrontViewControllerFromHierarchy:(UIViewController *)frontViewController
+- (void)_removeViewControllerFromHierarchy:(UIViewController *)viewController
 {
-	[frontViewController.view removeFromSuperview];
-	if ([frontViewController respondsToSelector:@selector(removeFromParentViewController)])
+	[viewController.view removeFromSuperview];
+	if ([viewController respondsToSelector:@selector(removeFromParentViewController)])
 	{
-		[frontViewController removeFromParentViewController];		
-	}
-}
-
-- (void)_removeRearViewControllerFromHierarchy:(UIViewController *)rearViewController
-{
-	[rearViewController.view removeFromSuperview];
-	if ([rearViewController respondsToSelector:@selector(removeFromParentViewController)])
-	{
-		[rearViewController removeFromParentViewController];
+		[viewController removeFromParentViewController];		
 	}
 }
 
@@ -636,8 +626,8 @@
 
 - (void)viewDidUnload
 {
-	[self _removeRearViewControllerFromHierarchy:self.frontViewController];
-	[self _removeFrontViewControllerFromHierarchy:self.frontViewController];
+	[self _removeViewControllerFromHierarchy:self.frontViewController];
+	[self _removeViewControllerFromHierarchy:self.rearViewController];
 	
 	self.frontView = nil;
     self.rearView = nil;
