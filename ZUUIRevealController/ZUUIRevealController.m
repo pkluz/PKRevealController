@@ -58,8 +58,8 @@
 @interface ZUUIRevealController()
 
 // Private Properties:
-@property (retain, nonatomic) UIView *frontView;
-@property (retain, nonatomic) UIView *rearView;
+@property (strong, nonatomic) UIView *frontView;
+@property (strong, nonatomic) UIView *rearView;
 @property (assign, nonatomic) float previousPanOffset;
 
 // Private Methods:
@@ -91,14 +91,19 @@
 
 #pragma mark - Initialization
 
-- (id)initWithFrontViewController:(UIViewController *)aFrontViewController rearViewController:(UIViewController *)aBackViewController
+- (id)initWithFrontViewController:(UIViewController *)frontViewController rearViewController:(UIViewController *)rearViewController
 {
 	self = [super init];
 	
 	if (nil != self)
 	{
-		_frontViewController = [aFrontViewController retain];
-		_rearViewController = [aBackViewController retain];
+#if __has_feature(objc_arc)
+		_frontViewController = frontViewController;
+		_rearViewController = rearViewController;
+#else
+		_frontViewController = [frontViewController retain];
+		_rearViewController = [rearViewController retain];
+#endif
 	}
 	
 	return self;
@@ -300,62 +305,62 @@
 
 /*
  // This code is experimental. It works but is not recommended for usage yet.
-- (void)setRearViewController:(UIViewController *)rearViewController
-{
-	if (nil != rearViewController)
-	{
-		if (self.currentFrontViewPosition == FrontViewPositionRight)
-		{
-			[UIView animateWithDuration:0.25f animations:^
-			{
-				self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-			}
-			completion:^(BOOL finished)
-			{
-				[self _performRearViewControllerSwap:rearViewController];
-				[self _revealAnimation];
-			}];
-		}
-		else
-		{
-			[self _performRearViewControllerSwap:rearViewController];
-		}
-	}
-}
-*/
+ - (void)setRearViewController:(UIViewController *)rearViewController
+ {
+ if (nil != rearViewController)
+ {
+ if (self.currentFrontViewPosition == FrontViewPositionRight)
+ {
+ [UIView animateWithDuration:0.25f animations:^
+ {
+ self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+ }
+ completion:^(BOOL finished)
+ {
+ [self _performRearViewControllerSwap:rearViewController];
+ [self _revealAnimation];
+ }];
+ }
+ else
+ {
+ [self _performRearViewControllerSwap:rearViewController];
+ }
+ }
+ }
+ */
 
 #pragma mark - Helper
 
 - (void)_revealAnimation
 {	
 	[UIView animateWithDuration:0.25f animations:^
-	{
-		self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-	}
-	completion:^(BOOL finished)
-	{
-		// Dispatch message to delegate, telling it the 'rearView' _DID_ reveal, if appropriate:
-		if ([self.delegate respondsToSelector:@selector(revealController:didRevealRearViewController:)])
-		{
-			[self.delegate revealController:self didRevealRearViewController:self.rearViewController];
-		}
-	}];
+	 {
+		 self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+	 }
+					 completion:^(BOOL finished)
+	 {
+		 // Dispatch message to delegate, telling it the 'rearView' _DID_ reveal, if appropriate:
+		 if ([self.delegate respondsToSelector:@selector(revealController:didRevealRearViewController:)])
+		 {
+			 [self.delegate revealController:self didRevealRearViewController:self.rearViewController];
+		 }
+	 }];
 }
 
 - (void)_concealAnimation
 {	
 	[UIView animateWithDuration:0.25f animations:^
-	{
-		self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-	}
-	completion:^(BOOL finished)
-	{
-		// Dispatch message to delegate, telling it the 'rearView' _DID_ hide, if appropriate:
-		if ([self.delegate respondsToSelector:@selector(revealController:didHideRearViewController:)])
-		{
-			[self.delegate revealController:self didHideRearViewController:self.rearViewController];
-		}
-	}];
+	 {
+		 self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+	 }
+					 completion:^(BOOL finished)
+	 {
+		 // Dispatch message to delegate, telling it the 'rearView' _DID_ hide, if appropriate:
+		 if ([self.delegate respondsToSelector:@selector(revealController:didHideRearViewController:)])
+		 {
+			 [self.delegate revealController:self didHideRearViewController:self.rearViewController];
+		 }
+	 }];
 }
 
 /*
@@ -385,17 +390,17 @@
 }
 
 /*
-// This code is experimental. It works but is not recommended for usage yet.
-- (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController
-{
-	[self _removeRearViewControllerFromHierarchy:self.rearViewController];
-	
-	[_rearViewController release];
-	_rearViewController = [newRearViewController retain];
-	
-	[self _addRearViewControllerToHierarchy:newRearViewController];
-}
-*/
+ // This code is experimental. It works but is not recommended for usage yet.
+ - (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController
+ {
+ [self _removeRearViewControllerFromHierarchy:self.rearViewController];
+ 
+ [_rearViewController release];
+ _rearViewController = [newRearViewController retain];
+ 
+ [self _addRearViewControllerToHierarchy:newRearViewController];
+ }
+ */
 
 - (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated
 {
@@ -415,40 +420,44 @@
 	if (animated)
 	{
 		[UIView animateWithDuration:0.15f delay:0.0f options:UIViewAnimationCurveEaseOut animations:^
-		{
-			CGRect offsetRect = CGRectOffset(self.frontView.frame, xSwapOffset, 0.0f);
-			self.frontView.frame = offsetRect;
-		}
-		completion:^(BOOL finished)
-		{
-            // Manually forward the view methods to the child view controllers
-            [self.frontViewController viewWillDisappear:animated];
-			[self _removeViewControllerFromHierarchy:self.frontViewController];
-            [self.frontViewController viewDidDisappear:animated];
-            
-			[newFrontViewController retain]; 
-			[_frontViewController release];
-			_frontViewController = newFrontViewController;
-			
-            [newFrontViewController viewWillAppear:animated];
-			[self _addFrontViewControllerToHierarchy:newFrontViewController];
-            [newFrontViewController viewDidAppear:animated];
+		 {
+			 CGRect offsetRect = CGRectOffset(self.frontView.frame, xSwapOffset, 0.0f);
+			 self.frontView.frame = offsetRect;
+		 }
+						 completion:^(BOOL finished)
+		 {
+			 // Manually forward the view methods to the child view controllers
+			 [self.frontViewController viewWillDisappear:animated];
+			 [self _removeViewControllerFromHierarchy:self.frontViewController];
+			 [self.frontViewController viewDidDisappear:animated];
 			 
-			[UIView animateWithDuration:0.225f delay:0.0f options:UIViewAnimationCurveEaseIn animations:^
-			{
-				CGRect offsetRect = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-				self.frontView.frame = offsetRect;
-			}
-			completion:^(BOOL finished)
-			{
-				[self revealToggle:self];
+#if __has_feature(objc_arc)
+			 _frontViewController = newFrontViewController;
+#else
+			 [newFrontViewController retain]; 
+			 [_frontViewController release];
+			 _frontViewController = newFrontViewController;
+#endif
+			 
+			 [newFrontViewController viewWillAppear:animated];
+			 [self _addFrontViewControllerToHierarchy:newFrontViewController];
+			 [newFrontViewController viewDidAppear:animated];
+			 
+			 [UIView animateWithDuration:0.225f delay:0.0f options:UIViewAnimationCurveEaseIn animations:^
+			  {
+				  CGRect offsetRect = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+				  self.frontView.frame = offsetRect;
+			  }
+							  completion:^(BOOL finished)
+			  {
+				  [self revealToggle:self];
 				  
-				if ([self.delegate respondsToSelector:@selector(revealController:didSwapToFrontViewController:)])
-				{
-					[self.delegate revealController:self didSwapToFrontViewController:newFrontViewController];
-				}
-			}];
-		}];
+				  if ([self.delegate respondsToSelector:@selector(revealController:didSwapToFrontViewController:)])
+				  {
+					  [self.delegate revealController:self didSwapToFrontViewController:newFrontViewController];
+				  }
+			  }];
+		 }];
 	}
 	else
 	{
@@ -457,9 +466,13 @@
         [self _removeViewControllerFromHierarchy:self.frontViewController];
         [self.frontViewController viewDidDisappear:animated];
         
+#if __has_feature(objc_arc)
+		_frontViewController = newFrontViewController;
+#else
         [newFrontViewController retain]; 
         [_frontViewController release];
         _frontViewController = newFrontViewController;
+#endif
         
         [newFrontViewController viewWillAppear:animated];
         [self _addFrontViewControllerToHierarchy:newFrontViewController];
@@ -484,7 +497,7 @@
 	frontViewController.view.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	
 	[self.frontView addSubview:frontViewController.view];
-		
+	
 	if ([frontViewController respondsToSelector:@selector(didMoveToParentViewController:)])
 	{
 		[frontViewController didMoveToParentViewController:self];
@@ -495,7 +508,7 @@
 {
 	[self addChildViewController:rearViewController];
 	[self.rearView addSubview:rearViewController.view];
-		
+	
 	if ([rearViewController respondsToSelector:@selector(didMoveToParentViewController:)])
 	{
 		[rearViewController didMoveToParentViewController:self];
@@ -514,8 +527,8 @@
 #pragma mark - View Event Forwarding
 
 /* 
- Thanks to jtoce ( https://github.com/jtoce ) for adding the event forwarding.
-*/
+ Thanks to jtoce ( https://github.com/jtoce ) for adding iOS 4 Support!
+ */
 
 /*
  *
@@ -592,8 +605,13 @@
 {
 	[super viewDidLoad];
 	
+#if __has_feature(objc_arc)
+	self.frontView = [[UIView alloc] initWithFrame:self.view.bounds];
+	self.rearView = [[UIView alloc] initWithFrame:self.view.bounds];
+#else
 	self.frontView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
 	self.rearView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
+#endif
 	
 	self.frontView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 	self.rearView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
@@ -640,6 +658,8 @@
 
 #pragma mark - Memory Management
 
+#if __has_feature(objc_arc)
+#else
 - (void)dealloc
 {
 	[_frontViewController release], _frontViewController = nil;
@@ -648,5 +668,6 @@
 	[_rearView release], _rearView = nil;
 	[super dealloc];
 }
+#endif
 
 @end
