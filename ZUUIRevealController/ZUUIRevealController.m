@@ -369,21 +369,21 @@
 }
 
 /*
- // This code is experimental. It works but is not recommended for usage yet.
- - (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController
- {
- [self _removeRearViewControllerFromHierarchy:self.rearViewController];
+// This code is experimental. It works but is not recommended for usage yet.
+- (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController
+{
+	[self _removeRearViewControllerFromHierarchy:self.rearViewController];
  
- #if __has_feature(objc_arc)
- [_rearViewController release];
- _rearViewController = [newRearViewController retain];
- #else
- _rearViewController = newRearViewController;
- #endif
- 
- [self _addRearViewControllerToHierarchy:newRearViewController];
- }
- */
+#if __has_feature(objc_arc)
+	[_rearViewController release];
+	_rearViewController = [newRearViewController retain];
+#else
+	_rearViewController = newRearViewController;
+#endif
+
+	[self _addRearViewControllerToHierarchy:newRearViewController];
+}
+*/
 
 - (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated
 {
@@ -413,7 +413,7 @@
 			[self.frontViewController viewWillDisappear:animated];
 			[self _removeViewControllerFromHierarchy:self.frontViewController];
 			[self.frontViewController viewDidDisappear:animated];
-			 
+			
 #if __has_feature(objc_arc)
 			_frontViewController = newFrontViewController;
 #else
@@ -445,21 +445,20 @@
 	else
 	{
 		// Manually forward the view methods to the child view controllers
-        [self.frontViewController viewWillDisappear:animated];
-        [self _removeViewControllerFromHierarchy:self.frontViewController];
-        [self.frontViewController viewDidDisappear:animated];
-        
+		[self.frontViewController viewWillDisappear:animated];
+		[self _removeViewControllerFromHierarchy:self.frontViewController];
+		[self.frontViewController viewDidDisappear:animated];
 #if __has_feature(objc_arc)
 		_frontViewController = newFrontViewController;
 #else
-        [newFrontViewController retain]; 
-        [_frontViewController release];
-        _frontViewController = newFrontViewController;
+		[newFrontViewController retain]; 
+		[_frontViewController release];
+		_frontViewController = newFrontViewController;
 #endif
-        
-        [newFrontViewController viewWillAppear:animated];
-        [self _addFrontViewControllerToHierarchy:newFrontViewController];
-        [newFrontViewController viewDidAppear:animated];
+		
+		[newFrontViewController viewWillAppear:animated];
+		[self _addFrontViewControllerToHierarchy:newFrontViewController];
+		[newFrontViewController viewDidAppear:animated];
 		
 		if ([self.delegate respondsToSelector:@selector(revealController:didSwapToFrontViewController:)])
 		{
@@ -577,56 +576,56 @@
 
 - (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers
 {
-    return NO;
+	return NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
-    [self.frontViewController viewWillAppear:animated];
-    [self.rearViewController viewWillAppear:animated];
+	[super viewWillAppear:animated];
+	[self.frontViewController viewWillAppear:animated];
+	[self.rearViewController viewWillAppear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
-    [self.frontViewController viewDidAppear:animated];
-    [self.rearViewController viewDidAppear:animated];    
+	[super viewDidAppear:animated];
+	[self.frontViewController viewDidAppear:animated];
+	[self.rearViewController viewDidAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [super viewWillDisappear:animated];
-    [self.frontViewController viewWillDisappear:animated];
-    [self.rearViewController viewWillDisappear:animated];    
+	[super viewWillDisappear:animated];
+	[self.frontViewController viewWillDisappear:animated];
+	[self.rearViewController viewWillDisappear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    [super viewDidDisappear:animated];
-    [self.frontViewController viewDidDisappear:animated];
-    [self.rearViewController viewDidDisappear:animated];
+	[super viewDidDisappear:animated];
+	[self.frontViewController viewDidDisappear:animated];
+	[self.rearViewController viewDidDisappear:animated];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    [self.frontViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    [self.rearViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];    
+	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	[self.frontViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	[self.rearViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    [self.frontViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    [self.rearViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	[super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	[self.frontViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	[self.rearViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    [self.frontViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    [self.rearViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+	[self.frontViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+	[self.rearViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
 #pragma mark - View lifecycle
@@ -678,7 +677,7 @@
 	[self _removeViewControllerFromHierarchy:self.rearViewController];
 	
 	self.frontView = nil;
-    self.rearView = nil;
+	self.rearView = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
