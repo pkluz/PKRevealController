@@ -369,21 +369,21 @@
 }
 
 /*
- // This code is experimental. It works but is not recommended for usage yet.
- - (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController
- {
- [self _removeRearViewControllerFromHierarchy:self.rearViewController];
+// This code is experimental. It works but is not recommended for usage yet.
+- (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController
+{
+	[self _removeRearViewControllerFromHierarchy:self.rearViewController];
  
- #if __has_feature(objc_arc)
- [_rearViewController release];
- _rearViewController = [newRearViewController retain];
- #else
- _rearViewController = newRearViewController;
- #endif
- 
- [self _addRearViewControllerToHierarchy:newRearViewController];
- }
- */
+#if __has_feature(objc_arc)
+	[_rearViewController release];
+	_rearViewController = [newRearViewController retain];
+#else
+	_rearViewController = newRearViewController;
+#endif
+
+	[self _addRearViewControllerToHierarchy:newRearViewController];
+}
+*/
 
 - (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated
 {
