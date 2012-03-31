@@ -304,29 +304,29 @@
 }
 
 /*
- // This code is experimental. It works but is not recommended for usage yet.
- - (void)setRearViewController:(UIViewController *)rearViewController
- {
- if (nil != rearViewController)
- {
- if (self.currentFrontViewPosition == FrontViewPositionRight)
- {
- [UIView animateWithDuration:0.25f animations:^
- {
- self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
- }
- completion:^(BOOL finished)
- {
- [self _performRearViewControllerSwap:rearViewController];
- [self _revealAnimation];
- }];
- }
- else
- {
- [self _performRearViewControllerSwap:rearViewController];
- }
- }
- }
+// This code is experimental. It works but is not recommended for usage yet.
+- (void)setRearViewController:(UIViewController *)rearViewController
+{
+	if (nil != rearViewController)
+	{
+		if (self.currentFrontViewPosition == FrontViewPositionRight)
+		{
+			[UIView animateWithDuration:0.25f animations:^
+			{
+				self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+			}
+			completion:^(BOOL finished)
+			{
+				[self _performRearViewControllerSwap:rearViewController];
+				[self _revealAnimation];
+			}];
+		}
+		else
+		{
+			[self _performRearViewControllerSwap:rearViewController];
+		}
+	}
+}
  */
 
 #pragma mark - Helper
@@ -334,33 +334,33 @@
 - (void)_revealAnimation
 {	
 	[UIView animateWithDuration:0.25f animations:^
-	 {
+	{
 		 self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-	 }
-					 completion:^(BOOL finished)
-	 {
-		 // Dispatch message to delegate, telling it the 'rearView' _DID_ reveal, if appropriate:
-		 if ([self.delegate respondsToSelector:@selector(revealController:didRevealRearViewController:)])
-		 {
-			 [self.delegate revealController:self didRevealRearViewController:self.rearViewController];
-		 }
-	 }];
+	}
+	completion:^(BOOL finished)
+	{
+		// Dispatch message to delegate, telling it the 'rearView' _DID_ reveal, if appropriate:
+		if ([self.delegate respondsToSelector:@selector(revealController:didRevealRearViewController:)])
+		{
+			[self.delegate revealController:self didRevealRearViewController:self.rearViewController];
+		}
+	}];
 }
 
 - (void)_concealAnimation
 {	
 	[UIView animateWithDuration:0.25f animations:^
-	 {
+	{
 		 self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-	 }
-					 completion:^(BOOL finished)
-	 {
-		 // Dispatch message to delegate, telling it the 'rearView' _DID_ hide, if appropriate:
-		 if ([self.delegate respondsToSelector:@selector(revealController:didHideRearViewController:)])
-		 {
-			 [self.delegate revealController:self didHideRearViewController:self.rearViewController];
-		 }
-	 }];
+	}
+	completion:^(BOOL finished)
+	{
+		// Dispatch message to delegate, telling it the 'rearView' _DID_ hide, if appropriate:
+		if ([self.delegate respondsToSelector:@selector(revealController:didHideRearViewController:)])
+		{
+			[self.delegate revealController:self didHideRearViewController:self.rearViewController];
+		}
+	}];
 }
 
 /*
@@ -390,16 +390,20 @@
 }
 
 /*
- // This code is experimental. It works but is not recommended for usage yet.
- - (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController
- {
- [self _removeRearViewControllerFromHierarchy:self.rearViewController];
+// This code is experimental. It works but is not recommended for usage yet.
+- (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController
+{
+	[self _removeRearViewControllerFromHierarchy:self.rearViewController];
  
- [_rearViewController release];
- _rearViewController = [newRearViewController retain];
- 
- [self _addRearViewControllerToHierarchy:newRearViewController];
- }
+#if __has_feature(objc_arc)
+	[_rearViewController release];
+	_rearViewController = [newRearViewController retain];
+#else
+	_rearViewController = newRearViewController;
+#endif
+
+	[self _addRearViewControllerToHierarchy:newRearViewController];
+}
  */
 
 - (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated
