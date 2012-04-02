@@ -55,6 +55,7 @@
 
 #import "ZUUIRevealController.h"
 
+
 @interface ZUUIRevealController()
 
 // Private Properties:
@@ -63,6 +64,7 @@
 @property (assign, nonatomic) float previousPanOffset;
 
 // Private Methods:
+- (CGRect)_mainScreenBounds;
 - (CGFloat)_calculateOffsetForTranslationInView:(CGFloat)x;
 - (void)_revealAnimation;
 - (void)_concealAnimation;
@@ -72,6 +74,7 @@
 - (void)_removeViewControllerFromHierarchy:(UIViewController *)frontViewController;
 
 - (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated;
+- (void)_swapCurrentRearViewControllerWith:(UIViewController *)newRearViewController animated:(BOOL)animated;
 
 // Work in progress:
 // - (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController;
@@ -83,8 +86,8 @@
 
 @synthesize previousPanOffset = _previousPanOffset;
 @synthesize currentFrontViewPosition = _currentFrontViewPosition;
-@synthesize frontViewController = _frontViewController;
-@synthesize rearViewController = _rearViewController;
+@dynamic frontViewController;
+@dynamic rearViewController;
 @synthesize frontView = _frontView;
 @synthesize rearView = _rearView;
 @synthesize delegate = _delegate;
@@ -234,8 +237,9 @@
 	}
 }
 
-// Instantaneously toggle the rear view's visibility.
-- (void)revealToggle:(id)sender
+// Instantaneously toggle the rear view's visibility. 
+// Returns YES by default unless the delegate prevented the action, then returns NO.
+- (BOOL)revealToggle:(id)sender
 {	
 	if (FrontViewPositionLeft == self.currentFrontViewPosition)
 	{
@@ -244,7 +248,7 @@
 		{
 			if (![self.delegate revealController:self shouldRevealRearViewController:self.rearViewController])
 			{
-				return;
+				return NO;
 			}
 		}
 		
@@ -265,7 +269,7 @@
 		{
 			if (![self.delegate revealController:self shouldHideRearViewController:self.rearViewController])
 			{
-				return;
+				return NO;
 			}
 		}
 		
@@ -279,6 +283,11 @@
 		
 		self.currentFrontViewPosition = FrontViewPositionLeft;
 	}
+    return YES;
+}
+
+- (UIViewController *)frontViewController {
+    return _frontViewController;
 }
 
 - (void)setFrontViewController:(UIViewController *)frontViewController
@@ -295,6 +304,27 @@
 	else if (nil != frontViewController)
 	{
 		[self _swapCurrentFrontViewControllerWith:frontViewController animated:animated];
+	}
+}
+
+- (UIViewController *)rearViewController {
+    return _rearViewController;
+}
+
+- (void)setRearViewController:(UIViewController *)rearViewController
+{
+	[self setRearViewController:rearViewController animated:NO];
+}
+
+- (void)setRearViewController:(UIViewController *)rearViewController animated:(BOOL)animated
+{
+	if (nil != rearViewController && _rearViewController == rearViewController)
+	{
+		return;
+	}
+	else if (nil != rearViewController)
+	{
+		[self _swapCurrentRearViewControllerWith:rearViewController animated:animated];
 	}
 }
 
@@ -358,6 +388,17 @@
 	}];
 }
 
+- (CGRect)_mainScreenBounds {
+    CGRect bounds = [UIScreen mainScreen].bounds;
+    if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
+        CGFloat width = bounds.size.width;
+        bounds.size.width = bounds.size.height;
+        bounds.size.height = width;
+    }
+    return bounds;
+}
+
+
 /*
  * Note: If someone wants to bother to implement a better (smoother) function. Go for it and share!
  */
@@ -409,12 +450,12 @@
 	
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
 	{
-		xSwapOffsetExpanded = [[UIScreen mainScreen] bounds].size.width;
-		xSwapOffsetNormal = 0.0f;
+		xSwapOffsetExpanded = [self _mainScreenBounds].size.width;
+		xSwapOffsetNormal = REVEAL_EDGE;
 	}
 	else
 	{
-		xSwapOffsetExpanded = self.frontView.frame.origin.x;
+		xSwapOffsetExpanded = [self _mainScreenBounds].size.width;
 		xSwapOffsetNormal = self.frontView.frame.origin.x;
 	}
 	
@@ -438,18 +479,16 @@
 			[self _addFrontViewControllerToHierarchy:newFrontViewController];
             [newFrontViewController viewDidAppear:animated];
 			 
-			[UIView animateWithDuration:0.225f delay:0.0f options:UIViewAnimationCurveEaseIn animations:^{
-				self.frontView.frame = CGRectMake(xSwapOffsetNormal, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+			if (![self revealToggle:self]) {				
+                [UIView animateWithDuration:0.15f delay:0.0f options:UIViewAnimationCurveEaseIn animations:^{
+                    self.frontView.frame = CGRectMake(xSwapOffsetNormal, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+                } completion:nil];
 			}
-			completion:^(BOOL finished)
-			{
-				[self revealToggle:self];
-				  
-				if ([self.delegate respondsToSelector:@selector(revealController:didSwapToFrontViewController:)])
-				{
-					[self.delegate revealController:self didSwapToFrontViewController:newFrontViewController];
-				}
-			}];
+            
+            if ([self.delegate respondsToSelector:@selector(revealController:didSwapToFrontViewController:)])
+            {
+                [self.delegate revealController:self didSwapToFrontViewController:newFrontViewController];
+            }
 		}];
 	}
 	else
@@ -473,6 +512,86 @@
 		}
 		
 		[self revealToggle:self];
+	}
+}
+
+- (void)_swapCurrentRearViewControllerWith:(UIViewController *)newRearViewController animated:(BOOL)animated
+{
+	if ([self.delegate respondsToSelector:@selector(revealController:willSwapToRearViewController:)])
+	{
+		[self.delegate revealController:self willSwapToRearViewController:newRearViewController];
+	}
+	
+	CGFloat xSwapOffsetExpanded;
+	CGFloat xSwapOffsetNormal;
+	
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+	{
+		xSwapOffsetExpanded = -REVEAL_EDGE;
+		xSwapOffsetNormal = 0.0f;
+	}
+	else
+	{
+		xSwapOffsetExpanded = -self.rearView.frame.size.width;
+		xSwapOffsetNormal = 0.0f;
+	}
+	
+	if (animated)
+	{
+		[UIView animateWithDuration:0.25f delay:0.0f options:UIViewAnimationCurveEaseOut animations:^{
+			self.rearView.frame = CGRectMake(xSwapOffsetExpanded, 0.0f, self.rearView.frame.size.width, self.rearView.frame.size.height);
+		}
+                         completion:^(BOOL finished)
+         {
+             // Manually forward the view methods to the child view controllers
+             [self.rearViewController viewWillDisappear:animated];
+             [self _removeViewControllerFromHierarchy:self.rearViewController];
+             [self.rearViewController viewDidDisappear:animated];
+             
+             [newRearViewController retain]; 
+             [_rearViewController release];
+             _rearViewController = newRearViewController;
+             
+             [newRearViewController viewWillAppear:animated];
+             [self _addRearViewControllerToHierarchy:newRearViewController];
+             [newRearViewController viewDidAppear:animated];
+             
+             [UIView animateWithDuration:0.25f delay:0.0f options:UIViewAnimationCurveEaseIn animations:^{
+                 self.rearView.frame = CGRectMake(xSwapOffsetNormal, 0.0f, self.rearView.frame.size.width, self.rearView.frame.size.height);
+             }
+             completion:^(BOOL finished)
+              {
+//                  [self revealToggle:self];
+                  
+                  if ([self.delegate respondsToSelector:@selector(revealController:didSwapToRearViewController:)])
+                  {
+                      [self.delegate revealController:self didSwapToRearViewController:newRearViewController];
+                  }
+              }];
+         }];
+	}
+	else
+	{
+        // Manually forward the view methods to the child view controllers
+        [self.rearViewController viewWillDisappear:animated];
+        [self _removeViewControllerFromHierarchy:self.rearViewController];
+        [self.rearViewController viewDidDisappear:animated];
+        
+        [newRearViewController retain]; 
+        [_rearViewController release];
+        _rearViewController = newRearViewController;
+        
+        [newRearViewController viewWillAppear:animated];
+        [self _addRearViewControllerToHierarchy:newRearViewController];
+        [newRearViewController viewDidAppear:animated];
+		
+		if ([self.delegate respondsToSelector:@selector(revealController:didSwapToRearViewController:)])
+		{
+			[self.delegate revealController:self didSwapToRearViewController:newRearViewController];
+		}
+		
+//		[self revealToggle:self];
+        [self performSelector:@selector(revealToggle:) withObject:self];
 	}
 }
 

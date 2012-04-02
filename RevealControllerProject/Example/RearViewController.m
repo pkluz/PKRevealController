@@ -119,7 +119,7 @@
 			
 			UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:mapViewController];
 			[mapViewController release];
-			[revealController setFrontViewController:navigationController animated:NO];
+			[revealController setFrontViewController:navigationController animated:YES];
 			[navigationController release];
 		}
 	}
