@@ -79,48 +79,45 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	// Grab a handle to the reveal controller, as if you'd do with a navigtion controller via self.navigationController.
 	RevealController *revealController = [self.parentViewController isKindOfClass:[RevealController class]] ? (RevealController *)self.parentViewController : nil;
 	
+	// Here you'd implement some of your own logic... I simply take for granted that the first row (=0) corresponds to the "FrontViewController".
 	if (indexPath.row == 0)
 	{
-		if (![revealController.frontViewController isKindOfClass:[FrontViewController class]])
+		// Now let's see if we're not attempting to swap the current frontViewController for a new instance of ITSELF, which'd be highly redundant.
+		if ([revealController.frontViewController isKindOfClass:[UINavigationController class]] && ![((UINavigationController *)revealController.frontViewController).topViewController isKindOfClass:[FrontViewController class]])
 		{
-			FrontViewController *frontViewController;
-			
-			if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-			{
-				frontViewController = [[FrontViewController alloc] initWithNibName:@"FrontViewController_iPhone" bundle:nil];
-			}
-			else
-			{
-				frontViewController = [[FrontViewController alloc] initWithNibName:@"FrontViewController_iPad" bundle:nil];
-			}
+			FrontViewController *frontViewController = [[FrontViewController alloc] init];
 			
 			UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:frontViewController];
 			[frontViewController release];
-			[revealController setFrontViewController:navigationController animated:NO];
+			[revealController setFrontViewController:navigationController animated:YES];
 			[navigationController release];
 		}
+		// Seems the user attempts to 'switch' to exactly the same controller he came from!
+		else
+		{
+			[revealController revealToggle:self];
+		}
 	}
+	// ... and the second row (=1) corresponds to the "MapViewController".
 	else
 	{
-		if (![revealController.frontViewController isKindOfClass:[MapViewController class]])
+		// Now let's see if we're not attempting to swap the current frontViewController for a new instance of ITSELF, which'd be highly redundant.
+		if ([revealController.frontViewController isKindOfClass:[UINavigationController class]] && ![((UINavigationController *)revealController.frontViewController).topViewController isKindOfClass:[MapViewController class]])
 		{
-			MapViewController *mapViewController;
-			
-			if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-			{
-				mapViewController = [[MapViewController alloc] initWithNibName:@"MapViewController_iPhone" bundle:nil];
-			}
-			else
-			{
-				mapViewController = [[MapViewController alloc] initWithNibName:@"MapViewController_iPad" bundle:nil];
-			}
+			MapViewController *mapViewController = [[MapViewController alloc] init];
 			
 			UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:mapViewController];
 			[mapViewController release];
 			[revealController setFrontViewController:navigationController animated:YES];
 			[navigationController release];
+		}
+		// Seems the user attempts to 'switch' to exactly the same controller he came from!
+		else
+		{
+			[revealController revealToggle:self];
 		}
 	}
 }

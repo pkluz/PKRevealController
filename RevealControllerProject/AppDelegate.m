@@ -43,21 +43,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-	self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+	UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+	self.window = window;
+	[window release];
 	
-	FrontViewController *frontViewController;
-	RearViewController *rearViewController;
-	
-	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-	{
-		frontViewController = [[FrontViewController alloc] initWithNibName:@"FrontViewController_iPhone" bundle:nil];
-		rearViewController = [[RearViewController alloc] initWithNibName:@"RearViewController_iPhone" bundle:nil];
-	}
-	else
-	{
-		frontViewController = [[FrontViewController alloc] initWithNibName:@"FrontViewController_iPad" bundle:nil];
-		rearViewController = [[RearViewController alloc] initWithNibName:@"RearViewController_iPad" bundle:nil];
-	}
+	FrontViewController *frontViewController = [[FrontViewController alloc] init];
+	RearViewController *rearViewController = [[RearViewController alloc] init];
 	
 	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:frontViewController];
 	

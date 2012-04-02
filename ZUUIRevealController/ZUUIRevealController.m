@@ -600,6 +600,10 @@
 - (void)_addFrontViewControllerToHierarchy:(UIViewController *)frontViewController
 {
 	[self addChildViewController:frontViewController];
+	
+	// iOS 4 doesn't adjust the frame properly if in landscape via implicit loading from a nib.
+	frontViewController.view.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+	
 	[self.frontView addSubview:frontViewController.view];
 		
 	if ([frontViewController respondsToSelector:@selector(didMoveToParentViewController:)])
@@ -630,6 +634,10 @@
 
 #pragma mark - View Event Forwarding
 
+/* 
+ Thanks to jtoce ( https://github.com/jtoce ) for adding the event forwarding.
+*/
+
 /*
  *
  *   If you override automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers and return NO, you  
@@ -645,47 +653,55 @@
  *
  */
 
-- (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers {
+- (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers
+{
     return NO;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
     [self.frontViewController viewWillAppear:animated];
     [self.rearViewController viewWillAppear:animated];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated
+{
     [super viewDidAppear:animated];
     [self.frontViewController viewDidAppear:animated];
     [self.rearViewController viewDidAppear:animated];    
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
+- (void)viewWillDisappear:(BOOL)animated
+{
     [super viewWillDisappear:animated];
     [self.frontViewController viewWillDisappear:animated];
     [self.rearViewController viewWillDisappear:animated];    
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
+- (void)viewDidDisappear:(BOOL)animated
+{
     [super viewDidDisappear:animated];
     [self.frontViewController viewDidDisappear:animated];
     [self.rearViewController viewDidDisappear:animated];
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     [self.frontViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     [self.rearViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];    
 }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
     [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
     [self.frontViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
     [self.rearViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
     [self.frontViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
     [self.rearViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
@@ -706,7 +722,8 @@
 	[self.view addSubview:self.rearView];
 	[self.view addSubview:self.frontView];
 	
-	/* Create a fancy shadow aroung the frontView.
+	/* 
+	 * Create a fancy shadow aroung the frontView.
 	 *
 	 * Note: UIBezierPath needed because shadows are evil. If you don't use the path, you might not
 	 * not notice a difference at first, but the keen eye will (even on an iPhone 4S) observe that 
