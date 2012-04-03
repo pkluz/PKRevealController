@@ -59,4 +59,16 @@ typedef enum
 - (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated;
 - (void)setRearViewController:(UIViewController *)rearViewController animated:(BOOL)animated;
 
+// Setting Property Methods:
+- (CGFloat)revealEdgeWidth;
+- (CGFloat)revealEdgeMaximumOffset;
+- (CGFloat)revealViewTriggerWidth;
+- (CGFloat)concealViewTriggerWidth;
+- (CGFloat)quickFlickVelocity;
+- (CGFloat)frontViewShadowRadius;
+- (NSTimeInterval)revealAnimationDuration;
+- (NSTimeInterval)concealAnimationDuration;
+- (NSTimeInterval)swapFrontViewAnimationDuration;
+- (NSTimeInterval)swapRearViewAnimationDuration;
+
 @end
