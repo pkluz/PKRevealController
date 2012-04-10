@@ -82,7 +82,7 @@
 - (void)_addRearViewControllerToHierarchy:(UIViewController *)rearViewController;
 - (void)_removeViewControllerFromHierarchy:(UIViewController *)frontViewController;
 
-- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated;
+- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated toggleReveal:(BOOL)toggleReveal;
 - (void)_swapCurrentRearViewControllerWith:(UIViewController *)newRearViewController animated:(BOOL)animated;
 
 @end
@@ -382,14 +382,26 @@
 
 - (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated
 {
+    [self setFrontViewController:frontViewController animated:NO toggleReveal:YES];
+}
+
+- (void)setFrontViewController:(UIViewController *)frontViewController toggleReveal:(BOOL)toggleReveal
+{
+    [self setFrontViewController:frontViewController animated:NO toggleReveal:toggleReveal];
+}
+
+- (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated toggleReveal:(BOOL)toggleReveal 
+{
 	if (nil != frontViewController && _frontViewController == frontViewController)
 	{
-		[self revealToggle:nil];
+        if (toggleReveal) {
+            [self revealToggle:nil];
+        }
 	}
 	else if (nil != frontViewController)
 	{
-		[self _swapCurrentFrontViewControllerWith:frontViewController animated:animated];
-	}
+		[self _swapCurrentFrontViewControllerWith:frontViewController animated:animated toggleReveal:toggleReveal];
+	}    
 }
 
 - (UIViewController *)rearViewController {
@@ -473,7 +485,7 @@
 	return result;
 }
 
-- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated
+- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated toggleReveal:(BOOL)toggleReveal
 {
 	if ([self.delegate respondsToSelector:@selector(revealController:willSwapToFrontViewController:)])
 	{
@@ -503,7 +515,7 @@
 			[self _addFrontViewControllerToHierarchy:newFrontViewController];
             [newFrontViewController viewDidAppear:animated];
 			 
-			if (![self revealToggle:self]) {				
+			if (!toggleReveal || ![self revealToggle:self]) {				
                 [UIView animateWithDuration:[self swapFrontViewAnimationDuration] delay:0.0f options:UIViewAnimationCurveEaseIn animations:^{
                     self.frontView.frame = CGRectMake(xSwapOffsetNormal, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
                 } completion:nil];
@@ -535,7 +547,9 @@
 			[self.delegate revealController:self didSwapToFrontViewController:newFrontViewController];
 		}
 		
-		[self revealToggle:self];
+        if (toggleReveal) {
+            [self revealToggle:self];
+        }
 	}
 }
 

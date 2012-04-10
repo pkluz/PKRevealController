@@ -57,6 +57,8 @@ typedef enum
 - (BOOL)revealToggle:(id)sender;
 
 - (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated;
+- (void)setFrontViewController:(UIViewController *)frontViewController toggleReveal:(BOOL)toggleReveal;
+- (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated toggleReveal:(BOOL)toggleReveal;
 - (void)setRearViewController:(UIViewController *)rearViewController animated:(BOOL)animated;
 
 // Setting Property Methods:
