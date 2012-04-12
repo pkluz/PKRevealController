@@ -50,19 +50,30 @@
 // 'VELOCITY_REQUIRED_FOR_QUICK_FLICK' is the minimum speed of the finger required to instantly trigger a reveal/hide.
 #define VELOCITY_REQUIRED_FOR_QUICK_FLICK 1300.0f
 
+// 'REVEAL_ANIMATION_DURATION' is the time to normally reveal/hide in portrait mode.
+#define REVEAL_ANIMATION_DURATION 0.25f
+
+// 'IPHONE_SWAP_ANIMATION_DURATION' is the time to normally swap in portrait mode on iPhone.
+#define IPHONE_SWAP_ANIMATION_DURATION 0.15f
+
+// 'IPAD_SWAP_ANIMATION_DURATION' is the time to normally swap in portrait mode on iPad.
+#define IPAD_SWAP_ANIMATION_DURATION 0.35f
+
 // Required for the shadow cast by the front view.
 #import <QuartzCore/QuartzCore.h>
 
 #import "ZUUIRevealController.h"
+
 
 @interface ZUUIRevealController()
 
 // Private Properties:
 @property (retain, nonatomic) UIView *frontView;
 @property (retain, nonatomic) UIView *rearView;
-@property (assign, nonatomic) float previousPanOffset;
+@property (assign, nonatomic) CGFloat previousPanOffset;
 
 // Private Methods:
+- (CGRect)_mainScreenBounds;
 - (CGFloat)_calculateOffsetForTranslationInView:(CGFloat)x;
 - (void)_revealAnimation;
 - (void)_concealAnimation;
@@ -71,11 +82,8 @@
 - (void)_addRearViewControllerToHierarchy:(UIViewController *)rearViewController;
 - (void)_removeViewControllerFromHierarchy:(UIViewController *)frontViewController;
 
-- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated;
-
-// Work in progress:
-// - (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController;
-// - (void)setRearViewController:(UIViewController *)rearViewController; // Delegate Call.
+- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated toggleReveal:(BOOL)toggleReveal;
+- (void)_swapCurrentRearViewControllerWith:(UIViewController *)newRearViewController animated:(BOOL)animated;
 
 @end
 
@@ -83,8 +91,8 @@
 
 @synthesize previousPanOffset = _previousPanOffset;
 @synthesize currentFrontViewPosition = _currentFrontViewPosition;
-@synthesize frontViewController = _frontViewController;
-@synthesize rearViewController = _rearViewController;
+@dynamic frontViewController;
+@dynamic rearViewController;
 @synthesize frontView = _frontView;
 @synthesize rearView = _rearView;
 @synthesize delegate = _delegate;
@@ -102,6 +110,86 @@
 	}
 	
 	return self;
+}
+
+#pragma mark - Setting Property Methods
+
+/*
+ * Note: Using setting property methods will make it easier to vary behavior by overriding in a subclass.
+ */
+
+- (CGFloat)revealEdgeWidth
+{
+    return REVEAL_EDGE;
+}
+
+- (CGFloat)revealEdgeMaximumOffset
+{
+    return REVEAL_EDGE_OVERDRAW;
+}
+
+- (CGFloat)revealViewTriggerWidth
+{
+    return REVEAL_VIEW_TRIGGER_LEVEL_LEFT;
+}
+
+- (CGFloat)concealViewTriggerWidth
+{
+    return REVEAL_VIEW_TRIGGER_LEVEL_RIGHT;
+}
+
+- (CGFloat)quickFlickVelocity
+{
+    return VELOCITY_REQUIRED_FOR_QUICK_FLICK;
+}
+
+- (CGFloat)frontViewShadowRadius
+{
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return 2.5f;
+    } else {
+        return 5.0f;        
+    }
+}
+
+- (NSTimeInterval)revealAnimationDuration
+{
+    return REVEAL_ANIMATION_DURATION * fabs(REVEAL_EDGE - self.frontView.frame.origin.x) / REVEAL_EDGE;
+}
+
+- (NSTimeInterval)concealAnimationDuration
+{
+    return REVEAL_ANIMATION_DURATION * self.frontView.frame.origin.x / REVEAL_EDGE;
+}
+
+- (NSTimeInterval)swapFrontViewAnimationDuration
+{
+    // Don't take longer if we are in landscape
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return IPHONE_SWAP_ANIMATION_DURATION;
+    } else {
+        return IPAD_SWAP_ANIMATION_DURATION;        
+    }
+}
+
+- (NSTimeInterval)swapRearViewAnimationDuration
+{
+    // Don't take longer if we are in landscape
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return IPHONE_SWAP_ANIMATION_DURATION;
+    } else {
+        return IPAD_SWAP_ANIMATION_DURATION;        
+    }
+}
+
+- (CGRect)_mainScreenBounds {
+    CGRect bounds = [UIScreen mainScreen].bounds;
+    if (UIInterfaceOrientationIsLandscape([self interfaceOrientation])) {
+        CGFloat width = bounds.size.width;
+        bounds.size.width = bounds.size.height;
+        bounds.size.height = width;
+    }
+    return bounds;
 }
 
 #pragma mark - Reveal Callbacks
@@ -164,7 +252,7 @@
 	if (UIGestureRecognizerStateEnded == [recognizer state])
 	{
 		// Case a): Quick finger flick fast enough to cause instant change:
-		if (fabs([recognizer velocityInView:self.view].x) > VELOCITY_REQUIRED_FOR_QUICK_FLICK)
+		if (fabs([recognizer velocityInView:self.view].x) > [self quickFlickVelocity])
 		{
 			if ([recognizer velocityInView:self.view].x > 0.0f)
 			{				
@@ -178,9 +266,9 @@
 		// Case b) Slow pan/drag ended:
 		else
 		{
-			float dynamicTriggerLevel = (FrontViewPositionLeft == self.currentFrontViewPosition) ? REVEAL_VIEW_TRIGGER_LEVEL_LEFT : REVEAL_VIEW_TRIGGER_LEVEL_RIGHT;
+			CGFloat dynamicTriggerLevel = (FrontViewPositionLeft == self.currentFrontViewPosition) ? [self revealViewTriggerWidth] : [self concealViewTriggerWidth];
 			
-			if (self.frontView.frame.origin.x >= dynamicTriggerLevel && self.frontView.frame.origin.x != REVEAL_EDGE)
+			if (self.frontView.frame.origin.x >= dynamicTriggerLevel && self.frontView.frame.origin.x != [self revealEdgeWidth])
 			{
 				[self _revealAnimation];
 			}
@@ -212,7 +300,7 @@
 		}
 		else
 		{
-			float offset = [self _calculateOffsetForTranslationInView:[recognizer translationInView:self.view].x];
+			CGFloat offset = [self _calculateOffsetForTranslationInView:[recognizer translationInView:self.view].x];
 			self.frontView.frame = CGRectMake(offset, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 		}
 	}
@@ -220,12 +308,12 @@
 	{
 		if ([recognizer translationInView:self.view].x > 0.0f)
 		{
-			float offset = [self _calculateOffsetForTranslationInView:([recognizer translationInView:self.view].x+REVEAL_EDGE)];
+			CGFloat offset = [self _calculateOffsetForTranslationInView:([recognizer translationInView:self.view].x+[self revealEdgeWidth])];
 			self.frontView.frame = CGRectMake(offset, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 		}
-		else if ([recognizer translationInView:self.view].x > -REVEAL_EDGE)
+		else if ([recognizer translationInView:self.view].x > -[self revealEdgeWidth])
 		{
-			self.frontView.frame = CGRectMake([recognizer translationInView:self.view].x+REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+			self.frontView.frame = CGRectMake([recognizer translationInView:self.view].x+[self revealEdgeWidth], 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 		}
 		else
 		{
@@ -234,8 +322,9 @@
 	}
 }
 
-// Instantaneously toggle the rear view's visibility.
-- (void)revealToggle:(id)sender
+// Instantaneously toggle the rear view's visibility. 
+// Returns YES by default unless the delegate prevented the action, then returns NO.
+- (BOOL)revealToggle:(id)sender
 {	
 	if (FrontViewPositionLeft == self.currentFrontViewPosition)
 	{
@@ -244,7 +333,7 @@
 		{
 			if (![self.delegate revealController:self shouldRevealRearViewController:self.rearViewController])
 			{
-				return;
+				return NO;
 			}
 		}
 		
@@ -265,7 +354,7 @@
 		{
 			if (![self.delegate revealController:self shouldHideRearViewController:self.rearViewController])
 			{
-				return;
+				return NO;
 			}
 		}
 		
@@ -279,6 +368,11 @@
 		
 		self.currentFrontViewPosition = FrontViewPositionLeft;
 	}
+    return YES;
+}
+
+- (UIViewController *)frontViewController {
+    return _frontViewController;
 }
 
 - (void)setFrontViewController:(UIViewController *)frontViewController
@@ -288,49 +382,56 @@
 
 - (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated
 {
+    [self setFrontViewController:frontViewController animated:NO toggleReveal:YES];
+}
+
+- (void)setFrontViewController:(UIViewController *)frontViewController toggleReveal:(BOOL)toggleReveal
+{
+    [self setFrontViewController:frontViewController animated:NO toggleReveal:toggleReveal];
+}
+
+- (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated toggleReveal:(BOOL)toggleReveal 
+{
 	if (nil != frontViewController && _frontViewController == frontViewController)
 	{
-		[self revealToggle:nil];
+        if (toggleReveal) {
+            [self revealToggle:nil];
+        }
 	}
 	else if (nil != frontViewController)
 	{
-		[self _swapCurrentFrontViewControllerWith:frontViewController animated:animated];
-	}
+		[self _swapCurrentFrontViewControllerWith:frontViewController animated:animated toggleReveal:toggleReveal];
+	}    
 }
 
-/*
- // This code is experimental. It works but is not recommended for usage yet.
+- (UIViewController *)rearViewController {
+    return _rearViewController;
+}
+
 - (void)setRearViewController:(UIViewController *)rearViewController
 {
-	if (nil != rearViewController)
+	[self setRearViewController:rearViewController animated:NO];
+}
+
+- (void)setRearViewController:(UIViewController *)rearViewController animated:(BOOL)animated
+{
+	if (nil != rearViewController && _rearViewController == rearViewController)
 	{
-		if (self.currentFrontViewPosition == FrontViewPositionRight)
-		{
-			[UIView animateWithDuration:0.25f animations:^
-			{
-				self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-			}
-			completion:^(BOOL finished)
-			{
-				[self _performRearViewControllerSwap:rearViewController];
-				[self _revealAnimation];
-			}];
-		}
-		else
-		{
-			[self _performRearViewControllerSwap:rearViewController];
-		}
+		return;
+	}
+	else if (nil != rearViewController)
+	{
+		[self _swapCurrentRearViewControllerWith:rearViewController animated:animated];
 	}
 }
-*/
 
 #pragma mark - Helper
 
 - (void)_revealAnimation
 {	
-	[UIView animateWithDuration:0.25f animations:^
+	[UIView animateWithDuration:[self revealAnimationDuration] animations:^
 	{
-		self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+		self.frontView.frame = CGRectMake([self revealEdgeWidth], 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
 	completion:^(BOOL finished)
 	{
@@ -344,7 +445,7 @@
 
 - (void)_concealAnimation
 {	
-	[UIView animateWithDuration:0.25f animations:^
+	[UIView animateWithDuration:[self concealAnimationDuration] animations:^
 	{
 		self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
@@ -365,59 +466,39 @@
 {
 	CGFloat result;
 	
-	if (x <= REVEAL_EDGE)
+	if (x <= [self revealEdgeWidth])
 	{
 		// Translate linearly.
 		result = x;
 	}
-	else if (x <= REVEAL_EDGE+(M_PI*REVEAL_EDGE_OVERDRAW/2.0f))
+	else if (x <= [self revealEdgeWidth]+(M_PI*[self revealEdgeMaximumOffset]/2.0f))
 	{
 		// and eventually slow translation slowly.
-		result = REVEAL_EDGE_OVERDRAW*sin((x-REVEAL_EDGE)/REVEAL_EDGE_OVERDRAW)+REVEAL_EDGE;
+		result = [self revealEdgeMaximumOffset]*sin((x-[self revealEdgeWidth])/[self revealEdgeMaximumOffset])+[self revealEdgeWidth];
 	}
 	else
 	{
 		// ...until we hit the limit.
-		result = REVEAL_EDGE+REVEAL_EDGE_OVERDRAW;
+		result = [self revealEdgeWidth]+[self revealEdgeMaximumOffset];
 	}
 	
 	return result;
 }
 
-/*
-// This code is experimental. It works but is not recommended for usage yet.
-- (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController
-{
-	[self _removeRearViewControllerFromHierarchy:self.rearViewController];
-	
-	[_rearViewController release];
-	_rearViewController = [newRearViewController retain];
-	
-	[self _addRearViewControllerToHierarchy:newRearViewController];
-}
-*/
-
-- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated
+- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated toggleReveal:(BOOL)toggleReveal
 {
 	if ([self.delegate respondsToSelector:@selector(revealController:willSwapToFrontViewController:)])
 	{
 		[self.delegate revealController:self willSwapToFrontViewController:newFrontViewController];
 	}
 	
-	CGFloat xSwapOffset = 0.0f;
-	
-	
-	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-	{
-		xSwapOffset = 60.0f;
-	}
+	CGFloat xSwapOffsetExpanded = [self _mainScreenBounds].size.width;
+	CGFloat xSwapOffsetNormal = [self revealEdgeWidth];
 	
 	if (animated)
 	{
-		[UIView animateWithDuration:0.15f delay:0.0f options:UIViewAnimationCurveEaseOut animations:^
-		{
-			CGRect offsetRect = CGRectOffset(self.frontView.frame, xSwapOffset, 0.0f);
-			self.frontView.frame = offsetRect;
+		[UIView animateWithDuration:[self swapFrontViewAnimationDuration] delay:0.0f options:UIViewAnimationCurveEaseOut animations:^{
+			self.frontView.frame = CGRectMake(xSwapOffsetExpanded, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 		}
 		completion:^(BOOL finished)
 		{
@@ -434,20 +515,16 @@
 			[self _addFrontViewControllerToHierarchy:newFrontViewController];
             [newFrontViewController viewDidAppear:animated];
 			 
-			[UIView animateWithDuration:0.225f delay:0.0f options:UIViewAnimationCurveEaseIn animations:^
-			{
-				CGRect offsetRect = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-				self.frontView.frame = offsetRect;
+			if (!toggleReveal || ![self revealToggle:self]) {				
+                [UIView animateWithDuration:[self swapFrontViewAnimationDuration] delay:0.0f options:UIViewAnimationCurveEaseIn animations:^{
+                    self.frontView.frame = CGRectMake(xSwapOffsetNormal, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+                } completion:nil];
 			}
-			completion:^(BOOL finished)
-			{
-				[self revealToggle:self];
-				  
-				if ([self.delegate respondsToSelector:@selector(revealController:didSwapToFrontViewController:)])
-				{
-					[self.delegate revealController:self didSwapToFrontViewController:newFrontViewController];
-				}
-			}];
+            
+            if ([self.delegate respondsToSelector:@selector(revealController:didSwapToFrontViewController:)])
+            {
+                [self.delegate revealController:self didSwapToFrontViewController:newFrontViewController];
+            }
 		}];
 	}
 	else
@@ -470,7 +547,73 @@
 			[self.delegate revealController:self didSwapToFrontViewController:newFrontViewController];
 		}
 		
-		[self revealToggle:self];
+        if (toggleReveal) {
+            [self revealToggle:self];
+        }
+	}
+}
+
+- (void)_swapCurrentRearViewControllerWith:(UIViewController *)newRearViewController animated:(BOOL)animated
+{
+	if ([self.delegate respondsToSelector:@selector(revealController:willSwapToRearViewController:)])
+	{
+		[self.delegate revealController:self willSwapToRearViewController:newRearViewController];
+	}
+	
+	CGFloat xSwapOffsetExpanded = -self.rearView.frame.size.width;
+	CGFloat xSwapOffsetNormal = 0.0f;
+	
+	if (animated)
+	{
+		[UIView animateWithDuration:[self swapRearViewAnimationDuration] delay:0.0f options:UIViewAnimationCurveEaseOut animations:^{
+			self.rearView.frame = CGRectMake(xSwapOffsetExpanded, 0.0f, self.rearView.frame.size.width, self.rearView.frame.size.height);
+		}
+                         completion:^(BOOL finished)
+         {
+             // Manually forward the view methods to the child view controllers
+             [self.rearViewController viewWillDisappear:animated];
+             [self _removeViewControllerFromHierarchy:self.rearViewController];
+             [self.rearViewController viewDidDisappear:animated];
+             
+             [newRearViewController retain]; 
+             [_rearViewController release];
+             _rearViewController = newRearViewController;
+             
+             [newRearViewController viewWillAppear:animated];
+             [self _addRearViewControllerToHierarchy:newRearViewController];
+             [newRearViewController viewDidAppear:animated];
+             
+             [UIView animateWithDuration:[self swapRearViewAnimationDuration] delay:0.0f options:UIViewAnimationCurveEaseIn animations:^{
+                 self.rearView.frame = CGRectMake(xSwapOffsetNormal, 0.0f, self.rearView.frame.size.width, self.rearView.frame.size.height);
+             }
+             completion:^(BOOL finished)
+              {
+                  if ([self.delegate respondsToSelector:@selector(revealController:didSwapToRearViewController:)])
+                  {
+                      [self.delegate revealController:self didSwapToRearViewController:newRearViewController];
+                  }
+              }];
+         }];
+	}
+	else
+	{
+        // Manually forward the view methods to the child view controllers
+        [self.rearViewController viewWillDisappear:animated];
+        [self _removeViewControllerFromHierarchy:self.rearViewController];
+        [self.rearViewController viewDidDisappear:animated];
+        
+        [newRearViewController retain]; 
+        [_rearViewController release];
+        _rearViewController = newRearViewController;
+        
+        [newRearViewController viewWillAppear:animated];
+        [self _addRearViewControllerToHierarchy:newRearViewController];
+        [newRearViewController viewDidAppear:animated];
+		
+		if ([self.delegate respondsToSelector:@selector(revealController:didSwapToRearViewController:)])
+		{
+			[self.delegate revealController:self didSwapToRearViewController:newRearViewController];
+		}
 	}
 }
 
@@ -481,7 +624,8 @@
 	[self addChildViewController:frontViewController];
 	
 	// iOS 4 doesn't adjust the frame properly if in landscape via implicit loading from a nib.
-	frontViewController.view.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+	frontViewController.view.frame = [self _mainScreenBounds];
+    frontViewController.view.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 	
 	[self.frontView addSubview:frontViewController.view];
 		
@@ -494,6 +638,11 @@
 - (void)_addRearViewControllerToHierarchy:(UIViewController *)rearViewController
 {
 	[self addChildViewController:rearViewController];
+    
+    // iOS 4 doesn't adjust the frame properly if in landscape via implicit loading from a nib.
+	rearViewController.view.frame = [self _mainScreenBounds];
+    rearViewController.view.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
+
 	[self.rearView addSubview:rearViewController.view];
 		
 	if ([rearViewController respondsToSelector:@selector(didMoveToParentViewController:)])
@@ -593,8 +742,8 @@
 	[super viewDidLoad];
 	
 	self.frontView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
-	self.rearView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
-	
+    self.rearView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
+
 	self.frontView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 	self.rearView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 	
@@ -613,15 +762,15 @@
 	self.frontView.layer.shadowColor = [UIColor blackColor].CGColor;
 	self.frontView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
 	self.frontView.layer.shadowOpacity = 1.0f;
-	self.frontView.layer.shadowRadius = 2.5f;
+	self.frontView.layer.shadowRadius = [self frontViewShadowRadius];
 	self.frontView.layer.shadowPath = shadowPath.CGPath;
 	
 	// Init the position with only the front view visible.
 	self.previousPanOffset = 0.0f;
 	self.currentFrontViewPosition = FrontViewPositionLeft;
 	
-	[self _addRearViewControllerToHierarchy:self.rearViewController];
 	[self _addFrontViewControllerToHierarchy:self.frontViewController];	
+    [self _addRearViewControllerToHierarchy:self.rearViewController];
 }
 
 - (void)viewDidUnload
@@ -635,7 +784,11 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-	return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    } else {
+        return YES;
+    }
 }
 
 #pragma mark - Memory Management

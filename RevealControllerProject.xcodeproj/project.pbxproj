@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1219E7B7152A470D00F00480 /* ZUUIRevealControllerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1219E7B6152A470D00F00480 /* ZUUIRevealControllerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		12410CC7152137DD00DE1CD9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E605BAB14A081F900853025 /* Foundation.framework */; };
 		12410CD11521386400DE1CD9 /* ZUUIRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E1EFE1D14A0BA57008062C1 /* ZUUIRevealController.m */; };
 		12410CD21521386E00DE1CD9 /* ZUUIRevealController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5E1EFE1C14A0BA57008062C1 /* ZUUIRevealController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -33,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1219E7B6152A470D00F00480 /* ZUUIRevealControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZUUIRevealControllerDelegate.h; sourceTree = "<group>"; };
 		12410CC6152137DD00DE1CD9 /* libZUUIRevealController.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libZUUIRevealController.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		12410CCA152137DD00DE1CD9 /* ZUUIRevealController-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZUUIRevealController-Prefix.pch"; sourceTree = "<group>"; };
 		5E1EFE0D14A0BA4F008062C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "en.lproj/FrontViewController~iPad.xib"; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 			children = (
 				5E1EFE1C14A0BA57008062C1 /* ZUUIRevealController.h */,
 				5E1EFE1D14A0BA57008062C1 /* ZUUIRevealController.m */,
+				1219E7B6152A470D00F00480 /* ZUUIRevealControllerDelegate.h */,
 				12410CC9152137DD00DE1CD9 /* Supporting Files */,
 			);
 			path = ZUUIRevealController;
@@ -212,6 +215,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				12410CD21521386E00DE1CD9 /* ZUUIRevealController.h in Headers */,
+				1219E7B7152A470D00F00480 /* ZUUIRevealControllerDelegate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,13 +399,16 @@
 				HEADERS_FOLDER_PATH = ../ZUUIRevealController/;
 				HEADER_SEARCH_PATHS = "$(STDLIB_HEADERS)";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OBJROOT = "$(SRCROOT)/Build";
 				OTHER_LDFLAGS = "-ObjC";
 				PRIVATE_HEADERS_FOLDER_PATH = "$(HEADERS_FOLDER_PATH)$(BASE_PRODUCT_NAME)/private";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = "$(HEADERS_FOLDER_PATH)$(BASE_PRODUCT_NAME)";
+				SHARED_PRECOMPS_DIR = "$(CACHE_ROOT)/SharedPrecompiledHeaders";
 				SKIP_INSTALL = YES;
 				STDLIB_HEADERS = /usr/include;
 				STDLIB_LIBRARY = /usr/lib;
+				SYMROOT = "$(OBJROOT)/Products";
 			};
 			name = Debug;
 		};
@@ -420,13 +427,16 @@
 				HEADERS_FOLDER_PATH = ../ZUUIRevealController/;
 				HEADER_SEARCH_PATHS = "$(STDLIB_HEADERS)";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OBJROOT = "$(SRCROOT)/Build";
 				OTHER_LDFLAGS = "-ObjC";
 				PRIVATE_HEADERS_FOLDER_PATH = "$(HEADERS_FOLDER_PATH)$(BASE_PRODUCT_NAME)/private";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = "$(HEADERS_FOLDER_PATH)$(BASE_PRODUCT_NAME)";
+				SHARED_PRECOMPS_DIR = "$(CACHE_ROOT)/SharedPrecompiledHeaders";
 				SKIP_INSTALL = YES;
 				STDLIB_HEADERS = /usr/include;
 				STDLIB_LIBRARY = /usr/lib;
+				SYMROOT = "$(OBJROOT)/Products";
 			};
 			name = Release;
 		};
