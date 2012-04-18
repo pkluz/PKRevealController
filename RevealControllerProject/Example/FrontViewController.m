@@ -86,7 +86,7 @@
 
 #pragma mark - Example Code
 
-- (void)pushExample:(id)sender
+- (IBAction)pushExample:(id)sender
 {
 	UIViewController *stubController = [[UIViewController alloc] init];
 	stubController.view.backgroundColor = [UIColor whiteColor];
