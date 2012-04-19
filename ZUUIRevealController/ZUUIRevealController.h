@@ -35,7 +35,8 @@
 typedef enum
 {
 	FrontViewPositionLeft,
-	FrontViewPositionRight
+	FrontViewPositionRight,
+	FrontViewPositionRightMost
 } FrontViewPosition;
 
 @protocol ZUUIRevealControllerDelegate;
@@ -55,6 +56,9 @@ typedef enum
 
 - (void)setFrontViewController:(UIViewController *)frontViewController;
 - (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated;
+
+- (void)hideFrontView;
+- (void)showFrontView;
 
 @end
 
