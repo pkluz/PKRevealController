@@ -34,8 +34,8 @@
 
 typedef enum
 {
-	FrontViewPositionLeft,
-	FrontViewPositionRight
+	FrontViewPositionTopLeft,
+	FrontViewPositionBottomRight
 } FrontViewPosition;
 
 @protocol ZUUIRevealControllerDelegate;

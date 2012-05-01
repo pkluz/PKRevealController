@@ -32,20 +32,22 @@
 
 /*
  * NOTE: Before editing the values below make sure they make 'sense'. Unexpected behavior might occur if for instance the 'REVEAL_EDGE'
- *		 were to be lower than the left trigger level...
+ *		 were to be lower than the top/left trigger level...
  */
 
+#define REVEAL_VERTICAL 1
+
 // 'REVEAL_EDGE' defines the point on the x-axis up to which the rear view is shown.
-#define REVEAL_EDGE 260.0f
+#define REVEAL_EDGE 160.0f
 
 // 'REVEAL_EDGE_OVERDRAW' defines the maximum offset that can occur after the 'REVEAL_EDGE' has been reached.
-#define REVEAL_EDGE_OVERDRAW 60.0f
+#define REVEAL_EDGE_OVERDRAW 60.0
 
-// 'REVEAL_VIEW_TRIGGER_LEVEL_LEFT' defines the least amount of offset that needs to be panned until the front view snaps to the right edge.
-#define REVEAL_VIEW_TRIGGER_LEVEL_LEFT 125.0f
+// 'REVEAL_VIEW_TRIGGER_LEVEL_BOTTOM_RIGHT' defines the least amount of offset that needs to be panned until the front view snaps to the right/bottom edge.
+#define REVEAL_VIEW_TRIGGER_LEVEL_BOTTOM_RIGHT 40.0f
 
-// 'REVEAL_VIEW_TRIGGER_LEVEL_RIGHT' defines the least amount of translation that needs to be panned until the front view snaps _BACK_ to the left edge.
-#define REVEAL_VIEW_TRIGGER_LEVEL_RIGHT 200.0f
+// 'REVEAL_VIEW_TRIGGER_LEVEL_TOP_LEFT' defines the least amount of translation that needs to be panned until the front view snaps _BACK_ to the left/top edge.
+#define REVEAL_VIEW_TRIGGER_LEVEL_TOP_LEFT 120.0f
 
 // 'VELOCITY_REQUIRED_FOR_QUICK_FLICK' is the minimum speed of the finger required to instantly trigger a reveal/hide.
 #define VELOCITY_REQUIRED_FOR_QUICK_FLICK 1300.0f
@@ -113,7 +115,7 @@
 	if ([self.delegate conformsToProtocol:@protocol(ZUUIRevealControllerDelegate)])
 	{
 		// Case a): We're going to be revealing.
-		if (FrontViewPositionLeft == self.currentFrontViewPosition)
+		if (FrontViewPositionTopLeft == self.currentFrontViewPosition)
 		{
 			if ([self.delegate respondsToSelector:@selector(revealController:shouldRevealRearViewController:)])
 			{
@@ -143,7 +145,7 @@
 		if ([self.delegate conformsToProtocol:@protocol(ZUUIRevealControllerDelegate)])
 		{
 			// Determine whether we're going to be revealing or hiding.
-			if (FrontViewPositionLeft == self.currentFrontViewPosition)
+			if (FrontViewPositionTopLeft == self.currentFrontViewPosition)
 			{
 				if ([self.delegate respondsToSelector:@selector(revealController:willRevealRearViewController:)])
 				{
@@ -163,10 +165,13 @@
 	// 3. ...or maybe the interaction already _ENDED_?
 	if (UIGestureRecognizerStateEnded == [recognizer state])
 	{
+        
+        float velocityInView = REVEAL_VERTICAL ? [recognizer velocityInView:self.view].y : [recognizer velocityInView:self.view].x;
+        
 		// Case a): Quick finger flick fast enough to cause instant change:
-		if (fabs([recognizer velocityInView:self.view].x) > VELOCITY_REQUIRED_FOR_QUICK_FLICK)
+		if (fabs(velocityInView) > VELOCITY_REQUIRED_FOR_QUICK_FLICK)
 		{
-			if ([recognizer velocityInView:self.view].x > 0.0f)
+			if (velocityInView > 0.0f)
 			{				
 				[self _revealAnimation];
 			}
@@ -178,54 +183,65 @@
 		// Case b) Slow pan/drag ended:
 		else
 		{
-			float dynamicTriggerLevel = (FrontViewPositionLeft == self.currentFrontViewPosition) ? REVEAL_VIEW_TRIGGER_LEVEL_LEFT : REVEAL_VIEW_TRIGGER_LEVEL_RIGHT;
+			float dynamicTriggerLevel = (FrontViewPositionTopLeft == self.currentFrontViewPosition) ? REVEAL_VIEW_TRIGGER_LEVEL_BOTTOM_RIGHT : REVEAL_VIEW_TRIGGER_LEVEL_TOP_LEFT;
 			
-			if (self.frontView.frame.origin.x >= dynamicTriggerLevel && self.frontView.frame.origin.x != REVEAL_EDGE)
+            float origin = REVEAL_VERTICAL ? self.frontView.frame.origin.y : self.frontView.frame.origin.x; 
+            
+			if (origin >= dynamicTriggerLevel && origin != REVEAL_EDGE)
 			{
 				[self _revealAnimation];
 			}
-			else if (self.frontView.frame.origin.x < dynamicTriggerLevel && self.frontView.frame.origin.x != 0.0f)
+			else if (origin < dynamicTriggerLevel && origin != 0.0f)
 			{
 				[self _concealAnimation];
 			}
 		}
+        
+        float origin = REVEAL_VERTICAL ? self.frontView.frame.origin.y : self.frontView.frame.origin.x; 
 		
 		// Now adjust the current state enum.
-		if (self.frontView.frame.origin.x == 0.0f)
+		if (origin == 0.0f)
 		{
-			self.currentFrontViewPosition = FrontViewPositionLeft;
+			self.currentFrontViewPosition = FrontViewPositionTopLeft;
 		}
 		else
 		{
-			self.currentFrontViewPosition = FrontViewPositionRight;
+			self.currentFrontViewPosition = FrontViewPositionBottomRight;
 		}
 		
 		return;
 	}
+    
+    float translationInView = REVEAL_VERTICAL ? [recognizer translationInView:self.view].y : [recognizer translationInView:self.view].x; 
 	
 	// 4. None of the above? That means it's _IN PROGRESS_!
-	if (FrontViewPositionLeft == self.currentFrontViewPosition)
+	if (FrontViewPositionTopLeft == self.currentFrontViewPosition)
 	{
-		if ([recognizer translationInView:self.view].x < 0.0f)
+        
+		if (translationInView < 0.0f)
 		{
 			self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 		}
 		else
 		{
-			float offset = [self _calculateOffsetForTranslationInView:[recognizer translationInView:self.view].x];
-			self.frontView.frame = CGRectMake(offset, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+			float offset_x = REVEAL_VERTICAL ? 0.0f : [self _calculateOffsetForTranslationInView:translationInView];
+            float offset_y = REVEAL_VERTICAL ? [self _calculateOffsetForTranslationInView:translationInView] : 0.0f;
+			self.frontView.frame = CGRectMake(offset_x, offset_y, self.frontView.frame.size.width, self.frontView.frame.size.height);
 		}
 	}
 	else
 	{
-		if ([recognizer translationInView:self.view].x > 0.0f)
+		if (translationInView > 0.0f)
 		{
-			float offset = [self _calculateOffsetForTranslationInView:([recognizer translationInView:self.view].x+REVEAL_EDGE)];
-			self.frontView.frame = CGRectMake(offset, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+			float offset_x = REVEAL_VERTICAL ? 0.0f : [self _calculateOffsetForTranslationInView:translationInView+REVEAL_EDGE];
+            float offset_y = REVEAL_VERTICAL ? [self _calculateOffsetForTranslationInView:translationInView+REVEAL_EDGE] : 0.0f;
+			self.frontView.frame = CGRectMake(offset_x, offset_y, self.frontView.frame.size.width, self.frontView.frame.size.height);
 		}
-		else if ([recognizer translationInView:self.view].x > -REVEAL_EDGE)
+		else if ([recognizer translationInView:self.view].y > -REVEAL_EDGE)
 		{
-			self.frontView.frame = CGRectMake([recognizer translationInView:self.view].x+REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+            float offset_x = REVEAL_VERTICAL ? 0.0f : translationInView+REVEAL_EDGE;
+            float offset_y = REVEAL_VERTICAL ? translationInView+REVEAL_EDGE : 0.0f;
+            self.frontView.frame = CGRectMake(offset_x, offset_y, self.frontView.frame.size.width, self.frontView.frame.size.height);
 		}
 		else
 		{
@@ -237,7 +253,7 @@
 // Instantaneously toggle the rear view's visibility.
 - (void)revealToggle:(id)sender
 {	
-	if (FrontViewPositionLeft == self.currentFrontViewPosition)
+	if (FrontViewPositionTopLeft == self.currentFrontViewPosition)
 	{
 		// Check if a delegate exists and if so, whether it is fine for us to revealing the rear view.
 		if ([self.delegate respondsToSelector:@selector(revealController:shouldRevealRearViewController:)])
@@ -256,7 +272,7 @@
 		
 		[self _revealAnimation];
 		
-		self.currentFrontViewPosition = FrontViewPositionRight;
+		self.currentFrontViewPosition = FrontViewPositionBottomRight;
 	}
 	else
 	{
@@ -277,7 +293,7 @@
 		
 		[self _concealAnimation];
 		
-		self.currentFrontViewPosition = FrontViewPositionLeft;
+		self.currentFrontViewPosition = FrontViewPositionTopLeft;
 	}
 }
 
@@ -304,7 +320,7 @@
 {
 	if (nil != rearViewController)
 	{
-		if (self.currentFrontViewPosition == FrontViewPositionRight)
+		if (self.currentFrontViewPosition == FrontViewPositionBottomRight)
 		{
 			[UIView animateWithDuration:0.25f animations:^
 			{
@@ -330,7 +346,9 @@
 {	
 	[UIView animateWithDuration:0.25f animations:^
 	{
-		self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+        float offset_x = REVEAL_VERTICAL ? 0.0f : REVEAL_EDGE;
+        float offset_y = REVEAL_VERTICAL ? REVEAL_EDGE : 0.0f;
+		self.frontView.frame = CGRectMake(offset_x, offset_y, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
 	completion:^(BOOL finished)
 	{
@@ -405,18 +423,20 @@
 	}
 	
 	CGFloat xSwapOffset = 0.0f;
+	CGFloat ySwapOffset = 0.0f;
 	
 	
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
 	{
-		xSwapOffset = 60.0f;
+		xSwapOffset = REVEAL_VERTICAL ? 0.0f : 40.0f;
+		ySwapOffset = REVEAL_VERTICAL ? 40.0f : 0.0f;
 	}
 	
 	if (animated)
 	{
 		[UIView animateWithDuration:0.15f delay:0.0f options:UIViewAnimationCurveEaseOut animations:^
 		{
-			CGRect offsetRect = CGRectOffset(self.frontView.frame, xSwapOffset, 0.0f);
+			CGRect offsetRect = CGRectOffset(self.frontView.frame, xSwapOffset, ySwapOffset);
 			self.frontView.frame = offsetRect;
 		}
 		completion:^(BOOL finished)
@@ -618,7 +638,7 @@
 	
 	// Init the position with only the front view visible.
 	self.previousPanOffset = 0.0f;
-	self.currentFrontViewPosition = FrontViewPositionLeft;
+	self.currentFrontViewPosition = FrontViewPositionTopLeft;
 	
 	[self _addRearViewControllerToHierarchy:self.rearViewController];
 	[self _addFrontViewControllerToHierarchy:self.frontViewController];	
