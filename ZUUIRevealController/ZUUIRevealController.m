@@ -234,8 +234,13 @@
 	}
 }
 
-// Instantaneously toggle the rear view's visibility.
 - (void)revealToggle:(id)sender
+{
+    [self revealToggle:sender animationDuration:0.25f];
+}
+
+// Instantaneously toggle the rear view's visibility.
+- (void)revealToggle:(id)sender animationDuration:(NSTimeInterval)animationDuration
 {	
 	if (FrontViewPositionLeft == self.currentFrontViewPosition)
 	{
@@ -254,7 +259,7 @@
 			[self.delegate revealController:self willRevealRearViewController:self.rearViewController];
 		}
 		
-		[self _revealAnimation];
+		[self _revealAnimationWithDuration:animationDuration];
 		
 		self.currentFrontViewPosition = FrontViewPositionRight;
 	}
@@ -275,7 +280,7 @@
 			[self.delegate revealController:self willHideRearViewController:self.rearViewController];
 		}
 		
-		[self _concealAnimation];
+		[self _concealAnimationWithDuration:animationDuration];
 		
 		self.currentFrontViewPosition = FrontViewPositionLeft;
 	}
@@ -326,9 +331,14 @@
 
 #pragma mark - Helper
 
-- (void)_revealAnimation
+- (void)_revealAnimation 
+{
+    [self _revealAnimationWithDuration:0];
+}
+
+- (void)_revealAnimationWithDuration:(NSTimeInterval)duration
 {	
-	[UIView animateWithDuration:0.25f animations:^
+	[UIView animateWithDuration:duration animations:^
 	{
 		self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
@@ -343,8 +353,13 @@
 }
 
 - (void)_concealAnimation
+{
+    [self _concealAnimationWithDuration:0];
+}
+
+- (void)_concealAnimationWithDuration:(NSTimeInterval)duration
 {	
-	[UIView animateWithDuration:0.25f animations:^
+	[UIView animateWithDuration:duration animations:^
 	{
 		self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
