@@ -30,29 +30,6 @@
  
  */
 
-/*
- * NOTE: Before editing the values below make sure they make 'sense'. Unexpected behavior might occur if for instance the 'REVEAL_EDGE'
- *		 were to be lower than the left trigger level...
- */
-
-// 'REVEAL_EDGE' defines the point on the x-axis up to which the rear view is shown.
-#define REVEAL_EDGE 260.0f
-
-// 'REVEAL_EDGE_OVERDRAW' defines the maximum offset that can occur after the 'REVEAL_EDGE' has been reached.
-#define REVEAL_EDGE_OVERDRAW 60.0f
-
-// 'REVEAL_VIEW_TRIGGER_LEVEL_LEFT' defines the least amount of offset that needs to be panned until the front view snaps to the right edge.
-#define REVEAL_VIEW_TRIGGER_LEVEL_LEFT 125.0f
-
-// 'REVEAL_VIEW_TRIGGER_LEVEL_RIGHT' defines the least amount of translation that needs to be panned until the front view snaps _BACK_ to the left edge.
-#define REVEAL_VIEW_TRIGGER_LEVEL_RIGHT 200.0f
-
-// 'VELOCITY_REQUIRED_FOR_QUICK_FLICK' is the minimum speed of the finger required to instantly trigger a reveal/hide.
-#define VELOCITY_REQUIRED_FOR_QUICK_FLICK 1300.0f
-
-// Required for the shadow cast by the front view.
-#import <QuartzCore/QuartzCore.h>
-
 #import "ZUUIRevealController.h"
 
 @interface ZUUIRevealController()
@@ -64,8 +41,8 @@
 
 // Private Methods:
 - (CGFloat)_calculateOffsetForTranslationInView:(CGFloat)x;
-- (void)_revealAnimation;
-- (void)_concealAnimation;
+- (void)_revealAnimationWithDuration:(NSTimeInterval)duration;
+- (void)_concealAnimationWithDuration:(NSTimeInterval)duration;
 
 - (void)_handleRevealGestureStateBeganWithRecognizer:(UIPanGestureRecognizer *)recognizer;
 - (void)_handleRevealGestureStateChangedWithRecognizer:(UIPanGestureRecognizer *)recognizer;
@@ -76,6 +53,8 @@
 - (void)_removeViewControllerFromHierarchy:(UIViewController *)frontViewController;
 
 - (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated;
+
+- (void)_loadDefaultConfiguration;
 
 // Work in progress:
 // - (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController;
@@ -93,6 +72,14 @@
 @synthesize rearView = _rearView;
 @synthesize delegate = _delegate;
 
+@synthesize rearViewRevealWidth = _rearViewRevealWidth;
+@synthesize maxRearViewRevealOverdraw = _maxRearViewRevealOverdraw;
+@synthesize revealViewTriggerWidth = _revealViewTriggerWidth;
+@synthesize concealViewTriggerWidth = _concealViewTriggerWidth;
+@synthesize quickFlickVelocity = _quickFlickVelocity;
+@synthesize toggleAnimationDuration = _toggleAnimationDuration;
+@synthesize frontViewShadowRadius = _frontViewShadowRadius;
+
 #pragma mark - Initialization
 
 - (id)initWithFrontViewController:(UIViewController *)frontViewController rearViewController:(UIViewController *)rearViewController
@@ -108,16 +95,37 @@
 		_frontViewController = [frontViewController retain];
 		_rearViewController = [rearViewController retain];
 #endif
+		
+		[self _loadDefaultConfiguration];
 	}
 	
 	return self;
 }
 
+- (void)_loadDefaultConfiguration
+{
+	self.rearViewRevealWidth = 260.0f;
+	self.maxRearViewRevealOverdraw = 60.0f;
+	self.revealViewTriggerWidth = 125.0f;
+	self.concealViewTriggerWidth = 200.0f;
+	self.quickFlickVelocity = 1300.0f;
+	self.toggleAnimationDuration = 0.25f;
+	self.frontViewShadowRadius = 2.5f;
+}
+
 #pragma mark - Reveal
 
-// Instantaneously toggle the rear view's visibility.
+/* Instantaneously toggle the rear view's visibility using the default duration.
+ */
 - (void)revealToggle:(id)sender
 {	
+	[self revealToggle:sender animationDuration:self.toggleAnimationDuration];
+}
+
+/* Instantaneously toggle the rear view's visibility using custom duration.
+ */
+- (void)revealToggle:(id)sender animationDuration:(NSTimeInterval)animationDuration
+{
 	if (FrontViewPositionLeft == self.currentFrontViewPosition)
 	{
 		// Check if a delegate exists and if so, whether it is fine for us to revealing the rear view.
@@ -135,7 +143,7 @@
 			[self.delegate revealController:self willRevealRearViewController:self.rearViewController];
 		}
 		
-		[self _revealAnimation];
+		[self _revealAnimationWithDuration:animationDuration];
 		
 		self.currentFrontViewPosition = FrontViewPositionRight;
 	}
@@ -156,17 +164,17 @@
 			[self.delegate revealController:self willHideRearViewController:self.rearViewController];
 		}
 		
-		[self _concealAnimation];
+		[self _concealAnimationWithDuration:animationDuration];
 		
 		self.currentFrontViewPosition = FrontViewPositionLeft;
 	}
 }
 
-- (void)_revealAnimation
+- (void)_revealAnimationWithDuration:(NSTimeInterval)duration
 {	
-	[UIView animateWithDuration:0.25f animations:^
+	[UIView animateWithDuration:duration animations:^
 	{
-		self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+		self.frontView.frame = CGRectMake(self.rearViewRevealWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
 	completion:^(BOOL finished)
 	{
@@ -178,9 +186,9 @@
 	}];
 }
 
-- (void)_concealAnimation
+- (void)_concealAnimationWithDuration:(NSTimeInterval)duration
 {	
-	[UIView animateWithDuration:0.25f animations:^
+	[UIView animateWithDuration:duration animations:^
 	{
 		self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
@@ -196,7 +204,8 @@
 
 #pragma mark - Gesture Based Reveal
 
-// Slowly reveal or hide the rear view based on the translation of the finger.
+/* Slowly reveal or hide the rear view based on the translation of the finger.
+ */
 - (void)revealGesture:(UIPanGestureRecognizer *)recognizer
 {	
 	// Ask the delegate (if appropriate) if we are allowed to proceed with our interaction:
@@ -292,12 +301,12 @@
 	{
 		if ([recognizer translationInView:self.view].x > 0.0f)
 		{
-			float offset = [self _calculateOffsetForTranslationInView:([recognizer translationInView:self.view].x+REVEAL_EDGE)];
+			float offset = [self _calculateOffsetForTranslationInView:([recognizer translationInView:self.view].x+self.rearViewRevealWidth)];
 			self.frontView.frame = CGRectMake(offset, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 		}
-		else if ([recognizer translationInView:self.view].x > -REVEAL_EDGE)
+		else if ([recognizer translationInView:self.view].x > -self.rearViewRevealWidth)
 		{
-			self.frontView.frame = CGRectMake([recognizer translationInView:self.view].x+REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+			self.frontView.frame = CGRectMake([recognizer translationInView:self.view].x+self.rearViewRevealWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 		}
 		else
 		{
@@ -309,29 +318,29 @@
 - (void)_handleRevealGestureStateEndedWithRecognizer:(UIPanGestureRecognizer *)recognizer
 {
 	// Case a): Quick finger flick fast enough to cause instant change:
-	if (fabs([recognizer velocityInView:self.view].x) > VELOCITY_REQUIRED_FOR_QUICK_FLICK)
+	if (fabs([recognizer velocityInView:self.view].x) > self.quickFlickVelocity)
 	{
 		if ([recognizer velocityInView:self.view].x > 0.0f)
 		{				
-			[self _revealAnimation];
+			[self _revealAnimationWithDuration:self.toggleAnimationDuration];
 		}
 		else
 		{
-			[self _concealAnimation];
+			[self _concealAnimationWithDuration:self.toggleAnimationDuration];
 		}
 	}
 	// Case b) Slow pan/drag ended:
 	else
 	{
-		float dynamicTriggerLevel = (FrontViewPositionLeft == self.currentFrontViewPosition) ? REVEAL_VIEW_TRIGGER_LEVEL_LEFT : REVEAL_VIEW_TRIGGER_LEVEL_RIGHT;
+		float dynamicTriggerLevel = (FrontViewPositionLeft == self.currentFrontViewPosition) ? self.revealViewTriggerWidth : self.concealViewTriggerWidth;
 		
-		if (self.frontView.frame.origin.x >= dynamicTriggerLevel && self.frontView.frame.origin.x != REVEAL_EDGE)
+		if (self.frontView.frame.origin.x >= dynamicTriggerLevel && self.frontView.frame.origin.x != self.rearViewRevealWidth)
 		{
-			[self _revealAnimation];
+			[self _revealAnimationWithDuration:self.toggleAnimationDuration];
 		}
 		else if (self.frontView.frame.origin.x < dynamicTriggerLevel && self.frontView.frame.origin.x != 0.0f)
 		{
-			[self _concealAnimation];
+			[self _concealAnimationWithDuration:self.toggleAnimationDuration];
 		}
 	}
 	
@@ -348,27 +357,26 @@
 
 #pragma mark - Helper
 
-/*
- * Note: If someone wants to bother to implement a better (smoother) function. Go for it and share!
+/* Note: If someone wants to bother to implement a better (smoother) function. Go for it and share!
  */
 - (CGFloat)_calculateOffsetForTranslationInView:(CGFloat)x
 {
 	CGFloat result;
 	
-	if (x <= REVEAL_EDGE)
+	if (x <= self.rearViewRevealWidth)
 	{
 		// Translate linearly.
 		result = x;
 	}
-	else if (x <= REVEAL_EDGE+(M_PI*REVEAL_EDGE_OVERDRAW/2.0f))
+	else if (x <= self.rearViewRevealWidth+(M_PI*self.maxRearViewRevealOverdraw/2.0f))
 	{
 		// and eventually slow translation slowly.
-		result = REVEAL_EDGE_OVERDRAW*sin((x-REVEAL_EDGE)/REVEAL_EDGE_OVERDRAW)+REVEAL_EDGE;
+		result = self.maxRearViewRevealOverdraw*sin((x-self.rearViewRevealWidth)/self.maxRearViewRevealOverdraw)+self.rearViewRevealWidth;
 	}
 	else
 	{
 		// ...until we hit the limit.
-		result = REVEAL_EDGE+REVEAL_EDGE_OVERDRAW;
+		result = self.rearViewRevealWidth+self.maxRearViewRevealOverdraw;
 	}
 	
 	return result;
@@ -502,7 +510,7 @@
 	{
 		if (self.currentFrontViewPosition == FrontViewPositionRight)
 		{
-			[UIView animateWithDuration:0.25f animations:^
+			[UIView animateWithDuration:self.toggleAnimationDuration animations:^
 			{
 				self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 			}
@@ -666,7 +674,7 @@
 	self.frontView.layer.shadowColor = [UIColor blackColor].CGColor;
 	self.frontView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
 	self.frontView.layer.shadowOpacity = 1.0f;
-	self.frontView.layer.shadowRadius = 2.5f;
+	self.frontView.layer.shadowRadius = self.frontViewShadowRadius;
 	self.frontView.layer.shadowPath = shadowPath.CGPath;
 	
 	// Init the position with only the front view visible.
