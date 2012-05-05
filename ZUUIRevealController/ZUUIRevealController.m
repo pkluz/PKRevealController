@@ -229,15 +229,21 @@
 	switch ([recognizer state])
 	{
 		case UIGestureRecognizerStateBegan:
+		{
 			[self _handleRevealGestureStateBeganWithRecognizer:recognizer];
+		}
 			break;
 			
 		case UIGestureRecognizerStateChanged:
+		{
 			[self _handleRevealGestureStateChangedWithRecognizer:recognizer];
+		}
 			break;
 			
 		case UIGestureRecognizerStateEnded:
+		{
 			[self _handleRevealGestureStateEndedWithRecognizer:recognizer];
+		}
 			break;
 			
 		default:

@@ -62,7 +62,7 @@
 	
 	if (nil == cell)
 	{
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier] autorelease];
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
 	}
 	
 	if (indexPath.row == 0)
@@ -82,6 +82,9 @@
 	// Grab a handle to the reveal controller, as if you'd do with a navigtion controller via self.navigationController.
 	RevealController *revealController = [self.parentViewController isKindOfClass:[RevealController class]] ? (RevealController *)self.parentViewController : nil;
 	
+	// We only want to animate the front-swap if we're on an iPhone/iPod because animating the swap on an iPad would just look silly.
+	BOOL deviceIsPhone = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
+	
 	// Here you'd implement some of your own logic... I simply take for granted that the first row (=0) corresponds to the "FrontViewController".
 	if (indexPath.row == 0)
 	{
@@ -89,11 +92,10 @@
 		if ([revealController.frontViewController isKindOfClass:[UINavigationController class]] && ![((UINavigationController *)revealController.frontViewController).topViewController isKindOfClass:[FrontViewController class]])
 		{
 			FrontViewController *frontViewController = [[FrontViewController alloc] init];
-			
 			UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:frontViewController];
-			[frontViewController release];
-			[revealController setFrontViewController:navigationController animated:NO];
-			[navigationController release];
+			
+			[revealController setFrontViewController:navigationController animated:deviceIsPhone];
+			
 		}
 		// Seems the user attempts to 'switch' to exactly the same controller he came from!
 		else
@@ -110,9 +112,7 @@
 			MapViewController *mapViewController = [[MapViewController alloc] init];
 			
 			UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:mapViewController];
-			[mapViewController release];
-			[revealController setFrontViewController:navigationController animated:NO];
-			[navigationController release];
+			[revealController setFrontViewController:navigationController animated:deviceIsPhone];
 		}
 		// Seems the user attempts to 'switch' to exactly the same controller he came from!
 		else
@@ -120,21 +120,6 @@
 			[revealController revealToggle:self];
 		}
 	}
-}
-
-#pragma mark - View lifecycle
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
-{
-	return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-}
-
-#pragma mark - Memory Management
-
-- (void)dealloc
-{
-	[_rearTableView release], _rearTableView = nil;
-	[super dealloc];
 }
 
 @end
