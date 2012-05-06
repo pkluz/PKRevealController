@@ -40,6 +40,8 @@
 @property (assign, nonatomic) float previousPanOffset;
 
 // Private Methods:
+- (void)_loadDefaultConfiguration;
+
 - (CGFloat)_calculateOffsetForTranslationInView:(CGFloat)x;
 - (void)_revealAnimationWithDuration:(NSTimeInterval)duration;
 - (void)_concealAnimationWithDuration:(NSTimeInterval)duration;
@@ -53,12 +55,6 @@
 - (void)_removeViewControllerFromHierarchy:(UIViewController *)frontViewController;
 
 - (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated;
-
-- (void)_loadDefaultConfiguration;
-
-// Work in progress:
-// - (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController;
-// - (void)setRearViewController:(UIViewController *)rearViewController; // Delegate Call.
 
 @end
 
@@ -383,23 +379,6 @@
 	return result;
 }
 
-/*
-// This code is experimental. It works but is not recommended for usage yet.
-- (void)_performRearViewControllerSwap:(UIViewController *)newRearViewController
-{
-	[self _removeRearViewControllerFromHierarchy:self.rearViewController];
- 
-#if __has_feature(objc_arc)
-	[_rearViewController release];
-	_rearViewController = [newRearViewController retain];
-#else
-	_rearViewController = newRearViewController;
-#endif
-
-	[self _addRearViewControllerToHierarchy:newRearViewController];
-}
-*/
-
 - (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated
 {
 	if ([self.delegate respondsToSelector:@selector(revealController:willSwapToFrontViewController:)])
@@ -502,33 +481,6 @@
 		[self _swapCurrentFrontViewControllerWith:frontViewController animated:animated];
 	}
 }
-
-/*
-// This code is experimental. It works but is not recommended for usage yet.
-- (void)setRearViewController:(UIViewController *)rearViewController
-{
-	if (nil != rearViewController)
-	{
-		if (self.currentFrontViewPosition == FrontViewPositionRight)
-		{
-			[UIView animateWithDuration:self.toggleAnimationDuration animations:^
-			{
-				self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-			}
-			completion:^(BOOL finished)
-			{
-				[self _performRearViewControllerSwap:rearViewController];
-				[self _revealAnimation];
-			}];
-		}
-		else
-		{
-			[self _performRearViewControllerSwap:rearViewController];
-		}
-	}
-}
- */
-
 
 #pragma mark - UIViewController Containment
 
