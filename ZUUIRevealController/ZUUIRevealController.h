@@ -46,22 +46,37 @@ typedef enum
 
 @interface ZUUIRevealController : UIViewController <UITableViewDelegate>
 
-// Public Properties:
+#pragma mark - Public Properties:
 @property (strong, nonatomic) IBOutlet UIViewController *frontViewController;
 @property (strong, nonatomic) IBOutlet UIViewController *rearViewController;
 @property (assign, nonatomic) FrontViewPosition currentFrontViewPosition;
 @property (assign, nonatomic) id<ZUUIRevealControllerDelegate> delegate;
 
-@property (assign, nonatomic) CGFloat rearViewRevealWidth;						// Defines how much of the rear view is shown.
-@property (assign, nonatomic) CGFloat maxRearViewRevealOverdraw;				// Defines how much of an overview can occur when drawing further than 'rearViewRevealWidth'.
-@property (assign, nonatomic) CGFloat rearViewPresentationWidth;				// Defines the width of the rear views presentation mode.
-@property (assign, nonatomic) CGFloat revealViewTriggerWidth;					// Leftmost point at which a reveal will be triggered if a user stops panning.
-@property (assign, nonatomic) CGFloat concealViewTriggerWidth;					// Leftmost point at which a conceal will be triggered if a user stops panning.
-@property (assign, nonatomic) CGFloat quickFlickVelocity;						// Velocity required for the controller to instantly toggle its state.
-@property (assign, nonatomic) NSTimeInterval toggleAnimationDuration;			// Default duration for the revealToggle: animation.
-@property (assign, nonatomic) CGFloat frontViewShadowRadius;					// Defines the radius of the front view's shadow.
+// Defines how much of the rear view is shown.
+@property (assign, nonatomic) CGFloat rearViewRevealWidth;
 
-// Public Methods:
+// Defines how much of an overview can occur when drawing further than 'rearViewRevealWidth'.
+@property (assign, nonatomic) CGFloat maxRearViewRevealOverdraw;
+
+// Defines the width of the rear views presentation mode.
+@property (assign, nonatomic) CGFloat rearViewPresentationWidth;
+
+// Leftmost point at which a reveal will be triggered if a user stops panning.
+@property (assign, nonatomic) CGFloat revealViewTriggerWidth;
+
+// Leftmost point at which a conceal will be triggered if a user stops panning.
+@property (assign, nonatomic) CGFloat concealViewTriggerWidth;
+
+// Velocity required for the controller to instantly toggle its state.
+@property (assign, nonatomic) CGFloat quickFlickVelocity;
+
+// Default duration for the revealToggle: animation.
+@property (assign, nonatomic) NSTimeInterval toggleAnimationDuration;
+
+// Defines the radius of the front view's shadow.
+@property (assign, nonatomic) CGFloat frontViewShadowRadius;
+
+#pragma mark - Public Methods:
 - (id)initWithFrontViewController:(UIViewController *)aFrontViewController rearViewController:(UIViewController *)aBackViewController;
 - (void)revealGesture:(UIPanGestureRecognizer *)recognizer;
 - (void)revealToggle:(id)sender;
@@ -75,7 +90,7 @@ typedef enum
 
 @end
 
-// ZUUIRevealControllerDelegate Protocol.
+#pragma mark - Delegate Protocol:
 @protocol ZUUIRevealControllerDelegate<NSObject>
 
 @optional
@@ -94,7 +109,7 @@ typedef enum
 - (void)revealController:(ZUUIRevealController *)revealController willSwapToFrontViewController:(UIViewController *)frontViewController;
 - (void)revealController:(ZUUIRevealController *)revealController didSwapToFrontViewController:(UIViewController *)frontViewController;
 
-#pragma mark - New in 0.9.9
+#pragma mark New in 0.9.9
 - (void)revealController:(ZUUIRevealController *)revealController willResignRearViewControllerPresentationMode:(UIViewController *)rearViewController;
 - (void)revealController:(ZUUIRevealController *)revealController didResignRearViewControllerPresentationMode:(UIViewController *)rearViewController;
 
