@@ -44,7 +44,8 @@
 
 - (CGFloat)_calculateOffsetForTranslationInView:(CGFloat)x;
 - (void)_revealAnimationWithDuration:(NSTimeInterval)duration;
-- (void)_concealAnimationWithDuration:(NSTimeInterval)duration;
+- (void)_concealAnimationWithDuration:(NSTimeInterval)duration resigningCompletelyFromRearViewPresentationMode:(BOOL)resigning;
+- (void)_concealPartiallyAnimationWithDuration:(NSTimeInterval)duration;
 
 - (void)_handleRevealGestureStateBeganWithRecognizer:(UIPanGestureRecognizer *)recognizer;
 - (void)_handleRevealGestureStateChangedWithRecognizer:(UIPanGestureRecognizer *)recognizer;
@@ -70,6 +71,7 @@
 
 @synthesize rearViewRevealWidth = _rearViewRevealWidth;
 @synthesize maxRearViewRevealOverdraw = _maxRearViewRevealOverdraw;
+@synthesize rearViewPresentationWidth = _rearViewPresentationWidth;
 @synthesize revealViewTriggerWidth = _revealViewTriggerWidth;
 @synthesize concealViewTriggerWidth = _concealViewTriggerWidth;
 @synthesize quickFlickVelocity = _quickFlickVelocity;
@@ -103,6 +105,7 @@
 {
 	self.rearViewRevealWidth = 260.0f;
 	self.maxRearViewRevealOverdraw = 60.0f;
+	self.rearViewPresentationWidth = 320.0f;
 	self.revealViewTriggerWidth = 125.0f;
 	self.concealViewTriggerWidth = 200.0f;
 	self.quickFlickVelocity = 1300.0f;
@@ -144,7 +147,7 @@
 		
 		self.currentFrontViewPosition = FrontViewPositionRight;
 	}
-	else
+	else if (FrontViewPositionRight == self.currentFrontViewPosition)
 	{
 		// Check if a delegate exists and if so, whether it is fine for us to hiding the rear view.
 		if ([self.delegate respondsToSelector:@selector(revealController:shouldHideRearViewController:)])
@@ -161,9 +164,23 @@
 			[self.delegate revealController:self willHideRearViewController:self.rearViewController];
 		}
 		
-		[self _concealAnimationWithDuration:animationDuration];
+		[self _concealAnimationWithDuration:animationDuration resigningCompletelyFromRearViewPresentationMode:NO];
 		
 		self.currentFrontViewPosition = FrontViewPositionLeft;
+	}
+	else // FrontViewPositionRightMost == self.currentFrontViewPosition
+	{
+		// Check if a delegate exists and if so, whether it is fine for us to hiding the rear view.
+		if ([self.delegate respondsToSelector:@selector(revealController:shouldHideRearViewController:)])
+		{
+			if (![self.delegate revealController:self shouldHideRearViewController:self.rearViewController])
+			{
+				[self showFrontViewCompletely:NO];
+				return;
+			}
+		}
+		
+		[self showFrontViewCompletely:YES];
 	}
 }
 
@@ -183,7 +200,7 @@
 	}];
 }
 
-- (void)_concealAnimationWithDuration:(NSTimeInterval)duration
+- (void)_concealAnimationWithDuration:(NSTimeInterval)duration resigningCompletelyFromRearViewPresentationMode:(BOOL)resigning
 {	
 	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction animations:^
 	{
@@ -191,12 +208,101 @@
 	}
 	completion:^(BOOL finished)
 	{
+		if (resigning)
+		{
+			// Dispatch message to delegate, telling it the 'rearView' _DID_ resign full-screen presentation mode, if appropriate:
+			if ([self.delegate respondsToSelector:@selector(revealController:didResignRearViewControllerPresentationMode:)])
+			{
+				[self.delegate revealController:self didResignRearViewControllerPresentationMode:self.rearViewController];
+			}
+		}
+		
 		// Dispatch message to delegate, telling it the 'rearView' _DID_ hide, if appropriate:
 		if ([self.delegate respondsToSelector:@selector(revealController:didHideRearViewController:)])
 		{
 			[self.delegate revealController:self didHideRearViewController:self.rearViewController];
 		}
 	}];
+}
+
+- (void)_concealPartiallyAnimationWithDuration:(NSTimeInterval)duration
+{
+	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction animations:^
+	{
+		self.frontView.frame = CGRectMake(self.rearViewRevealWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+	}
+	completion:^(BOOL finished)
+	{
+		// Dispatch message to delegate, telling it the 'rearView' _DID_ resign its full-screen presentation mode, if appropriate:
+		if ([self.delegate respondsToSelector:@selector(revealController:didResignRearViewControllerPresentationMode:)])
+		{
+			[self.delegate revealController:self didResignRearViewControllerPresentationMode:self.rearViewController];
+		}
+	}];
+}
+
+- (void)_revealCompletelyAnimationWithDuration:(NSTimeInterval)duration
+{
+	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction animations:^
+	{
+		self.frontView.frame = CGRectMake(self.rearViewPresentationWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+	}
+	completion:^(BOOL finished)
+	{
+		// Dispatch message to delegate, telling it the 'rearView' _DID_ enter its full-screen presentation mode, if appropriate:
+		if ([self.delegate respondsToSelector:@selector(revealController:didEnterRearViewControllerPresentationMode:)])
+		{
+			[self.delegate revealController:self didEnterRearViewControllerPresentationMode:self.rearViewController];
+		}
+	}];
+}
+
+- (void)hideFrontView
+{
+	if (self.currentFrontViewPosition == FrontViewPositionRightMost)
+	{
+		return;
+	}
+	
+	// Dispatch message to delegate, telling it the 'rearView' _WILL_ enter its full-screen presentation mode, if appropriate:
+	if ([self.delegate respondsToSelector:@selector(revealController:willEnterRearViewControllerPresentationMode:)])
+	{
+		[self.delegate revealController:self willEnterRearViewControllerPresentationMode:self.rearViewController];
+	}
+	
+	[self _revealCompletelyAnimationWithDuration:self.toggleAnimationDuration*0.5f];
+	self.currentFrontViewPosition = FrontViewPositionRightMost;
+}
+
+- (void)showFrontViewCompletely:(BOOL)completely
+{
+	if (self.currentFrontViewPosition != FrontViewPositionRightMost)
+	{
+		return;
+	}
+	
+	// Dispatch message to delegate, telling it the 'rearView' _WILL_ resign its full-screen presentation mode, if appropriate:
+	if ([self.delegate respondsToSelector:@selector(revealController:willResignRearViewControllerPresentationMode:)])
+	{
+		[self.delegate revealController:self willResignRearViewControllerPresentationMode:self.rearViewController];
+	}
+	
+	if (completely)
+	{
+		// Dispatch message to delegate, telling it the 'rearView' _WILL_ hide, if appropriate:
+		if ([self.delegate respondsToSelector:@selector(revealController:willHideRearViewController:)])
+		{
+			[self.delegate revealController:self willHideRearViewController:self.rearViewController];
+		}
+		
+		[self _concealAnimationWithDuration:self.toggleAnimationDuration resigningCompletelyFromRearViewPresentationMode:YES];
+		self.currentFrontViewPosition = FrontViewPositionLeft;
+	}
+	else
+	{
+		[self _concealPartiallyAnimationWithDuration:self.toggleAnimationDuration*0.5f];
+		self.currentFrontViewPosition = FrontViewPositionRight;
+	}
 }
 
 #pragma mark - Gesture Based Reveal
@@ -323,7 +429,7 @@
 		}
 		else
 		{
-			[self _concealAnimationWithDuration:self.toggleAnimationDuration];
+			[self _concealAnimationWithDuration:self.toggleAnimationDuration resigningCompletelyFromRearViewPresentationMode:NO];
 		}
 	}
 	// Case b) Slow pan/drag ended:
@@ -337,7 +443,7 @@
 		}
 		else
 		{
-			[self _concealAnimationWithDuration:self.toggleAnimationDuration];
+			[self _concealAnimationWithDuration:self.toggleAnimationDuration resigningCompletelyFromRearViewPresentationMode:NO];
 		}
 	}
 	

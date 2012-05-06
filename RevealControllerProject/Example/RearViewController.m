@@ -52,7 +52,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 2;
+	return 4;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -69,9 +69,17 @@
 	{
 		cell.textLabel.text = @"Front View Controller";
 	}
-	else
+	else if (indexPath.row == 1)
 	{
 		cell.textLabel.text = @"Map View Controller";
+	}
+	else if (indexPath.row == 2)
+	{
+		cell.textLabel.text = @"Enter Presentation Mode";
+	}
+	else if (indexPath.row == 3)
+	{
+		cell.textLabel.text = @"Resign Presentation Mode";
 	}
 	
 	return cell;
@@ -100,7 +108,7 @@
 		}
 	}
 	// ... and the second row (=1) corresponds to the "MapViewController".
-	else
+	else if (indexPath.row == 1)
 	{
 		// Now let's see if we're not attempting to swap the current frontViewController for a new instance of ITSELF, which'd be highly redundant.
 		if ([revealController.frontViewController isKindOfClass:[UINavigationController class]] && ![((UINavigationController *)revealController.frontViewController).topViewController isKindOfClass:[MapViewController class]])
@@ -114,6 +122,14 @@
 		{
 			[revealController revealToggle:self];
 		}
+	}
+	else if (indexPath.row == 2)
+	{
+		[revealController hideFrontView];
+	}
+	else if (indexPath.row == 3)
+	{
+		[revealController showFrontViewCompletely:NO];
 	}
 }
 

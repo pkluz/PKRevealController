@@ -38,7 +38,8 @@
 typedef enum
 {
 	FrontViewPositionLeft,
-	FrontViewPositionRight
+	FrontViewPositionRight,
+	FrontViewPositionRightMost
 } FrontViewPosition;
 
 @protocol ZUUIRevealControllerDelegate;
@@ -53,6 +54,7 @@ typedef enum
 
 @property (assign, nonatomic) CGFloat rearViewRevealWidth;						// Defines how much of the rear view is shown.
 @property (assign, nonatomic) CGFloat maxRearViewRevealOverdraw;				// Defines how much of an overview can occur when drawing further than 'rearViewRevealWidth'.
+@property (assign, nonatomic) CGFloat rearViewPresentationWidth;				// Defines the width of the rear views presentation mode.
 @property (assign, nonatomic) CGFloat revealViewTriggerWidth;					// Leftmost point at which a reveal will be triggered if a user stops panning.
 @property (assign, nonatomic) CGFloat concealViewTriggerWidth;					// Leftmost point at which a conceal will be triggered if a user stops panning.
 @property (assign, nonatomic) CGFloat quickFlickVelocity;						// Velocity required for the controller to instantly toggle its state.
@@ -67,6 +69,9 @@ typedef enum
 
 - (void)setFrontViewController:(UIViewController *)frontViewController;
 - (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated;
+
+- (void)hideFrontView;
+- (void)showFrontViewCompletely:(BOOL)completely;
 
 @end
 
@@ -88,5 +93,12 @@ typedef enum
 
 - (void)revealController:(ZUUIRevealController *)revealController willSwapToFrontViewController:(UIViewController *)frontViewController;
 - (void)revealController:(ZUUIRevealController *)revealController didSwapToFrontViewController:(UIViewController *)frontViewController;
+
+#pragma mark - New in 1.0
+- (void)revealController:(ZUUIRevealController *)revealController willResignRearViewControllerPresentationMode:(UIViewController *)rearViewController;
+- (void)revealController:(ZUUIRevealController *)revealController didResignRearViewControllerPresentationMode:(UIViewController *)rearViewController;
+
+- (void)revealController:(ZUUIRevealController *)revealController willEnterRearViewControllerPresentationMode:(UIViewController *)rearViewController;
+- (void)revealController:(ZUUIRevealController *)revealController didEnterRearViewControllerPresentationMode:(UIViewController *)rearViewController;
 
 @end
