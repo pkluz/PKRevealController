@@ -32,7 +32,7 @@
 
 #import <UIKit/UIKit.h>
 
-// Required for the shadow cast by the front view.
+// Required for the shadow, cast by the front view.
 #import <QuartzCore/QuartzCore.h>
 
 typedef enum
