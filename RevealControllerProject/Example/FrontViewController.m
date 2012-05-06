@@ -84,6 +84,11 @@
 	}
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+	return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+}
+
 #pragma mark - Example Code
 
 - (IBAction)pushExample:(id)sender

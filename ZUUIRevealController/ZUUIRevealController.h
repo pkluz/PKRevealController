@@ -78,9 +78,7 @@ typedef enum
 - (BOOL)revealController:(ZUUIRevealController *)revealController shouldRevealRearViewController:(UIViewController *)rearViewController;
 - (BOOL)revealController:(ZUUIRevealController *)revealController shouldHideRearViewController:(UIViewController *)rearViewController;
 
-/* 
- * IMPORTANT: It is not guaranteed that 'didReveal...' will be called after 'willReveal...'. The user 
- * might not have panned far enough for a reveal to be triggered! Thus 'didHide...' will be called!
+/* IMPORTANT: It is not guaranteed that 'didReveal...' will be called after 'willReveal...'! - DO NOT _under any circumstances_ make that assumption!
  */
 - (void)revealController:(ZUUIRevealController *)revealController willRevealRearViewController:(UIViewController *)rearViewController;
 - (void)revealController:(ZUUIRevealController *)revealController didRevealRearViewController:(UIViewController *)rearViewController;

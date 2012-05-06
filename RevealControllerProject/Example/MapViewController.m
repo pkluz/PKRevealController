@@ -28,4 +28,9 @@
 	}
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+	return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+}
+
 @end

@@ -92,10 +92,11 @@
 		_frontViewController = frontViewController;
 		_rearViewController = rearViewController;
 #else
-		_frontViewController = [frontViewController retain];
-		_rearViewController = [rearViewController retain];
+		[frontViewController retain];
+		_frontViewController = frontViewController;
+		[rearViewController retain];
+		_rearViewController = rearViewController;
 #endif
-		
 		[self _loadDefaultConfiguration];
 	}
 	
@@ -172,7 +173,7 @@
 
 - (void)_revealAnimationWithDuration:(NSTimeInterval)duration
 {	
-	[UIView animateWithDuration:duration animations:^
+	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction animations:^
 	{
 		self.frontView.frame = CGRectMake(self.rearViewRevealWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
@@ -188,7 +189,7 @@
 
 - (void)_concealAnimationWithDuration:(NSTimeInterval)duration
 {	
-	[UIView animateWithDuration:duration animations:^
+	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction animations:^
 	{
 		self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
@@ -338,7 +339,7 @@
 		{
 			[self _revealAnimationWithDuration:self.toggleAnimationDuration];
 		}
-		else if (self.frontView.frame.origin.x < dynamicTriggerLevel && self.frontView.frame.origin.x != 0.0f)
+		else
 		{
 			[self _concealAnimationWithDuration:self.toggleAnimationDuration];
 		}
@@ -425,7 +426,7 @@
 		{
 			// Manually forward the view methods to the child view controllers
 			[self.frontViewController viewWillDisappear:animated];
-			[self _removeViewControllerFromHierarchy:self.frontViewController];
+			[self _removeViewControllerFromHierarchy:_frontViewController];
 			[self.frontViewController viewDidDisappear:animated];
 			
 #if __has_feature(objc_arc)
@@ -494,7 +495,7 @@
 {
 	if (nil != frontViewController && _frontViewController == frontViewController)
 	{
-		[self revealToggle:nil];
+		[self revealToggle:self];
 	}
 	else if (nil != frontViewController)
 	{

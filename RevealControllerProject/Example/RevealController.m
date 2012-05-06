@@ -89,9 +89,9 @@
 
 #pragma mark - View lifecycle
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-	return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+	return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 @end

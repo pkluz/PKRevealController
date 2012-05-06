@@ -90,7 +90,6 @@
 		{
 			FrontViewController *frontViewController = [[FrontViewController alloc] init];
 			UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:frontViewController];
-			
 			[revealController setFrontViewController:navigationController animated:NO];
 			
 		}
@@ -107,7 +106,6 @@
 		if ([revealController.frontViewController isKindOfClass:[UINavigationController class]] && ![((UINavigationController *)revealController.frontViewController).topViewController isKindOfClass:[MapViewController class]])
 		{
 			MapViewController *mapViewController = [[MapViewController alloc] init];
-			
 			UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:mapViewController];
 			[revealController setFrontViewController:navigationController animated:NO];
 		}
@@ -117,6 +115,11 @@
 			[revealController revealToggle:self];
 		}
 	}
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+	return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 @end
