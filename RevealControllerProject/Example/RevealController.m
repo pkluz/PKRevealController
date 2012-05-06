@@ -87,11 +87,31 @@
 	NSLog(@"%@", NSStringFromSelector(_cmd));
 }
 
+- (void)revealController:(ZUUIRevealController *)revealController willResignRearViewControllerPresentationMode:(UIViewController *)rearViewController
+{
+	NSLog(@"%@", NSStringFromSelector(_cmd));
+}
+
+- (void)revealController:(ZUUIRevealController *)revealController didResignRearViewControllerPresentationMode:(UIViewController *)rearViewController
+{
+	NSLog(@"%@", NSStringFromSelector(_cmd));
+}
+
+- (void)revealController:(ZUUIRevealController *)revealController willEnterRearViewControllerPresentationMode:(UIViewController *)rearViewController
+{
+	NSLog(@"%@", NSStringFromSelector(_cmd));
+}
+
+- (void)revealController:(ZUUIRevealController *)revealController didEnterRearViewControllerPresentationMode:(UIViewController *)rearViewController
+{
+	NSLog(@"%@", NSStringFromSelector(_cmd));
+}
+
 #pragma mark - View lifecycle
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-	return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+	return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 @end

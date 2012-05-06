@@ -45,7 +45,6 @@
 {
 	UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	self.window = window;
-	[window release];
 	
 	FrontViewController *frontViewController = [[FrontViewController alloc] init];
 	RearViewController *rearViewController = [[RearViewController alloc] init];
@@ -55,23 +54,9 @@
 	RevealController *revealController = [[RevealController alloc] initWithFrontViewController:navigationController rearViewController:rearViewController];
 	self.viewController = revealController;
 	
-	[navigationController release];
-	[frontViewController release];
-	[rearViewController release];
-	[revealController release];
-	
 	self.window.rootViewController = self.viewController;
 	[self.window makeKeyAndVisible];
 	return YES;
-}
-
-#pragma mark - Memory management
-
-- (void)dealloc
-{
-	[_window release], _window = nil;
-	[_viewController release], _viewController = nil;
-	[super dealloc];
 }
 
 @end

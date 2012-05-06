@@ -34,17 +34,12 @@
 
 @interface FrontViewController()
 
-// Private Properties:
-@property (retain, nonatomic) UIPanGestureRecognizer *navigationBarPanGestureRecognizer;
-
 // Private Methods:
 - (IBAction)pushExample:(id)sender;
 
 @end
 
 @implementation FrontViewController
-
-@synthesize navigationBarPanGestureRecognizer = _navigationBarPanGestureRecognizer;
 
 #pragma mark - View lifecycle
 
@@ -74,33 +69,18 @@
  * the code easier to understand I decided to go with self.navigationController.
  *
  */
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidLoad
 {
-	[super viewWillAppear:animated];
+	[super viewDidLoad];
 	
 	self.title = NSLocalizedString(@"Front View", @"FrontView");
 	
 	if ([self.navigationController.parentViewController respondsToSelector:@selector(revealGesture:)] && [self.navigationController.parentViewController respondsToSelector:@selector(revealToggle:)])
 	{
-		// Check if a UIPanGestureRecognizer already sits atop our NavigationBar.
-		if (![[self.navigationController.navigationBar gestureRecognizers] containsObject:self.navigationBarPanGestureRecognizer])
-		{
-			// If not, allocate one and add it.
-			UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self.navigationController.parentViewController action:@selector(revealGesture:)];
-			self.navigationBarPanGestureRecognizer = panGestureRecognizer;
-			[panGestureRecognizer release];
-			
-			[self.navigationController.navigationBar addGestureRecognizer:self.navigationBarPanGestureRecognizer];
-		}
+		UIPanGestureRecognizer *navigationBarPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self.navigationController.parentViewController action:@selector(revealGesture:)];
+		[self.navigationController.navigationBar addGestureRecognizer:navigationBarPanGestureRecognizer];
 		
-		// Check if we have a revealButton already.
-		if (![self.navigationItem leftBarButtonItem])
-		{
-			// If not, allocate one and add it.
-			UIBarButtonItem *revealButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Reveal", @"Reveal") style:UIBarButtonItemStylePlain target:self.navigationController.parentViewController action:@selector(revealToggle:)];
-			self.navigationItem.leftBarButtonItem = revealButton;
-			[revealButton release];
-		}
+		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Reveal", @"Reveal") style:UIBarButtonItemStylePlain target:self.navigationController.parentViewController action:@selector(revealToggle:)];
 	}
 }
 
@@ -111,21 +91,11 @@
 
 #pragma mark - Example Code
 
-- (void)pushExample:(id)sender
+- (IBAction)pushExample:(id)sender
 {
 	UIViewController *stubController = [[UIViewController alloc] init];
 	stubController.view.backgroundColor = [UIColor whiteColor];
 	[self.navigationController pushViewController:stubController animated:YES];
-	[stubController release];
-}
-
-#pragma mark - Memory Management
-
-- (void)dealloc
-{
-	[self.navigationController.navigationBar removeGestureRecognizer:self.navigationBarPanGestureRecognizer];
-	[_navigationBarPanGestureRecognizer release], _navigationBarPanGestureRecognizer = nil;
-	[super dealloc];
 }
 
 @end
