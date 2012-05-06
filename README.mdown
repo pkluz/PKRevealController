@@ -5,7 +5,7 @@ A Facebook inspired custom iOS ViewControllerContainer that enables to have a UI
 
 [![](http://nehira.com/rsc/upld/revealcontroller_img_1.png)](http://nehira.com/rsc/upld/revealcontroller_img_1.png)
 
-UPDATE (Math 6th, 2012)
+UPDATE (May 6th, 2012)
 =======
 - ARC is now officially supported (via conditional compiling i.e. it still works flawlessly without ARC)
 - Missing presentation mode for the rear view added.
