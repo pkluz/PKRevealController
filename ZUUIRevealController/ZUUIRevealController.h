@@ -55,7 +55,7 @@ typedef enum
 // Defines how much of the rear view is shown.
 @property (assign, nonatomic) CGFloat rearViewRevealWidth;
 
-// Defines how much of an overview can occur when drawing further than 'rearViewRevealWidth'.
+// Defines how much of an overdraw can occur when drawing further than 'rearViewRevealWidth'.
 @property (assign, nonatomic) CGFloat maxRearViewRevealOverdraw;
 
 // Defines the width of the rear views presentation mode.
