@@ -329,6 +329,26 @@
 }
 */
 
+- (void)hideFrontView
+{
+	NSTimeInterval duration = FrontViewPositionRight == self.currentFrontViewPosition ? 0.1f : 0.3f;
+	[UIView animateWithDuration:duration animations:^
+	 {
+		 self.frontView.frame = CGRectMake(320.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+	 }];
+	self.currentFrontViewPosition = FrontViewPositionRightMost;
+}
+
+- (void)showFrontView
+{
+	if (FrontViewPositionRightMost != self.currentFrontViewPosition)
+		return;
+	[UIView animateWithDuration:0.1f animations:^
+	 {
+		 self.frontView.frame = CGRectMake(REVEAL_EDGE, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
+	 }];
+}
+
 #pragma mark - Helper
 
 - (void)_revealAnimation 
