@@ -706,13 +706,16 @@
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
-	
+
+	CGRect frontViewBounds = self.view.bounds;
+	CGRect rearViewBounds  = self.view.bounds;
+
 #if __has_feature(objc_arc)
-	self.frontView = [[UIView alloc] initWithFrame:self.view.bounds];
-	self.rearView = [[UIView alloc] initWithFrame:self.view.bounds];
+	self.frontView = [[UIView alloc] initWithFrame:frontViewBounds];
+	self.rearView = [[UIView alloc] initWithFrame:rearViewBounds];
 #else
-	self.frontView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
-	self.rearView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
+	self.frontView = [[[UIView alloc] initWithFrame:frontViewBounds] autorelease];
+	self.rearView = [[[UIView alloc] initWithFrame:rearViewBounds] autorelease];
 #endif
 	
 	self.frontView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
