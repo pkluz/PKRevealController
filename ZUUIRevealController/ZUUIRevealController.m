@@ -186,8 +186,9 @@
 
 - (void)_revealAnimationWithDuration:(NSTimeInterval)duration
 {	
-	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction animations:^
+	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionLayoutSubviews animations:^
 	{
+		self.rearView.frame  = [self _rearViewBoundsForFrontViewPosition:FrontViewPositionRight];
 		self.frontView.frame = CGRectMake(self.rearViewRevealWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
 	completion:^(BOOL finished)
@@ -202,8 +203,9 @@
 
 - (void)_concealAnimationWithDuration:(NSTimeInterval)duration resigningCompletelyFromRearViewPresentationMode:(BOOL)resigning
 {	
-	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction animations:^
+	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionLayoutSubviews animations:^
 	{
+		self.rearView.frame  = [self _rearViewBoundsForFrontViewPosition:FrontViewPositionLeft];
 		self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
 	completion:^(BOOL finished)
@@ -227,8 +229,9 @@
 
 - (void)_concealPartiallyAnimationWithDuration:(NSTimeInterval)duration
 {
-	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction animations:^
+	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionLayoutSubviews animations:^
 	{
+		self.rearView.frame  = [self _rearViewBoundsForFrontViewPosition:FrontViewPositionRight];
 		self.frontView.frame = CGRectMake(self.rearViewRevealWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
 	completion:^(BOOL finished)
@@ -243,8 +246,9 @@
 
 - (void)_revealCompletelyAnimationWithDuration:(NSTimeInterval)duration
 {
-	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction animations:^
+	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionLayoutSubviews animations:^
 	{
+		self.rearView.frame = [self _rearViewBoundsForFrontViewPosition:FrontViewPositionRightMost];
 		self.frontView.frame = CGRectMake(self.rearViewPresentationWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
 	completion:^(BOOL finished)
@@ -569,6 +573,37 @@
 	}
 }
 
+/**
+ * Returns the bounding rect appropriate for the rear view based on the given
+ * `FrontViewPosition`.
+ */
+- (CGRect)_rearViewBoundsForFrontViewPosition:(FrontViewPosition)frontViewPosition
+{
+	CGRect rvBounds = self.view.bounds; // start with some default
+	CGFloat rvHeight = rvBounds.size.height;
+
+	switch (frontViewPosition)
+	{
+		// Position right most means we need a rear view bounding rect for the
+		// rear view presentaiton mode.
+		case FrontViewPositionRightMost:
+		{
+			rvBounds = (CGRect) {CGPointZero, {self.rearViewPresentationWidth, rvHeight}};
+			break;
+		}
+		// Fall through both position left and position right since we don't
+		// need to do any rear view resizing on a normal reveal.
+		case FrontViewPositionLeft:
+		case FrontViewPositionRight:
+		{
+			rvBounds = (CGRect) {CGPointZero, {self.rearViewRevealWidth, rvHeight}};
+			break;
+		}
+	}
+
+	return rvBounds;
+}
+
 #pragma mark - Accessors
 
 - (void)setFrontViewController:(UIViewController *)frontViewController
@@ -708,8 +743,10 @@
 {
 	[super viewDidLoad];
 
+	FrontViewPosition initialFrontViewPosition = FrontViewPositionLeft;
+
 	CGRect frontViewBounds = self.view.bounds;
-	CGRect rearViewBounds  = self.view.bounds;
+	CGRect rearViewBounds  = [self _rearViewBoundsForFrontViewPosition:initialFrontViewPosition];
 
 #if __has_feature(objc_arc)
 	self.frontView = [[UIView alloc] initWithFrame:frontViewBounds];
@@ -742,7 +779,7 @@
 	
 	// Init the position with only the front view visible.
 	self.previousPanOffset = 0.0f;
-	self.currentFrontViewPosition = FrontViewPositionLeft;
+	self.currentFrontViewPosition = initialFrontViewPosition;
 	
 	[self _addRearViewControllerToHierarchy:self.rearViewController];
 	[self _addFrontViewControllerToHierarchy:self.frontViewController];	
