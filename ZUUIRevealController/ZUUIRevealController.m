@@ -607,6 +607,7 @@
 
 - (void)_addRearViewControllerToHierarchy:(UIViewController *)rearViewController
 {
+	rearViewController.view.frame = self.rearView.bounds;
 	[self addChildViewController:rearViewController];
 	[self.rearView addSubview:rearViewController.view];
 	
