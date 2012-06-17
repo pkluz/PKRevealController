@@ -607,6 +607,11 @@
 
 - (void)_addRearViewControllerToHierarchy:(UIViewController *)rearViewController
 {
+    // Ensures an extra StatusBar height isn't being added to the rear view
+    CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
+    CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
+    rearViewController.view.frame = CGRectMake(0.0, 0.0, appFrame.size.width, appFrame.size.height + statusBarFrame.size.height);
+
 	[self addChildViewController:rearViewController];
 	[self.rearView addSubview:rearViewController.view];
 	
