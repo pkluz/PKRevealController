@@ -571,6 +571,27 @@
 
 #pragma mark - Accessors
 
+- (void)setRearViewController:(UIViewController *)rearViewController
+{
+    // Manually forward the view methods to the child view controllers
+    [self.rearViewController viewWillDisappear:NO];
+    [self _removeViewControllerFromHierarchy:_rearViewController];
+    [self.rearViewController viewDidDisappear:NO];
+    
+    #if __has_feature(objc_arc)
+        _rearViewController = rearViewController;
+    #else
+        [rearViewController retain]; 
+        [_rearViewController release];
+        _rearViewController = rearViewController;
+    #endif
+    
+    [rearViewController viewWillAppear:NO];
+    [self _addRearViewControllerToHierarchy:rearViewController];
+    [rearViewController viewDidAppear:NO];
+    rearViewController.view.frame = self.rearView.frame;
+}
+
 - (void)setFrontViewController:(UIViewController *)frontViewController
 {
 	[self setFrontViewController:frontViewController animated:NO];
