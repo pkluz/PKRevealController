@@ -40,8 +40,6 @@
 @property (assign, nonatomic) float previousPanOffset;
 
 // Private Methods:
-- (void)_loadDefaultConfiguration;
-
 - (CGFloat)_calculateOffsetForTranslationInView:(CGFloat)x;
 - (void)_revealAnimationWithDuration:(NSTimeInterval)duration;
 - (void)_concealAnimationWithDuration:(NSTimeInterval)duration resigningCompletelyFromRearViewPresentationMode:(BOOL)resigning;
@@ -95,13 +93,13 @@
 		[rearViewController retain];
 		_rearViewController = rearViewController;
 #endif
-		[self _loadDefaultConfiguration];
+		[self loadDefaultConfiguration];
 	}
 	
 	return self;
 }
 
-- (void)_loadDefaultConfiguration
+- (void)loadDefaultConfiguration
 {
 	self.rearViewRevealWidth = 260.0f;
 	self.maxRearViewRevealOverdraw = 60.0f;

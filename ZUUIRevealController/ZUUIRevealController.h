@@ -78,6 +78,7 @@ typedef enum
 
 #pragma mark - Public Methods:
 - (id)initWithFrontViewController:(UIViewController *)aFrontViewController rearViewController:(UIViewController *)aBackViewController;
+- (void)loadDefaultConfiguration;
 - (void)revealGesture:(UIPanGestureRecognizer *)recognizer;
 - (void)revealToggle:(id)sender;
 - (void)revealToggle:(id)sender animationDuration:(NSTimeInterval)animationDuration;
