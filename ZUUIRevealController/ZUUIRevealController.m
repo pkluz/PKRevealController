@@ -40,8 +40,6 @@
 @property (assign, nonatomic) float previousPanOffset;
 
 // Private Methods:
-- (void)_loadDefaultConfiguration;
-
 - (CGFloat)_calculateOffsetForTranslationInView:(CGFloat)x;
 - (void)_revealAnimationWithDuration:(NSTimeInterval)duration;
 - (void)_concealAnimationWithDuration:(NSTimeInterval)duration resigningCompletelyFromRearViewPresentationMode:(BOOL)resigning;
