@@ -95,13 +95,13 @@
 		[rearViewController retain];
 		_rearViewController = rearViewController;
 #endif
-		[self _loadDefaultConfiguration];
+		[self loadDefaultConfiguration];
 	}
 	
 	return self;
 }
 
-- (void)_loadDefaultConfiguration
+- (void)loadDefaultConfiguration
 {
 	self.rearViewRevealWidth = 260.0f;
 	self.maxRearViewRevealOverdraw = 60.0f;
