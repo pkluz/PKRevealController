@@ -143,6 +143,8 @@
 			[self.delegate revealController:self willRevealRearViewController:self.rearViewController];
 		}
 		
+        self.rearView.hidden = NO;
+
 		[self _revealAnimationWithDuration:animationDuration];
 		
 		self.currentFrontViewPosition = FrontViewPositionRight;
@@ -217,6 +219,8 @@
 			}
 		}
 		
+        self.rearView.hidden = YES;
+
 		// Dispatch message to delegate, telling it the 'rearView' _DID_ hide, if appropriate:
 		if ([self.delegate respondsToSelector:@selector(revealController:didHideRearViewController:)])
 		{
@@ -375,6 +379,8 @@
 			{
 				[self.delegate revealController:self willRevealRearViewController:self.rearViewController];
 			}
+
+            self.rearView.hidden = NO;
 		}
 		else
 		{
@@ -718,6 +724,8 @@
 	self.frontView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 	self.rearView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 	
+    self.rearView.hidden = YES;
+
 	[self.view addSubview:self.rearView];
 	[self.view addSubview:self.frontView];
 	
