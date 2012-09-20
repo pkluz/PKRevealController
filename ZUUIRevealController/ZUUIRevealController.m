@@ -758,9 +758,11 @@
 	return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
+#if __IPHONE_OS_VERSION_MIN_REQUIRED > __IPHONE_5_1
 - (NSUInteger)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskAll;
 }
+#endif
 
 #pragma mark - Memory Management
 
