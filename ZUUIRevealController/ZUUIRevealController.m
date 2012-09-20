@@ -32,7 +32,14 @@
 
 #import "ZUUIRevealController.h"
 
-@interface ZUUIRevealController()
+@interface ZUUIRevealController() {
+	BOOL enableSwipeAndTapGestures;
+	
+	UITapGestureRecognizer *tapGestureRecognizer;
+	UISwipeGestureRecognizer *swipeGestureRecognizer;
+	UISwipeGestureRecognizer *swipeLeftGestureRecognizer;
+}
+
 
 // Private Properties:
 @property (strong, nonatomic) UIView *frontView;
@@ -306,6 +313,65 @@
 }
 
 #pragma mark - Gesture Based Reveal
+
+- (void)setEnableSwipeAndTapGestures:(BOOL)_enableSwipeAndTapGestures {
+	enableSwipeAndTapGestures = _enableSwipeAndTapGestures;
+	
+	if(enableSwipeAndTapGestures) {
+		tapGestureRecognizer = [[UITapGestureRecognizer alloc]
+												 initWithTarget:self
+												 action:@selector(_tap:)];
+		tapGestureRecognizer.numberOfTapsRequired = 1;
+		tapGestureRecognizer.numberOfTouchesRequired = 1;
+		tapGestureRecognizer.cancelsTouchesInView = NO;
+				
+		swipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]
+													 initWithTarget:self
+													 action:@selector(_swipe:)];
+		
+		swipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+				
+		swipeLeftGestureRecognizer = [[UISwipeGestureRecognizer alloc]
+														 initWithTarget:self
+														 action:@selector(_swipeLeft:)];
+		
+		swipeLeftGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+		
+		[self.frontViewController.view addGestureRecognizer:tapGestureRecognizer];
+		[self.frontViewController.view addGestureRecognizer:swipeGestureRecognizer];
+		[self.frontViewController.view addGestureRecognizer:swipeLeftGestureRecognizer];
+	}
+	else {
+		if(swipeGestureRecognizer != nil) {
+			[self.frontViewController.view removeGestureRecognizer:tapGestureRecognizer];
+			[self.frontViewController.view removeGestureRecognizer:swipeGestureRecognizer];
+			[self.frontViewController.view removeGestureRecognizer:swipeLeftGestureRecognizer];
+		}
+	}
+}
+
+- (BOOL)enableSwipeAndTapGestures {
+	return enableSwipeAndTapGestures;
+}
+
+
+-(void)_tap:(id)sender {
+	if(self.currentFrontViewPosition != FrontViewPositionLeft) {
+		[self revealToggle:self];
+	}
+}
+
+-(void)_swipe:(id)sender {
+	if(self.currentFrontViewPosition == FrontViewPositionLeft) {
+		[self revealToggle:self];
+	}
+}
+
+-(void)_swipeLeft:(id)sender {
+	if(self.currentFrontViewPosition != FrontViewPositionLeft) {
+		[self revealToggle:self];
+	}
+}
 
 /* Slowly reveal or hide the rear view based on the translation of the finger.
  */
@@ -774,6 +840,13 @@
 	[_rearViewController release], _rearViewController = nil;
 	[_frontView release], _frontView = nil;
 	[_rearView release], _rearView = nil;
+	
+	if(tapGestureRecognizer != nil) {
+		[tapGestureRecognizer release], tapGestureRecognizer = nil;
+		[swipeGestureRecognizer release], swipeGestureRecognizer = nil;
+		[swipeLeftGestureRecognizer release], swipeLeftGestureRecognizer = nil;
+	}
+	
 	[super dealloc];
 }
 #endif
