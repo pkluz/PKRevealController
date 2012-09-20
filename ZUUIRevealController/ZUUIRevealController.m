@@ -758,6 +758,10 @@
 	return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
+- (NSUInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskAll;
+}
+
 #pragma mark - Memory Management
 
 #if __has_feature(objc_arc)
