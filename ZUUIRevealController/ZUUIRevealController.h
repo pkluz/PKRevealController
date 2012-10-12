@@ -44,7 +44,7 @@ typedef enum
 
 @protocol ZUUIRevealControllerDelegate;
 
-@interface ZUUIRevealController : UIViewController <UITableViewDelegate>
+@interface ZUUIRevealController : UIViewController <UITableViewDelegate, UIGestureRecognizerDelegate>
 
 #pragma mark - Public Properties:
 @property (strong, nonatomic) IBOutlet UIViewController *frontViewController;

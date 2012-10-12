@@ -715,6 +715,14 @@
 	self.rearView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
 #endif
 	
+	UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapRecognizedOnFrontView:)];
+	tapGesture.delegate = self;
+	[self.frontView addGestureRecognizer:tapGesture];
+#if __has_feature(objc_arc)
+#else
+	[tapGesture release];
+#endif
+	
 	self.frontView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 	self.rearView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 	
@@ -763,6 +771,18 @@
     return UIInterfaceOrientationMaskAll;
 }
 #endif
+
+#pragma mark Gesture Recognizer Delegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+	return (self.currentFrontViewPosition != FrontViewPositionLeft);
+}
+
+- (void)tapRecognizedOnFrontView:(UITapGestureRecognizer *)gestureRecognizer
+{
+	[self revealToggle:self];
+}
 
 #pragma mark - Memory Management
 
