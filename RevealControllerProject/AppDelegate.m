@@ -52,6 +52,9 @@
 	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:frontViewController];
 	
 	RevealController *revealController = [[RevealController alloc] initWithFrontViewController:navigationController rearViewController:rearViewController];
+	
+	revealController.enableSwipeAndTapGestures = YES;
+	
 	self.viewController = revealController;
 	
 	self.window.rootViewController = self.viewController;

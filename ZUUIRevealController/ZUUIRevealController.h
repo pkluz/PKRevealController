@@ -52,6 +52,9 @@ typedef enum
 @property (assign, nonatomic) FrontViewPosition currentFrontViewPosition;
 @property (assign, nonatomic) id<ZUUIRevealControllerDelegate> delegate;
 
+// use swipe and tap gesutures
+@property (assign, nonatomic) BOOL enableSwipeAndTapGestures;
+
 // Defines how much of the rear view is shown.
 @property (assign, nonatomic) CGFloat rearViewRevealWidth;
 
