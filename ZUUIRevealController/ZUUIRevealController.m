@@ -340,12 +340,14 @@
 		[self.frontViewController.view addGestureRecognizer:tapGestureRecognizer];
 		[self.frontViewController.view addGestureRecognizer:swipeGestureRecognizer];
 		[self.frontViewController.view addGestureRecognizer:swipeLeftGestureRecognizer];
+		[self.rearViewController.view addGestureRecognizer:swipeLeftGestureRecognizer];
 	}
 	else {
 		if(swipeGestureRecognizer != nil) {
 			[self.frontViewController.view removeGestureRecognizer:tapGestureRecognizer];
 			[self.frontViewController.view removeGestureRecognizer:swipeGestureRecognizer];
 			[self.frontViewController.view removeGestureRecognizer:swipeLeftGestureRecognizer];
+			[self.rearViewController.view removeGestureRecognizer:swipeLeftGestureRecognizer];
 		}
 	}
 }
@@ -652,6 +654,7 @@
 	{
 		[self _swapCurrentFrontViewControllerWith:frontViewController animated:animated];
 	}
+	self.enableSwipeAndTapGestures = YES;
 }
 
 #pragma mark - UIViewController Containment

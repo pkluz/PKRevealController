@@ -12,7 +12,7 @@
 		12410CD21521386E00DE1CD9 /* ZUUIRevealController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5E1EFE1C14A0BA57008062C1 /* ZUUIRevealController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		12A27B051522763300F2EBF2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E605BA914A081F900853025 /* UIKit.framework */; };
 		12A27B081522766900F2EBF2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E605BAD14A081F900853025 /* CoreGraphics.framework */; };
-		5E1EFE1414A0BA4F008062C1 /* FrontViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E1EFE0C14A0BA4F008062C1 /* FrontViewController~iPad.xib */; };
+		5E1EFE1414A0BA4F008062C1 /* FrontViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E1EFE0C14A0BA4F008062C1 /* FrontViewController~ipad.xib */; };
 		5E1EFE1514A0BA4F008062C1 /* FrontViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E1EFE0E14A0BA4F008062C1 /* FrontViewController.xib */; };
 		5E1EFE1614A0BA4F008062C1 /* RearViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E1EFE1014A0BA4F008062C1 /* RearViewController~iPad.xib */; };
 		5E1EFE1714A0BA4F008062C1 /* RearViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E1EFE1214A0BA4F008062C1 /* RearViewController.xib */; };
@@ -124,7 +124,7 @@
 			children = (
 				5EF3AA5914D73A1C00FDD48F /* FrontViewController.h */,
 				5EF3AA5A14D73A1C00FDD48F /* FrontViewController.m */,
-				5E1EFE0C14A0BA4F008062C1 /* FrontViewController~iPad.xib */,
+				5E1EFE0C14A0BA4F008062C1 /* FrontViewController~ipad.xib */,
 				5E1EFE0E14A0BA4F008062C1 /* FrontViewController.xib */,
 			);
 			name = "FrontViewController (Front)";
@@ -284,7 +284,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5E605BB414A081F900853025 /* InfoPlist.strings in Resources */,
-				5E1EFE1414A0BA4F008062C1 /* FrontViewController~iPad.xib in Resources */,
+				5E1EFE1414A0BA4F008062C1 /* FrontViewController~ipad.xib in Resources */,
 				5E1EFE1514A0BA4F008062C1 /* FrontViewController.xib in Resources */,
 				5E1EFE1614A0BA4F008062C1 /* RearViewController~iPad.xib in Resources */,
 				5E1EFE1714A0BA4F008062C1 /* RearViewController.xib in Resources */,
@@ -321,12 +321,12 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		5E1EFE0C14A0BA4F008062C1 /* FrontViewController~iPad.xib */ = {
+		5E1EFE0C14A0BA4F008062C1 /* FrontViewController~ipad.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				5E1EFE0D14A0BA4F008062C1 /* en */,
 			);
-			name = "FrontViewController~iPad.xib";
+			name = "FrontViewController~ipad.xib";
 			sourceTree = "<group>";
 		};
 		5E1EFE0E14A0BA4F008062C1 /* FrontViewController.xib */ = {
@@ -455,6 +455,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = armv7;
 			};
 			name = Debug;
 		};
@@ -477,6 +478,7 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = armv7;
 			};
 			name = Release;
 		};
