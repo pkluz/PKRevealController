@@ -51,6 +51,12 @@ typedef enum
 @property (strong, nonatomic) IBOutlet UIViewController *rearViewController;
 @property (assign, nonatomic) FrontViewPosition currentFrontViewPosition;
 @property (assign, nonatomic) id<ZUUIRevealControllerDelegate> delegate;
+/* Set this just after the initialization of the view to set supported orientations.
+ * I did not find a way to make this dynamic. You can actually change the value of this
+ * property after the reveal controller has been loaded, however, it is not guaranteed the
+ * change will be effective due to the way Apple handles the auto-rotate thing.
+ * Default is all but upside down. */
+@property (assign, nonatomic) NSUInteger supportedInterfaceOrientations;
 
 // Defines how much of the rear view is shown.
 @property (assign, nonatomic) CGFloat rearViewRevealWidth;

@@ -74,6 +74,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 @synthesize frontView = _frontView;
 @synthesize rearView = _rearView;
 @synthesize delegate = _delegate;
+@synthesize supportedInterfaceOrientations = _supportedInterfaceOrientations;
 
 @synthesize rearViewRevealWidth = _rearViewRevealWidth;
 @synthesize maxRearViewRevealOverdraw = _maxRearViewRevealOverdraw;
@@ -117,6 +118,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 	self.quickFlickVelocity = 1300.0f;
 	self.toggleAnimationDuration = 0.25f;
 	self.frontViewShadowRadius = 2.5f;
+	self.supportedInterfaceOrientations = UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
 #pragma mark - Reveal
@@ -816,14 +818,14 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-	return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+	/* A bit dirty. See the definitions of the interface orientation masks to understand */
+	return (_supportedInterfaceOrientations & (1 << toInterfaceOrientation));
 }
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED > __IPHONE_5_1
-- (NSUInteger)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskAll;
+- (NSUInteger)supportedInterfaceOrientations
+{
+	return _supportedInterfaceOrientations;
 }
-#endif
 
 #pragma mark Gesture Recognizer Delegate
 
