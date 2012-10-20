@@ -32,6 +32,12 @@
 
 #import "ZUUIRevealController.h"
 
+typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
+	ZUUIRevealControllerFrontViewAnimNone,
+	ZUUIRevealControllerFrontViewAnimShowFullMenu,
+	ZUUIRevealControllerFrontViewAnimFade
+} ZUUIRevealControllerFrontViewAnim;
+
 @interface ZUUIRevealController()
 
 // Private Properties:
@@ -55,7 +61,7 @@
 - (void)_addRearViewControllerToHierarchy:(UIViewController *)rearViewController;
 - (void)_removeViewControllerFromHierarchy:(UIViewController *)frontViewController;
 
-- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated;
+- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animation:(ZUUIRevealControllerFrontViewAnim)animated;
 
 @end
 
@@ -485,7 +491,7 @@
 	return result;
 }
 
-- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated
+- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animation:(ZUUIRevealControllerFrontViewAnim)anim
 {
 	if ([self.delegate respondsToSelector:@selector(revealController:willSwapToFrontViewController:)])
 	{
@@ -500,7 +506,7 @@
 		xSwapOffset = 60.0f;
 	}
 	
-	if (animated)
+	if (anim == ZUUIRevealControllerFrontViewAnimShowFullMenu)
 	{
 		[UIView animateWithDuration:0.15f delay:0.0f options:UIViewAnimationCurveEaseOut animations:^
 		{
@@ -510,9 +516,9 @@
 		completion:^(BOOL finished)
 		{
 			// Manually forward the view methods to the child view controllers
-			[self.frontViewController viewWillDisappear:animated];
+			[self.frontViewController viewWillDisappear:YES];
 			[self _removeViewControllerFromHierarchy:_frontViewController];
-			[self.frontViewController viewDidDisappear:animated];
+			[self.frontViewController viewDidDisappear:YES];
 			
 #if __has_feature(objc_arc)
 			_frontViewController = newFrontViewController;
@@ -522,9 +528,9 @@
 			_frontViewController = newFrontViewController;
 #endif
 			 
-			[newFrontViewController viewWillAppear:animated];
+			[newFrontViewController viewWillAppear:YES];
 			[self _addFrontViewControllerToHierarchy:newFrontViewController];
-			[newFrontViewController viewDidAppear:animated];
+			[newFrontViewController viewDidAppear:YES];
 			 
 			[UIView animateWithDuration:0.225f delay:0.0f options:UIViewAnimationCurveEaseIn animations:^
 			{
@@ -542,12 +548,47 @@
 			}];
 		}];
 	}
+	else if (anim == ZUUIRevealControllerFrontViewAnimFade)
+	{
+		if (self.currentFrontViewPosition != FrontViewPositionLeft) [self revealToggle:self];
+		
+		// Manually forward the view methods to the child view controllers
+		[newFrontViewController viewWillAppear:YES];
+		[self.frontViewController viewWillDisappear:YES];
+		newFrontViewController.view.alpha = 0.;
+		[self _addFrontViewControllerToHierarchy:newFrontViewController];
+		[UIView animateWithDuration:0.75f delay:0.0f options:UIViewAnimationCurveLinear animations:^
+		{
+			newFrontViewController.view.alpha = 1.;
+			self.frontViewController.view.alpha = 0.;
+		}
+		completion:^(BOOL finished)
+		{
+			[self _removeViewControllerFromHierarchy:_frontViewController];
+			[self.frontViewController viewDidDisappear:YES];
+			
+#if __has_feature(objc_arc)
+			_frontViewController = newFrontViewController;
+#else
+			[newFrontViewController retain];
+			[_frontViewController release];
+			_frontViewController = newFrontViewController;
+#endif
+			
+			[newFrontViewController viewDidAppear:YES];
+			
+			if ([self.delegate respondsToSelector:@selector(revealController:didSwapToFrontViewController:)])
+			{
+				[self.delegate revealController:self didSwapToFrontViewController:newFrontViewController];
+			}
+		}];
+	}
 	else
 	{
 		// Manually forward the view methods to the child view controllers
-		[self.frontViewController viewWillDisappear:animated];
+		[self.frontViewController viewWillDisappear:NO];
 		[self _removeViewControllerFromHierarchy:self.frontViewController];
-		[self.frontViewController viewDidDisappear:animated];
+		[self.frontViewController viewDidDisappear:NO];
 #if __has_feature(objc_arc)
 		_frontViewController = newFrontViewController;
 #else
@@ -556,9 +597,9 @@
 		_frontViewController = newFrontViewController;
 #endif
 		
-		[newFrontViewController viewWillAppear:animated];
+		[newFrontViewController viewWillAppear:NO];
 		[self _addFrontViewControllerToHierarchy:newFrontViewController];
-		[newFrontViewController viewDidAppear:animated];
+		[newFrontViewController viewDidAppear:NO];
 		
 		if ([self.delegate respondsToSelector:@selector(revealController:didSwapToFrontViewController:)])
 		{
@@ -584,7 +625,19 @@
 	}
 	else if (nil != frontViewController)
 	{
-		[self _swapCurrentFrontViewControllerWith:frontViewController animated:animated];
+		[self _swapCurrentFrontViewControllerWith:frontViewController animation:animated? ZUUIRevealControllerFrontViewAnimShowFullMenu: ZUUIRevealControllerFrontViewAnimNone];
+	}
+}
+
+- (void)setFrontViewControllerWithFade:(UIViewController *)frontViewController
+{
+	if (nil != frontViewController && _frontViewController == frontViewController)
+	{
+		if (self.currentFrontViewPosition != FrontViewPositionLeft) [self revealToggle:self];
+	}
+	else if (nil != frontViewController)
+	{
+		[self _swapCurrentFrontViewControllerWith:frontViewController animation:ZUUIRevealControllerFrontViewAnimFade];
 	}
 }
 
