@@ -101,6 +101,17 @@
 	return self;
 }
 
+// Raj: Added support loading ZUUIRevealVC from xib / storyboard
+-(id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self)
+    {
+        [self _loadDefaultConfiguration];
+    }
+    return self;
+}
+
 - (void)_loadDefaultConfiguration
 {
 	self.rearViewRevealWidth = 260.0f;
