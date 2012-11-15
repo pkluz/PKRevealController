@@ -851,6 +851,11 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 
 - (void)_addLearViewControllerToHierarchy:(UIViewController *)learViewController
 {
+	// Ensures an extra StatusBar height isn't being added to the lear view
+	CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
+	CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
+	learViewController.view.frame = CGRectMake(0.0, 0.0, appFrame.size.width, appFrame.size.height + statusBarFrame.size.height);
+	
 	[self addChildViewController:learViewController];
 	[self.learView addSubview:learViewController.view];
 	
