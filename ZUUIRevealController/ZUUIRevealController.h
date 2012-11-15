@@ -37,9 +37,11 @@
 
 typedef enum
 {
-	FrontViewPositionLeft,
+	FrontViewPositionCenter,
 	FrontViewPositionRight,
-	FrontViewPositionRightMost
+	FrontViewPositionRightMost,
+	FrontViewPositionLeft,
+	FrontViewPositionLeftMost
 } FrontViewPosition;
 
 @protocol ZUUIRevealControllerDelegate;
@@ -49,6 +51,7 @@ typedef enum
 #pragma mark - Public Properties:
 @property (strong, nonatomic) IBOutlet UIViewController *frontViewController;
 @property (strong, nonatomic) IBOutlet UIViewController *rearViewController;
+@property (strong, nonatomic) IBOutlet UIViewController *learViewController;
 @property (assign, nonatomic) FrontViewPosition currentFrontViewPosition;
 @property (assign, nonatomic) id<ZUUIRevealControllerDelegate> delegate;
 /* Set this just after the initialization of the view to set supported orientations.
@@ -58,20 +61,25 @@ typedef enum
  * Default is all but upside down. */
 @property (assign, nonatomic) NSUInteger supportedInterfaceOrientations;
 
-// Defines how much of the rear view is shown.
+// Defines how much of the rear and lear view are shown.
 @property (assign, nonatomic) CGFloat rearViewRevealWidth;
+@property (assign, nonatomic) CGFloat learViewRevealWidth;
 
-// Defines how much of an overdraw can occur when drawing further than 'rearViewRevealWidth'.
+// Defines how much of an overdraw can occur when drawing further than 'rearViewRevealWidth' resp lear.
 @property (assign, nonatomic) CGFloat maxRearViewRevealOverdraw;
+@property (assign, nonatomic) CGFloat maxLearViewRevealOverdraw;
 
-// Defines the width of the rear views presentation mode.
+// Defines the width of the rear/lear views presentation mode.
 @property (assign, nonatomic) CGFloat rearViewPresentationWidth;
+@property (assign, nonatomic) CGFloat learViewPresentationWidth;
 
 // Leftmost point at which a reveal will be triggered if a user stops panning.
-@property (assign, nonatomic) CGFloat revealViewTriggerWidth;
+@property (assign, nonatomic) CGFloat revealRearViewTriggerWidth;
+@property (assign, nonatomic) CGFloat revealLearViewTriggerWidth;
 
 // Leftmost point at which a conceal will be triggered if a user stops panning.
-@property (assign, nonatomic) CGFloat concealViewTriggerWidth;
+@property (assign, nonatomic) CGFloat concealRearViewTriggerWidth;
+@property (assign, nonatomic) CGFloat concealLearViewTriggerWidth;
 
 // Velocity required for the controller to instantly toggle its state.
 @property (assign, nonatomic) CGFloat quickFlickVelocity;
@@ -83,16 +91,23 @@ typedef enum
 @property (assign, nonatomic) CGFloat frontViewShadowRadius;
 
 #pragma mark - Public Methods:
+/* Lear view controller corresponds to the rear view controller when the front view is moved away
+ * to the left, instead of the traditionnal move to the right.
+ * Lear view controller can be nil. Rear view controller can't be nil. */
+- (id)initWithFrontViewController:(UIViewController *)aFrontViewController rearViewController:(UIViewController *)aBackViewController learViewController:(UIViewController *)anotherBackViewController;
 - (id)initWithFrontViewController:(UIViewController *)aFrontViewController rearViewController:(UIViewController *)aBackViewController;
 - (void)revealGesture:(UIPanGestureRecognizer *)recognizer;
-- (void)revealToggle:(id)sender;
-- (void)revealToggle:(id)sender animationDuration:(NSTimeInterval)animationDuration;
+- (void)revealRearToggle:(id)sender;
+- (void)revealRearToggle:(id)sender animationDuration:(NSTimeInterval)animationDuration;
+- (void)revealLearToggle:(id)sender;
+- (void)revealLearToggle:(id)sender animationDuration:(NSTimeInterval)animationDuration;
 
 - (void)setFrontViewController:(UIViewController *)frontViewController;
 - (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated;
 - (void)setFrontViewControllerWithFade:(UIViewController *)frontViewController;
 
-- (void)hideFrontView;
+- (void)hideFrontViewToRear;
+- (void)hideFrontViewToLear;
 - (void)showFrontViewCompletely:(BOOL)completely;
 
 @end
@@ -101,6 +116,8 @@ typedef enum
 @protocol ZUUIRevealControllerDelegate<NSObject>
 
 @optional
+
+/* *** Rear View *** */
 
 - (BOOL)revealController:(ZUUIRevealController *)revealController shouldRevealRearViewController:(UIViewController *)rearViewController;
 - (BOOL)revealController:(ZUUIRevealController *)revealController shouldHideRearViewController:(UIViewController *)rearViewController;
@@ -122,5 +139,28 @@ typedef enum
 
 - (void)revealController:(ZUUIRevealController *)revealController willEnterRearViewControllerPresentationMode:(UIViewController *)rearViewController;
 - (void)revealController:(ZUUIRevealController *)revealController didEnterRearViewControllerPresentationMode:(UIViewController *)rearViewController;
+
+- (BOOL)revealController:(ZUUIRevealController *)revealController shouldRevealRearViewController:(UIViewController *)rearViewController;
+- (BOOL)revealController:(ZUUIRevealController *)revealController shouldHideRearViewController:(UIViewController *)rearViewController;
+
+/* *** Lear View *** */
+
+/* IMPORTANT: It is not guaranteed that 'didReveal...' will be called after 'willReveal...'! - DO NOT _under any circumstances_ make that assumption!
+ */
+
+- (BOOL)revealController:(ZUUIRevealController *)revealController shouldRevealLearViewController:(UIViewController *)learViewController;
+- (BOOL)revealController:(ZUUIRevealController *)revealController shouldHideLearViewController:(UIViewController *)learViewController;
+
+- (void)revealController:(ZUUIRevealController *)revealController willRevealLearViewController:(UIViewController *)learViewController;
+- (void)revealController:(ZUUIRevealController *)revealController didRevealLearViewController:(UIViewController *)learViewController;
+
+- (void)revealController:(ZUUIRevealController *)revealController willHideLearViewController:(UIViewController *)learViewController;
+- (void)revealController:(ZUUIRevealController *)revealController didHideLearViewController:(UIViewController *)learViewController;
+
+- (void)revealController:(ZUUIRevealController *)revealController willResignLearViewControllerPresentationMode:(UIViewController *)learViewController;
+- (void)revealController:(ZUUIRevealController *)revealController didResignLearViewControllerPresentationMode:(UIViewController *)learViewController;
+
+- (void)revealController:(ZUUIRevealController *)revealController willEnterLearViewControllerPresentationMode:(UIViewController *)learViewController;
+- (void)revealController:(ZUUIRevealController *)revealController didEnterLearViewControllerPresentationMode:(UIViewController *)learViewController;
 
 @end
