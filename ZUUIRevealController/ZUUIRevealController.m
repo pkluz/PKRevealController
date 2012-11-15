@@ -1,33 +1,33 @@
-/* 
- 
+/*
+
  Copyright (c) 2011, Philip Kluz (Philip.Kluz@zuui.org)
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
- 
+
  * Redistributions of source code must retain the above copyright
  notice, this list of conditions and the following disclaimer.
- 
+
  * Redistributions in binary form must reproduce the above copyright
  notice, this list of conditions and the following disclaimer in the
  documentation and/or other materials provided with the distribution.
- 
- * Neither the name of Philip Kluz, 'zuui.org' nor the names of its contributors may 
- be used to endorse or promote products derived from this software 
+
+ * Neither the name of Philip Kluz, 'zuui.org' nor the names of its contributors may
+ be used to endorse or promote products derived from this software
  without specific prior written permission.
- 
+
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- DISCLAIMED. IN NO EVENT SHALL PHILIP KLUZ BE LIABLE FOR ANY DIRECT, 
+ DISCLAIMED. IN NO EVENT SHALL PHILIP KLUZ BE LIABLE FOR ANY DIRECT,
  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- 
+
  */
 
 #import "ZUUIRevealController.h"
@@ -108,7 +108,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 - (id)initWithFrontViewController:(UIViewController *)frontViewController rearViewController:(UIViewController *)rearViewController learViewController:(UIViewController *)learViewController
 {
 	self = [super init];
-	
+
 	if (nil != self)
 	{
 #if __has_feature(objc_arc)
@@ -125,7 +125,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 #endif
 		[self _loadDefaultConfiguration];
 	}
-	
+
 	return self;
 }
 
@@ -137,7 +137,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 	self.maxLearViewRevealOverdraw = 60.0f;
 	self.rearViewPresentationWidth = 320.0f;
 	self.learViewPresentationWidth = 320.0f;
-	
+
 	self.revealRearViewTriggerWidth = 125.0f;
 	self.revealLearViewTriggerWidth = 125.0f;
 	self.concealRearViewTriggerWidth = 200.0f;
@@ -176,13 +176,13 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 			if ([self.delegate respondsToSelector:@selector(revealController:shouldRevealRearViewController:)])
 				if (![self.delegate revealController:self shouldRevealRearViewController:self.rearViewController])
 					return;
-			
+
 			// Dispatch message to delegate, telling it the 'rearView' _WILL_ reveal, if appropriate:
 			if ([self.delegate respondsToSelector:@selector(revealController:willRevealRearViewController:)])
 				[self.delegate revealController:self willRevealRearViewController:self.rearViewController];
-			
+
 			[self _revealAnimationWithDuration:animationDuration toRear:YES];
-			
+
 			self.tapGestureView.userInteractionEnabled = YES;
 			self.currentFrontViewPosition = FrontViewPositionRight;
 			break;
@@ -191,13 +191,13 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 			if ([self.delegate respondsToSelector:@selector(revealController:shouldHideRearViewController:)])
 				if (![self.delegate revealController:self shouldHideRearViewController:self.rearViewController])
 					return;
-			
+
 			// Dispatch message to delegate, telling it the 'rearView' _WILL_ hide, if appropriate:
 			if ([self.delegate respondsToSelector:@selector(revealController:willHideRearViewController:)])
 				[self.delegate revealController:self willHideRearViewController:self.rearViewController];
-			
+
 			[self _concealAnimationWithDuration:animationDuration fromRear:YES resigningCompletelyFromXearViewPresentationMode:NO];
-			
+
 			self.tapGestureView.userInteractionEnabled = NO;
 			self.currentFrontViewPosition = FrontViewPositionCenter;
 			break;
@@ -209,7 +209,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 					return;
 				}
 			}
-			
+
 			[self showFrontViewCompletely:YES];
 		default:
 			NSLog(@"*** Warning: Unknown current front view position: %lu", (unsigned long)self.currentFrontViewPosition);
@@ -218,6 +218,8 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 
 - (void)revealLearToggle:(id)sender animationDuration:(NSTimeInterval)animationDuration
 {
+	if (self.learViewController == nil) return;
+
 	switch (self.currentFrontViewPosition) {
 		case FrontViewPositionRight: /* No Break */
 		case FrontViewPositionRightMost: /* No Break */
@@ -226,13 +228,13 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 			if ([self.delegate respondsToSelector:@selector(revealController:shouldRevealLearViewController:)])
 				if (![self.delegate revealController:self shouldRevealLearViewController:self.learViewController])
 					return;
-			
+
 			// Dispatch message to delegate, telling it the 'learView' _WILL_ reveal, if appropriate:
 			if ([self.delegate respondsToSelector:@selector(revealController:willRevealLearViewController:)])
 				[self.delegate revealController:self willRevealLearViewController:self.learViewController];
-			
+
 			[self _revealAnimationWithDuration:animationDuration toRear:NO];
-			
+
 			self.tapGestureView.userInteractionEnabled = YES;
 			self.currentFrontViewPosition = FrontViewPositionLeft;
 			break;
@@ -241,13 +243,13 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 			if ([self.delegate respondsToSelector:@selector(revealController:shouldHideLearViewController:)])
 				if (![self.delegate revealController:self shouldHideLearViewController:self.learViewController])
 					return;
-			
+
 			// Dispatch message to delegate, telling it the 'learView' _WILL_ hide, if appropriate:
 			if ([self.delegate respondsToSelector:@selector(revealController:willHideLearViewController:)])
 				[self.delegate revealController:self willHideLearViewController:self.learViewController];
-			
+
 			[self _concealAnimationWithDuration:animationDuration fromRear:NO resigningCompletelyFromXearViewPresentationMode:NO];
-			
+
 			self.tapGestureView.userInteractionEnabled = NO;
 			self.currentFrontViewPosition = FrontViewPositionCenter;
 			break;
@@ -259,7 +261,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 					return;
 				}
 			}
-			
+
 			[self showFrontViewCompletely:YES];
 		default:
 			NSLog(@"*** Warning: Unknown current front view position: %lu", (unsigned long)self.currentFrontViewPosition);
@@ -268,13 +270,14 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 
 - (void)_revealAnimationWithDuration:(NSTimeInterval)duration toRear:(BOOL)destIsRear
 {
+	if (!destIsRear && self.learViewController == nil) return;
+
 	if (destIsRear) [self _showRear];
 	else            [self _showLear];
-	
+
 	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction animations:^
 	{
 		self.frontView.frame = CGRectMake(destIsRear? self.rearViewRevealWidth: -self.learViewRevealWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-		self.tapGestureView.frame = CGRectMake(destIsRear? self.rearViewRevealWidth: -self.learViewRevealWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
 	completion:^(BOOL finished)
 	{
@@ -291,11 +294,10 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 }
 
 - (void)_concealAnimationWithDuration:(NSTimeInterval)duration fromRear:(BOOL)fromRear resigningCompletelyFromXearViewPresentationMode:(BOOL)resigning
-{	
+{
 	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction animations:^
 	{
 		self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-		self.tapGestureView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
 	completion:^(BOOL finished)
 	{
@@ -310,7 +312,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 					[self.delegate revealController:self didResignLearViewControllerPresentationMode:self.learViewController];
 			}
 		}
-		
+
 		if (fromRear) {
 			// Dispatch message to delegate, telling it the 'rearView' _DID_ hide, if appropriate:
 			if ([self.delegate respondsToSelector:@selector(revealController:didHideRearViewController:)])
@@ -328,7 +330,6 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction animations:^
 	{
 		self.frontView.frame = CGRectMake(fromRear? self.rearViewRevealWidth: -self.learViewRevealWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-		self.tapGestureView.frame = CGRectMake(fromRear? self.rearViewRevealWidth: -self.learViewRevealWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
 	completion:^(BOOL finished)
 	{
@@ -346,13 +347,14 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 
 - (void)_revealCompletelyAnimationWithDuration:(NSTimeInterval)duration toRear:(BOOL)toRear
 {
+	if (!toRear && self.learViewController == nil) return;
+
 	if (toRear) [self _showRear];
 	else        [self _showLear];
-	
+
 	[UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction animations:^
 	{
 		self.frontView.frame = CGRectMake(toRear? self.rearViewPresentationWidth: -self.learViewPresentationWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-		self.tapGestureView.frame = CGRectMake(toRear? self.rearViewPresentationWidth: -self.learViewPresentationWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 	}
 	completion:^(BOOL finished)
 	{
@@ -372,13 +374,13 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 {
 	if (self.currentFrontViewPosition == FrontViewPositionRightMost)
 		return;
-	
+
 	[self _showRear];
-	
+
 	// Dispatch message to delegate, telling it the 'rearView' _WILL_ enter its full-screen presentation mode, if appropriate:
 	if ([self.delegate respondsToSelector:@selector(revealController:willEnterRearViewControllerPresentationMode:)])
 		[self.delegate revealController:self willEnterRearViewControllerPresentationMode:self.rearViewController];
-	
+
 	[self _revealCompletelyAnimationWithDuration:self.toggleAnimationDuration*0.5f toRear:YES];
 	self.tapGestureView.userInteractionEnabled = YES;
 	self.currentFrontViewPosition = FrontViewPositionRightMost;
@@ -386,15 +388,15 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 
 - (void)hideFrontViewToLear
 {
-	if (self.currentFrontViewPosition == FrontViewPositionLeftMost)
+	if (self.currentFrontViewPosition == FrontViewPositionLeftMost || self.learViewController == nil)
 		return;
-	
+
 	[self _showLear];
-	
+
 	// Dispatch message to delegate, telling it the 'learView' _WILL_ enter its full-screen presentation mode, if appropriate:
 	if ([self.delegate respondsToSelector:@selector(revealController:willEnterLearViewControllerPresentationMode:)])
 		[self.delegate revealController:self willEnterLearViewControllerPresentationMode:self.learViewController];
-	
+
 	[self _revealCompletelyAnimationWithDuration:self.toggleAnimationDuration*0.5f toRear:NO];
 	self.tapGestureView.userInteractionEnabled = YES;
 	self.currentFrontViewPosition = FrontViewPositionLeftMost;
@@ -404,9 +406,9 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 {
 	if (self.currentFrontViewPosition != FrontViewPositionRightMost && self.currentFrontViewPosition != FrontViewPositionLeftMost)
 		return;
-	
+
 	BOOL fromRear = (self.currentFrontViewPosition == FrontViewPositionRightMost);
-	
+
 	if (fromRear) {
 		// Dispatch message to delegate, telling it the 'rearView' _WILL_ resign its full-screen presentation mode, if appropriate:
 		if ([self.delegate respondsToSelector:@selector(revealController:willResignRearViewControllerPresentationMode:)])
@@ -416,7 +418,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 		if ([self.delegate respondsToSelector:@selector(revealController:willResignLearViewControllerPresentationMode:)])
 			[self.delegate revealController:self willResignLearViewControllerPresentationMode:self.learViewController];
 	}
-	
+
 	if (completely) {
 		if (fromRear) {
 			// Dispatch message to delegate, telling it the 'rearView' _WILL_ hide, if appropriate:
@@ -427,7 +429,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 			if ([self.delegate respondsToSelector:@selector(revealController:willHideLearViewController:)])
 				[self.delegate revealController:self willHideLearViewController:self.learViewController];
 		}
-		
+
 		[self _concealAnimationWithDuration:self.toggleAnimationDuration fromRear:fromRear resigningCompletelyFromXearViewPresentationMode:YES];
 		self.tapGestureView.userInteractionEnabled = NO;
 		self.currentFrontViewPosition = FrontViewPositionCenter;
@@ -443,7 +445,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 /* Slowly reveal or hide the rear view based on the translation of the finger.
  */
 - (void)revealGesture:(UIPanGestureRecognizer *)recognizer
-{	
+{
 	// Ask the delegate (if appropriate) if we are allowed to proceed with our interaction:
 	if ([self.delegate conformsToProtocol:@protocol(ZUUIRevealControllerDelegate)]) {
 		if (FrontViewPositionCenter == self.currentFrontViewPosition) {
@@ -466,7 +468,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 			}
 		}
 	}
-	
+
 	switch ([recognizer state]) {
 		case UIGestureRecognizerStateBegan:
 			[self _handleRevealGestureStateBeganWithRecognizer:recognizer];
@@ -511,32 +513,36 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 		case FrontViewPositionCenter: {
 			float t = [recognizer translationInView:self.view].x;
 			float offset = [self _calculateOffsetForTranslationInView:t forRearView:t > 0.0f];
-			
+
 			if ((offset > 0. && self.frontView.frame.origin.x <= 0.) ||
 				 (offset < 0. && self.frontView.frame.origin.x >= 0.)) {
 				if (offset > 0.) {
 					/* Trying to show the rear view */
-					[self _showRear];
 					if ([self.delegate respondsToSelector:@selector(revealController:shouldRevealRearViewController:)])
 						if (![self.delegate revealController:self shouldRevealRearViewController:self.rearViewController])
 							return;
-					
+
+					[self _showRear];
+
 					if ([self.delegate respondsToSelector:@selector(revealController:willRevealRearViewController:)])
 						[self.delegate revealController:self willRevealRearViewController:self.rearViewController];
 				} else {
 					/* Trying to show the lear view */
-					[self _showLear];
+					if (!self.learViewController)
+						return;
+
 					if ([self.delegate respondsToSelector:@selector(revealController:shouldRevealLearViewController:)])
 						if (![self.delegate revealController:self shouldRevealLearViewController:self.learViewController])
 							return;
-					
+
+					[self _showLear];
+
 					if ([self.delegate respondsToSelector:@selector(revealController:willRevealLearViewController:)])
 						[self.delegate revealController:self willRevealLearViewController:self.learViewController];
 				}
 			}
-			
+
 			self.frontView.frame = CGRectMake(offset, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-			self.tapGestureView.frame = CGRectMake(offset, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 			break;
 		}
 		case FrontViewPositionRight:
@@ -544,14 +550,11 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 				/* We're moving to the right */
 				float offset = [self _calculateOffsetForTranslationInView:([recognizer translationInView:self.view].x+self.rearViewRevealWidth) forRearView:YES];
 				self.frontView.frame = CGRectMake(offset, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-				self.tapGestureView.frame = CGRectMake(offset, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 			} else if ([recognizer translationInView:self.view].x > -self.rearViewRevealWidth) {
 				/* We're moved to the left, but less than the rear view reveal width */
 				self.frontView.frame = CGRectMake([recognizer translationInView:self.view].x+self.rearViewRevealWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-				self.tapGestureView.frame = CGRectMake([recognizer translationInView:self.view].x+self.rearViewRevealWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 			} else {
 				self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-				self.tapGestureView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 			}
 			break;
 		case FrontViewPositionLeft:
@@ -559,14 +562,11 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 				/* We're moving to the left */
 				float offset = [self _calculateOffsetForTranslationInView:([recognizer translationInView:self.view].x-self.learViewRevealWidth) forRearView:NO];
 				self.frontView.frame = CGRectMake(offset, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-				self.tapGestureView.frame = CGRectMake(offset, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 			} else if ([recognizer translationInView:self.view].x < self.learViewRevealWidth) {
 				/* We're moved to the right, but less than the lear view reveal width */
 				self.frontView.frame = CGRectMake([recognizer translationInView:self.view].x-self.learViewRevealWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-				self.tapGestureView.frame = CGRectMake([recognizer translationInView:self.view].x-self.learViewRevealWidth, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 			} else {
 				self.frontView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-				self.tapGestureView.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 			}
 			break;
 		case FrontViewPositionLeftMost: /* No Break */
@@ -583,9 +583,15 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 	if (fabs([recognizer velocityInView:self.view].x) > self.quickFlickVelocity)
 	{
 		switch (self.currentFrontViewPosition) {
-			case FrontViewPositionCenter:
-				[self _revealAnimationWithDuration:self.toggleAnimationDuration toRear:[recognizer velocityInView:self.view].x > 0.0f];
+			case FrontViewPositionCenter: {
+				BOOL toRear = [recognizer velocityInView:self.view].x > 0.0f;
+				if (!toRear && self.learViewController == nil) {
+					[self _concealAnimationWithDuration:self.toggleAnimationDuration fromRear:YES resigningCompletelyFromXearViewPresentationMode:NO];
+				} else {
+					[self _revealAnimationWithDuration:self.toggleAnimationDuration toRear:toRear];
+				}
 				break;
+			}
 			case FrontViewPositionRight:
 				if ([recognizer velocityInView:self.view].x > 0.0f) {
 					[self _revealAnimationWithDuration:self.toggleAnimationDuration toRear:YES];
@@ -644,7 +650,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 				NSLog(@"*** Warning: Unknown current front view position: %lu", (unsigned long)self.currentFrontViewPosition);
 		}
 	}
-	
+
 	// Now adjust the current state enum.
 	if (self.frontView.frame.origin.x == 0.0f) {
 		self.tapGestureView.userInteractionEnabled = NO;
@@ -665,7 +671,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 - (CGFloat)_calculateOffsetForTranslationInView:(CGFloat)x forRearView:(BOOL)forRear
 {
 	CGFloat result;
-	
+
 	if (forRear) {
 		if (x <= self.rearViewRevealWidth) {
 			// Translate linearly.
@@ -700,22 +706,21 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 	{
 		[self.delegate revealController:self willSwapToFrontViewController:newFrontViewController];
 	}
-	
+
 	CGFloat xSwapOffset = 0.0f;
-	
-	
+
+
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
 	{
 		xSwapOffset = 60.0f;
 	}
-	
+
 	if (anim == ZUUIRevealControllerFrontViewAnimShowFullMenu)
 	{
 		[UIView animateWithDuration:0.15f delay:0.0f options:UIViewAnimationCurveEaseOut animations:^
 		{
 			CGRect offsetRect = CGRectOffset(self.frontView.frame, xSwapOffset, 0.0f);
 			self.frontView.frame = offsetRect;
-			self.tapGestureView.frame = offsetRect;
 		}
 		completion:^(BOOL finished)
 		{
@@ -723,29 +728,28 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 			[self.frontViewController viewWillDisappear:YES];
 			[self _removeViewControllerFromHierarchy:_frontViewController];
 			[self.frontViewController viewDidDisappear:YES];
-			
+
 #if __has_feature(objc_arc)
 			_frontViewController = newFrontViewController;
 #else
-			[newFrontViewController retain]; 
+			[newFrontViewController retain];
 			[_frontViewController release];
 			_frontViewController = newFrontViewController;
 #endif
-			 
+
 			[newFrontViewController viewWillAppear:YES];
 			[self _addFrontViewControllerToHierarchy:newFrontViewController];
 			[newFrontViewController viewDidAppear:YES];
-			 
+
 			[UIView animateWithDuration:0.225f delay:0.0f options:UIViewAnimationCurveEaseIn animations:^
 			{
 				CGRect offsetRect = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
 				self.frontView.frame = offsetRect;
-				self.tapGestureView.frame = offsetRect;
 			}
 			completion:^(BOOL finished)
 			{
 				[self revealRearToggle:self];
-				  
+
 				if ([self.delegate respondsToSelector:@selector(revealController:didSwapToFrontViewController:)])
 				{
 					[self.delegate revealController:self didSwapToFrontViewController:newFrontViewController];
@@ -756,7 +760,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 	else if (anim == ZUUIRevealControllerFrontViewAnimFade)
 	{
 		if (self.currentFrontViewPosition != FrontViewPositionCenter) [self revealRearToggle:self];
-		
+
 		// Manually forward the view methods to the child view controllers
 		[newFrontViewController viewWillAppear:YES];
 		[self.frontViewController viewWillDisappear:YES];
@@ -771,7 +775,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 		{
 			[self _removeViewControllerFromHierarchy:_frontViewController];
 			[self.frontViewController viewDidDisappear:YES];
-			
+
 #if __has_feature(objc_arc)
 			_frontViewController = newFrontViewController;
 #else
@@ -779,9 +783,9 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 			[_frontViewController release];
 			_frontViewController = newFrontViewController;
 #endif
-			
+
 			[newFrontViewController viewDidAppear:YES];
-			
+
 			if ([self.delegate respondsToSelector:@selector(revealController:didSwapToFrontViewController:)])
 			{
 				[self.delegate revealController:self didSwapToFrontViewController:newFrontViewController];
@@ -797,20 +801,20 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 #if __has_feature(objc_arc)
 		_frontViewController = newFrontViewController;
 #else
-		[newFrontViewController retain]; 
+		[newFrontViewController retain];
 		[_frontViewController release];
 		_frontViewController = newFrontViewController;
 #endif
-		
+
 		[newFrontViewController viewWillAppear:NO];
 		[self _addFrontViewControllerToHierarchy:newFrontViewController];
 		[newFrontViewController viewDidAppear:NO];
-		
+
 		if ([self.delegate respondsToSelector:@selector(revealController:didSwapToFrontViewController:)])
 		{
 			[self.delegate revealController:self didSwapToFrontViewController:newFrontViewController];
 		}
-		
+
 		[self revealRearToggle:self];
 	}
 }
@@ -851,23 +855,23 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 - (void)_addFrontViewControllerToHierarchy:(UIViewController *)frontViewController
 {
 	[self addChildViewController:frontViewController];
-	
+
 	// iOS 4 doesn't adjust the frame properly if in landscape via implicit loading from a nib.
 	frontViewController.view.frame = CGRectMake(0.0f, 0.0f, self.frontView.frame.size.width, self.frontView.frame.size.height);
-	
-	[self.frontView addSubview:frontViewController.view];
-	
+
+	[self.frontView insertSubview:frontViewController.view belowSubview:self.tapGestureView];
+
 	if ([frontViewController respondsToSelector:@selector(didMoveToParentViewController:)])
 		[frontViewController didMoveToParentViewController:self];
 }
 
 - (void)_addRearViewControllerToHierarchy:(UIViewController *)rearViewController
 {
-    // Ensures an extra StatusBar height isn't being added to the rear view
-    CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
-    CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
-    rearViewController.view.frame = CGRectMake(0.0, 0.0, appFrame.size.width, appFrame.size.height + statusBarFrame.size.height);
-
+	// Ensures an extra StatusBar height isn't being added to the rear view
+	CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
+	CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
+	rearViewController.view.frame = CGRectMake(0.0, 0.0, appFrame.size.width, appFrame.size.height + statusBarFrame.size.height);
+	
 	[self addChildViewController:rearViewController];
 	[self.rearView addSubview:rearViewController.view];
 	
@@ -877,14 +881,16 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 
 - (void)_addLearViewControllerToHierarchy:(UIViewController *)learViewController
 {
+	if (learViewController == nil) return;
+
 	// Ensures an extra StatusBar height isn't being added to the lear view
 	CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
 	CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
 	learViewController.view.frame = CGRectMake(0.0, 0.0, appFrame.size.width, appFrame.size.height + statusBarFrame.size.height);
-	
+
 	[self addChildViewController:learViewController];
 	[self.learView addSubview:learViewController.view];
-	
+
 	if ([learViewController respondsToSelector:@selector(didMoveToParentViewController:)])
 		[learViewController didMoveToParentViewController:self];
 }
@@ -892,13 +898,15 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 - (void)_removeViewControllerFromHierarchy:(UIViewController *)viewController
 {
 	[viewController.view removeFromSuperview];
-	
+
 	if ([viewController respondsToSelector:@selector(removeFromParentViewController)])
 		[viewController removeFromParentViewController];
 }
 
 - (void)_showLear
 {
+	if (self.learViewController == nil) return;
+
 	NSArray *subviews = self.view.subviews;
 	NSUInteger lidx = [subviews indexOfObjectIdenticalTo:self.learView];
 	NSUInteger ridx = [subviews indexOfObjectIdenticalTo:self.rearView];
@@ -908,6 +916,8 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 
 - (void)_showRear
 {
+	if (self.learViewController == nil) return;
+
 	NSArray *subviews = self.view.subviews;
 	NSUInteger lidx = [subviews indexOfObjectIdenticalTo:self.learView];
 	NSUInteger ridx = [subviews indexOfObjectIdenticalTo:self.rearView];
@@ -917,15 +927,15 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 
 #pragma mark - View Event Forwarding
 
-/* 
+/*
  Thanks to jtoce ( https://github.com/jtoce ) for adding iOS 4 Support!
  */
 
 /*
  *
- *   If you override automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers and return NO, you  
+ *   If you override automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers and return NO, you
  *   are responsible for forwarding the following methods to child view controllers at the appropriate times:
- *   
+ *
  *   viewWillAppear:
  *   viewDidAppear:
  *   viewWillDisappear:
@@ -1002,46 +1012,50 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
-	
+
 #if __has_feature(objc_arc)
-	self.tapGestureView = [[UIView alloc] initWithFrame:self.view.bounds];
 	self.frontView = [[UIView alloc] initWithFrame:self.view.bounds];
+	self.tapGestureView = [[UIView alloc] initWithFrame:self.frontView.bounds];
 	self.rearView = [[UIView alloc] initWithFrame:self.view.bounds];
 	self.learView = [[UIView alloc] initWithFrame:self.view.bounds];
 #else
-	self.tapGestureView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
 	self.frontView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
+	self.tapGestureView = [[[UIView alloc] initWithFrame:self.frontView.bounds] autorelease];
 	self.rearView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
 	self.learView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
 #endif
-	
+
 	UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapRecognizedOnFrontView:)];
+	UIPanGestureRecognizer *slideGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(revealGesture:)];
 	tapGesture.delegate = self;
 	[self.tapGestureView addGestureRecognizer:tapGesture];
+	[self.tapGestureView addGestureRecognizer:slideGestureRecognizer];
 #if __has_feature(objc_arc)
 	tapGesture = nil; /* Not sure if needed or not :/ */
+	slideGestureRecognizer = nil; /* Not sure if needed or not :/ */
 #else
 	[tapGesture release];
+	[slideGestureRecognizer release];
 #endif
-	
+
 	self.tapGestureView.backgroundColor = [UIColor clearColor];
 	self.tapGestureView.userInteractionEnabled = NO;
-	
+
 	self.tapGestureView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 	self.frontView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 	self.rearView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 	self.learView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
-	
+
 	[self.view addSubview:self.learView];
 	[self.view addSubview:self.rearView];
 	[self.view addSubview:self.frontView];
-	[self.view addSubview:self.tapGestureView];
-	
+	[self.frontView addSubview:self.tapGestureView];
+
 	/*
 	 * Create a fancy shadow aroung the frontView.
 	 *
 	 * Note: UIBezierPath needed because shadows are evil. If you don't use the path, you might not
-	 * not notice a difference at first, but the keen eye will (even on an iPhone 4S) observe that 
+	 * not notice a difference at first, but the keen eye will (even on an iPhone 4S) observe that
 	 * the interface rotation _WILL_ lag slightly and feel less fluid than with the path.
 	 */
 	UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:self.frontView.bounds];
@@ -1051,11 +1065,11 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 	self.frontView.layer.shadowOpacity = 1.0f;
 	self.frontView.layer.shadowRadius = self.frontViewShadowRadius;
 	self.frontView.layer.shadowPath = shadowPath.CGPath;
-	
+
 	// Init the position with only the front view visible.
 	self.previousPanOffset = 0.0f;
 	self.currentFrontViewPosition = FrontViewPositionCenter;
-	
+
 	[self _addLearViewControllerToHierarchy:self.learViewController];
 	[self _addRearViewControllerToHierarchy:self.rearViewController];
 	[self _addFrontViewControllerToHierarchy:self.frontViewController];
@@ -1066,7 +1080,7 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 	[self _removeViewControllerFromHierarchy:self.frontViewController];
 	[self _removeViewControllerFromHierarchy:self.rearViewController];
 	[self _removeViewControllerFromHierarchy:self.learViewController];
-	
+
 	self.tapGestureView = nil;
 	self.frontView = nil;
 	self.rearView = nil;
