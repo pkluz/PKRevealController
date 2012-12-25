@@ -106,7 +106,7 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
     
     if (self != nil)
     {
-        self.state = PKRevealControllerShowsFrontViewController;
+        [self commonInitializer];
         
         self.frontViewController = frontViewController;
         self.leftViewController = leftViewController;
@@ -116,6 +116,47 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
     }
     
     return self;
+}
+
+- (id)init
+{
+    self = [super init];
+    
+    if (self != nil)
+    {
+        [self commonInitializer];
+    }
+    
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    
+    if (self != nil)
+    {
+        [self commonInitializer];
+    }
+    
+    return self;
+}
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    
+    if (self != nil)
+    {
+        [self commonInitializer];
+    }
+    
+    return self;
+}
+
+- (void)commonInitializer
+{
+    self.state = PKRevealControllerShowsFrontViewController;
 }
 
 #pragma mark - View Lifecycle
@@ -324,11 +365,6 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
     }
     
     self.frontViewController.view.frame = frame;
-}
-
-- (void)moveFrontViewToEdgeAt:(CGFloat)delta
-{
-    
 }
 
 - (void)moveFrontViewLeftwardsIfPossible
