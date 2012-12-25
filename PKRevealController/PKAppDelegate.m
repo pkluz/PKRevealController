@@ -30,6 +30,7 @@
     
     self.revealController = [PKRevealController revealControllerWithFrontViewController:self.frontViewController
                                                                      leftViewController:self.leftViewController
+                                                                    rightViewController:self.rightViewController
                                                                                 options:nil];
     
     self.window.rootViewController = self.revealController;
