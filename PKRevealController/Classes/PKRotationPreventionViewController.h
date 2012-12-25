@@ -12,8 +12,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PKAppDelegate : UIResponder <UIApplicationDelegate>
-
-@property (strong, nonatomic) UIWindow *window;
+@interface PKRotationPreventionViewController : UIViewController
 
 @end

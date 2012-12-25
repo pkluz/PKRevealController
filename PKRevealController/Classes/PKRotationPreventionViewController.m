@@ -10,10 +10,51 @@
  
  */
 
-#import <UIKit/UIKit.h>
+#import "PKRotationPreventionViewController.h"
 
-@interface PKAppDelegate : UIResponder <UIApplicationDelegate>
+@implementation PKRotationPreventionViewController
 
-@property (strong, nonatomic) UIWindow *window;
+#pragma mark - Autorotation
+
+/*
+ * Please get familiar with iOS 6 new rotation handling as if you were to nest this controller within a UINavigationController,
+ * the UINavigationController would _NOT_ relay rotation requests to his children on its own!
+ */
+
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskAll;
+}
+
+#pragma mark - View Lifecycle
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    NSLog(@"Rotation Preventer View Controller Will Appear!");
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    NSLog(@"Rotation Preventer View Controller Did Appear!");
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    NSLog(@"Rotation Preventer View Controller Will Disappear!");
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    NSLog(@"Rotation Preventer View Controller Did Disappear!");
+}
 
 @end

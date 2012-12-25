@@ -72,13 +72,20 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
                           options:(NSDictionary *)options;
 
 - (void)showViewController:(UIViewController *)controller;
-- (void)showViewController:(UIViewController *)controller animated:(BOOL)animated completion:(PKDefaultCompletionHandler)completion;
+- (void)showViewController:(UIViewController *)controller
+                  animated:(BOOL)animated
+                completion:(PKDefaultCompletionHandler)completion;
 
 - (void)setFrontViewController:(UIViewController *)frontViewController;
-- (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated completion:(PKDefaultCompletionHandler)completion;
+- (void)setFrontViewController:(UIViewController *)frontViewController
+                      animated:(BOOL)animated showAfterChange:(BOOL)show
+                    completion:(PKDefaultCompletionHandler)completion;
 
-- (PKRevealControllerType)type;
+- (void)setLeftViewController:(UIViewController *)leftViewController;
+- (void)setRightViewController:(UIViewController *)rightViewController;
 
 - (UIViewController *)currentlyActiveController;
+
+- (PKRevealControllerType)type;
 
 @end

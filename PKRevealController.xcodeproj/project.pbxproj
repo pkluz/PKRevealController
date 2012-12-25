@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F9A90B2E168A54320003D5E0 /* PKRotationPreventionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A90B2C168A54320003D5E0 /* PKRotationPreventionViewController.m */; };
 		F9E6F19E1688B76F00C7CF25 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E6F19D1688B76F00C7CF25 /* UIKit.framework */; };
 		F9E6F1A01688B76F00C7CF25 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E6F19F1688B76F00C7CF25 /* Foundation.framework */; };
 		F9E6F1A21688B76F00C7CF25 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E6F1A11688B76F00C7CF25 /* CoreGraphics.framework */; };
@@ -21,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F9A90B2B168A54320003D5E0 /* PKRotationPreventionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PKRotationPreventionViewController.h; path = Classes/PKRotationPreventionViewController.h; sourceTree = "<group>"; };
+		F9A90B2C168A54320003D5E0 /* PKRotationPreventionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PKRotationPreventionViewController.m; path = Classes/PKRotationPreventionViewController.m; sourceTree = "<group>"; };
 		F9E6F1991688B76F00C7CF25 /* PKRevealController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PKRevealController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9E6F19D1688B76F00C7CF25 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F9E6F19F1688B76F00C7CF25 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -89,6 +92,8 @@
 				F9E6F1AD1688B76F00C7CF25 /* PKAppDelegate.m */,
 				F9E6F1BA1688B7AE00C7CF25 /* PKRevealController.h */,
 				F9E6F1BB1688B7AE00C7CF25 /* PKRevealController.m */,
+				F9A90B2B168A54320003D5E0 /* PKRotationPreventionViewController.h */,
+				F9A90B2C168A54320003D5E0 /* PKRotationPreventionViewController.m */,
 				F9E6F1A41688B76F00C7CF25 /* Supporting Files */,
 			);
 			path = PKRevealController;
@@ -177,6 +182,7 @@
 				F9E6F1AA1688B76F00C7CF25 /* main.m in Sources */,
 				F9E6F1AE1688B76F00C7CF25 /* PKAppDelegate.m in Sources */,
 				F9E6F1BC1688B7AE00C7CF25 /* PKRevealController.m in Sources */,
+				F9A90B2E168A54320003D5E0 /* PKRotationPreventionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,6 +296,7 @@
 				F9E6F1B91688B76F00C7CF25 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
