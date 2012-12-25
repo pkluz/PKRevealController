@@ -263,17 +263,11 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
 {
     if (controller == self.leftViewController)
     {
-        if ([self hasLeftViewController])
-        {
-            [self showLeftViewControllerAnimated:animated completion:completion];
-        }
+        [self hasLeftViewController] ? [self showLeftViewControllerAnimated:animated completion:completion] : nil;
     }
     else if (controller == self.rightViewController)
     {
-        if ([self hasRightViewController])
-        {
-            [self showRightViewControllerAnimated:animated completion:completion];
-        }
+        [self hasRightViewController] ? [self showRightViewControllerAnimated:animated completion:completion] : nil;
     }
     else if (controller == self.frontViewController)
     {
@@ -299,14 +293,8 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
         
         [self addFrontViewController];
         
-        if (show)
-        {
-            [self showViewController:self.frontViewController animated:animated completion:completion];
-        }
-        else
-        {
-            (completion != NULL) ? completion(YES) : nil;
-        }
+        show ? [self showViewController:self.frontViewController animated:animated completion:completion]
+             : (completion != NULL) ? completion(YES) : nil;
     }
 }
 
@@ -481,17 +469,19 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
     BOOL negativeTranslationDoesNotExceedSoftLimit = (translation > CGRectGetMinX(frameForFrontViewCenter)-[self rightViewWidthRange].location);
     BOOL negativeTranslationDoesNotExceedHardLimit = (translation > CGRectGetMinX(frameForFrontViewCenter)-[self rightViewWidthRange].length);
     
-    if (([self hasLeftViewController] && isPositiveTranslation && positiveTranslationDoesNotExceedSoftLimit)
-        || ([self hasRightViewController] && isNegativeTranslation && negativeTranslationDoesNotExceedSoftLimit))
+    BOOL isLegalTranslation = ([self hasLeftViewController] && isPositiveTranslation && positiveTranslationDoesNotExceedSoftLimit)
+                            || ([self hasRightViewController] && isNegativeTranslation && negativeTranslationDoesNotExceedSoftLimit);
+    
+    BOOL isLegalOverdraw = ([self hasLeftViewController] && isPositiveTranslation && positiveTranslationDoesNotExceedHardLimit)
+                        || ([self hasRightViewController] && isNegativeTranslation && negativeTranslationDoesNotExceedHardLimit);
+    
+    if (isLegalTranslation)
     {
         frame.origin.x += delta;
     }
-    else if (([self hasLeftViewController] && isPositiveTranslation && positiveTranslationDoesNotExceedHardLimit)
-             || ([self hasRightViewController] && isNegativeTranslation && negativeTranslationDoesNotExceedHardLimit))
+    else if (isLegalOverdraw)
     {
-        // CGFloat adjustedDelta = [self overdrawForDelta:delta absoluteNormalizedProgress:normalizedProgress];
         frame.origin.x += delta;
-        NSLog(@"Overdraw with delta: %f", delta);
     }
               
     self.frontViewController.view.frame = frame;
