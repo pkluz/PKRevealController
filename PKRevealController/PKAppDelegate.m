@@ -33,7 +33,7 @@
     self.rightViewController = [[PKRotationPreventionViewController alloc] init];
     self.leftViewController = [[UIViewController alloc] init];
     
-    NSDictionary *options = @{ PKRevealControllerAnimationDurationKey : [NSNumber numberWithFloat:0.25f] };
+    NSDictionary *options = @{ PKRevealControllerAnimationDurationKey : [NSNumber numberWithFloat:0.22f] };
     
     self.revealController = [PKRevealController revealControllerWithFrontViewController:self.frontViewController
                                                                      leftViewController:self.leftViewController

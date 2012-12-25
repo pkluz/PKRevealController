@@ -12,15 +12,11 @@
 
 #import "PKRevealController.h"
 
-#define DEFAULT_ANIMATION_DURATION_VALUE 0.2f
+#define DEFAULT_ANIMATION_DURATION_VALUE 0.22f
 #define DEFAULT_ANIMATION_CURVE_VALUE UIViewAnimationCurveEaseInOut
-
-#define DEFAULT_LEFT_VIEW_WIDTH_RANGE NSMakeRange(280, 300)
+#define DEFAULT_LEFT_VIEW_WIDTH_RANGE NSMakeRange(280, 310)
 #define DEFAULT_RIGHT_VIEW_WIDTH_RANGE DEFAULT_LEFT_VIEW_WIDTH_RANGE
-
-#define MIN_TRANSLATION_TO_TRIGGER_VIEW_CHANGE 40.0f
-
-#define MIN_VELOCITY_TO_TRIGGER_INSTANT_VIEW_CHANGE 400.0f
+#define DEFAULT_MIN_TRANSLATION_TO_TRIGGER_VIEW_CHANGE 40.0f
 
 @interface PKRevealController ()
 
@@ -45,6 +41,7 @@ NSString * const PKRevealControllerAnimationDurationKey = @"PKRevealControllerAn
 NSString * const PKRevealControllerAnimationCurveKey = @"PKRevealControllerAnimationCurveKey";
 NSString * const PKRevealControllerLeftViewWidthRangeKey = @"PKRevealControllerLeftViewWidthRangeKey";
 NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealControllerRightViewWidthRangeKey";
+NSString * const PKRevealControllerMinTranslationForViewChangeKey = @"PKRevealControllerMinTranslationForViewChangeKey";
 
 #pragma mark - Initialization
 
@@ -174,7 +171,7 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
 
 - (void)setup
 {
-    self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+    self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
 }
 
 - (void)setupFrontViewShadow
@@ -190,13 +187,15 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
 
 - (void)setupPanGestureRecognizer
 {
-    self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didRecognizePanWithGestureRecognizer:)];
+    self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                        action:@selector(didRecognizePanWithGestureRecognizer:)];
     self.panGestureRecognizer.delegate = self;
 }
 
 - (void)setupTapGestureRecognizer
 {
-    self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didRecognizeTapWithGestureRecognizer:)];
+    self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                        action:@selector(didRecognizeTapWithGestureRecognizer:)];
     self.tapGestureRecognizer.delegate = self;
 }
 
@@ -248,6 +247,18 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
     }
     
     return DEFAULT_RIGHT_VIEW_WIDTH_RANGE;
+}
+
+- (CGFloat)minTranslationForViewChange
+{
+    NSNumber *minTranslationForViewChange = [self.options objectForKey:PKRevealControllerMinTranslationForViewChangeKey];
+    
+    if (minTranslationForViewChange != nil)
+    {
+        return [minTranslationForViewChange floatValue];
+    }
+    
+    return DEFAULT_MIN_TRANSLATION_TO_TRIGGER_VIEW_CHANGE;
 }
 
 #pragma mark - API
@@ -422,11 +433,11 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
     CGPoint currentTouchLocation = [recognizer locationInView:self.view];
     CGFloat absoluteDelta = currentTouchLocation.x - self.initialTouchLocation.x;
 
-    if (isPositive(absoluteDelta) && absoluteDelta > MIN_TRANSLATION_TO_TRIGGER_VIEW_CHANGE)
+    if (isPositive(absoluteDelta) && absoluteDelta > [self minTranslationForViewChange])
     {
         [self moveFrontViewRightwardsIfPossible];
     }
-    else if (isNegative(absoluteDelta) && absoluteDelta < -MIN_TRANSLATION_TO_TRIGGER_VIEW_CHANGE)
+    else if (isNegative(absoluteDelta) && absoluteDelta < -[self minTranslationForViewChange])
     {
         [self moveFrontViewLeftwardsIfPossible];
     }
@@ -447,7 +458,8 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
     }
     else if (gestureRecognizer == self.tapGestureRecognizer)
     {
-        return (self.state == PKRevealControllerShowsLeftViewController || self.state == PKRevealControllerShowsRightViewController);
+        return (self.state == PKRevealControllerShowsLeftViewController
+                || self.state == PKRevealControllerShowsRightViewController);
     }
     
     return YES;
@@ -517,8 +529,6 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
 {
     if (self.frontViewController != nil && ![self.childViewControllers containsObject:self.frontViewController])
     {
-        self.frontViewController.view.layer.cornerRadius = 3.0f;
-        
         [self setupFrontViewShadow];
         
         [self addChildViewController:self.frontViewController];
@@ -638,7 +648,9 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
     
     __weak PKRevealController *weakSelf = self;
     
-    [self setFrontViewFrame:[self frontViewFrameForVisibleLeftView] animated:animated completion:^(BOOL finished)
+    [self setFrontViewFrame:[self frontViewFrameForVisibleLeftView]
+                   animated:animated
+                 completion:^(BOOL finished)
     {
         self.state = PKRevealControllerShowsLeftViewController;
         (completion != NULL) ? completion(finished) : nil;
@@ -655,7 +667,9 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
     
     __weak PKRevealController *weakSelf = self;
     
-    [self setFrontViewFrame:[self frontViewFrameForVisibleRightView] animated:animated completion:^(BOOL finished)
+    [self setFrontViewFrame:[self frontViewFrameForVisibleRightView]
+                   animated:animated
+                 completion:^(BOOL finished)
     {
         self.state = PKRevealControllerShowsRightViewController;
         (completion != NULL) ? completion(finished) : nil;
@@ -670,7 +684,9 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
 {
     __weak PKRevealController *weakSelf = self;
     
-    [self setFrontViewFrame:[self frontViewFrameForCenter] animated:animated completion:^(BOOL finished)
+    [self setFrontViewFrame:[self frontViewFrameForCenter]
+                   animated:animated
+                 completion:^(BOOL finished)
     {
         self.state = PKRevealControllerShowsFrontViewController;
         (completion != NULL) ? completion(finished) : nil;
@@ -741,21 +757,26 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
 #pragma mark - Autorotation
 
 /*
- * Please Note: The PKRevealController will only rotate if and only if all the controllers support the requested orientation.
+ * Please Note: The PKRevealController will only rotate if, and only if,
+ * all the controllers support the requested orientation.
  */
 - (BOOL)shouldAutorotate
 {
     if ([self hasLeftViewController] && [self hasRightViewController])
     {
-        return [self.frontViewController shouldAutorotate] && [self.leftViewController shouldAutorotate] && [self.rightViewController shouldAutorotate];
+        return [self.frontViewController shouldAutorotate]
+            && [self.leftViewController shouldAutorotate]
+            && [self.rightViewController shouldAutorotate];
     }
     else if ([self hasLeftViewController])
     {
-        return [self.frontViewController shouldAutorotate] && [self.leftViewController shouldAutorotate];
+        return [self.frontViewController shouldAutorotate]
+            && [self.leftViewController shouldAutorotate];
     }
     else if ([self hasRightViewController])
     {
-        return [self.frontViewController shouldAutorotate] && [self.rightViewController shouldAutorotate];
+        return [self.frontViewController shouldAutorotate]
+            && [self.rightViewController shouldAutorotate];
     }
     else
     {
@@ -767,15 +788,19 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
 {
     if ([self hasLeftViewController] && [self hasRightViewController])
     {
-        return self.frontViewController.supportedInterfaceOrientations & self.leftViewController.supportedInterfaceOrientations & self.rightViewController.supportedInterfaceOrientations;
+        return self.frontViewController.supportedInterfaceOrientations
+             & self.leftViewController.supportedInterfaceOrientations
+             & self.rightViewController.supportedInterfaceOrientations;
     }
     else if ([self hasLeftViewController])
     {
-        return self.frontViewController.supportedInterfaceOrientations & self.leftViewController.supportedInterfaceOrientations;
+        return self.frontViewController.supportedInterfaceOrientations
+             & self.leftViewController.supportedInterfaceOrientations;
     }
     else if ([self hasRightViewController])
     {
-        return self.frontViewController.supportedInterfaceOrientations & self.rightViewController.supportedInterfaceOrientations;
+        return self.frontViewController.supportedInterfaceOrientations
+             & self.rightViewController.supportedInterfaceOrientations;
     }
     else
     {
