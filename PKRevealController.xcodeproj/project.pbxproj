@@ -16,6 +16,8 @@
 		F9E6F1B01688B76F00C7CF25 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F9E6F1AF1688B76F00C7CF25 /* Default.png */; };
 		F9E6F1B21688B76F00C7CF25 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F9E6F1B11688B76F00C7CF25 /* Default@2x.png */; };
 		F9E6F1B41688B76F00C7CF25 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F9E6F1B31688B76F00C7CF25 /* Default-568h@2x.png */; };
+		F9E6F1BC1688B7AE00C7CF25 /* PKRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E6F1BB1688B7AE00C7CF25 /* PKRevealController.m */; };
+		F9E6F1BE1688B85900C7CF25 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E6F1BD1688B85900C7CF25 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,9 @@
 		F9E6F1AF1688B76F00C7CF25 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		F9E6F1B11688B76F00C7CF25 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		F9E6F1B31688B76F00C7CF25 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		F9E6F1BA1688B7AE00C7CF25 /* PKRevealController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PKRevealController.h; path = Classes/PKRevealController.h; sourceTree = "<group>"; };
+		F9E6F1BB1688B7AE00C7CF25 /* PKRevealController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PKRevealController.m; path = Classes/PKRevealController.m; sourceTree = "<group>"; };
+		F9E6F1BD1688B85900C7CF25 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9E6F1BE1688B85900C7CF25 /* QuartzCore.framework in Frameworks */,
 				F9E6F19E1688B76F00C7CF25 /* UIKit.framework in Frameworks */,
 				F9E6F1A01688B76F00C7CF25 /* Foundation.framework in Frameworks */,
 				F9E6F1A21688B76F00C7CF25 /* CoreGraphics.framework in Frameworks */,
@@ -68,6 +74,7 @@
 		F9E6F19C1688B76F00C7CF25 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F9E6F1BD1688B85900C7CF25 /* QuartzCore.framework */,
 				F9E6F19D1688B76F00C7CF25 /* UIKit.framework */,
 				F9E6F19F1688B76F00C7CF25 /* Foundation.framework */,
 				F9E6F1A11688B76F00C7CF25 /* CoreGraphics.framework */,
@@ -80,6 +87,8 @@
 			children = (
 				F9E6F1AC1688B76F00C7CF25 /* PKAppDelegate.h */,
 				F9E6F1AD1688B76F00C7CF25 /* PKAppDelegate.m */,
+				F9E6F1BA1688B7AE00C7CF25 /* PKRevealController.h */,
+				F9E6F1BB1688B7AE00C7CF25 /* PKRevealController.m */,
 				F9E6F1A41688B76F00C7CF25 /* Supporting Files */,
 			);
 			path = PKRevealController;
@@ -167,6 +176,7 @@
 			files = (
 				F9E6F1AA1688B76F00C7CF25 /* main.m in Sources */,
 				F9E6F1AE1688B76F00C7CF25 /* PKAppDelegate.m in Sources */,
+				F9E6F1BC1688B7AE00C7CF25 /* PKRevealController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,10 +248,12 @@
 		F9E6F1B81688B76F00C7CF25 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Philip Kluz (D8YR7K42RY)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PKRevealController/PKRevealController-Prefix.pch";
 				INFOPLIST_FILE = "PKRevealController/PKRevealController-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "D2B6A088-7C15-485B-98E0-04822B216DDF";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -249,10 +261,12 @@
 		F9E6F1B91688B76F00C7CF25 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Philip Kluz (D8YR7K42RY)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PKRevealController/PKRevealController-Prefix.pch";
 				INFOPLIST_FILE = "PKRevealController/PKRevealController-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "D2B6A088-7C15-485B-98E0-04822B216DDF";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
