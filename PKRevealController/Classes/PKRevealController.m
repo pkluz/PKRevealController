@@ -183,7 +183,7 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
     self.frontViewController.view.layer.masksToBounds = NO;
     self.frontViewController.view.layer.shadowColor = [UIColor blackColor].CGColor;
     self.frontViewController.view.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
-    self.frontViewController.view.layer.shadowOpacity = 0.45f;
+    self.frontViewController.view.layer.shadowOpacity = 0.65f;
     self.frontViewController.view.layer.shadowRadius = 2.5f;
     self.frontViewController.view.layer.shadowPath = shadowPath.CGPath;
 }
@@ -325,45 +325,29 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
 - (void)moveFrontViewBy:(CGFloat)delta
 {
     CGRect frame = self.frontViewController.view.frame;
+    CGRect frameForFrontViewCenter = [self frontViewFrameForCenter];
+    CGFloat translation = CGRectGetMinX(frame)+delta;
     
-    if (self.state == PKRevealControllerShowsLeftViewController)
-    {
-        if (CGRectGetMinX(frame)+delta > CGRectGetMinX([self frontViewFrameForCenter]))
-        {
-            frame.origin.x += delta;
-        }
-        else
-        {
-            frame.origin.x = CGRectGetMinX([self frontViewFrameForCenter]);
-        }
-    }
-    else if (self.state == PKRevealControllerShowsFrontViewController)
-    {
-        if (CGRectGetMinX(frame)+delta > CGRectGetMinX([self frontViewFrameForCenter]) && [self hasLeftViewController])
-        {
-            frame.origin.x += delta;
-        }
-        else if (CGRectGetMinX(frame)+delta <= CGRectGetMinX([self frontViewFrameForCenter]) && [self hasRightViewController])
-        {
-            frame.origin.x += delta;
-        }
-        else
-        {
-            frame.origin.x = CGRectGetMinX([self frontViewFrameForCenter]);
-        }
-    }
-    else if (self.state == PKRevealControllerShowsRightViewController)
-    {
-        if (CGRectGetMinX(frame)+delta > CGRectGetMinX([self frontViewFrameForCenter]))
-        {
-            frame.origin.x = CGRectGetMinX([self frontViewFrameForCenter]);
-        }
-        else
-        {
-            frame.origin.x += delta;
-        }
-    }
+    BOOL isPositiveTranslation = (translation >= CGRectGetMinX(frameForFrontViewCenter));
+    BOOL positiveTranslationDoesNotExceedSoftLimit = (translation <= CGRectGetMinX(frameForFrontViewCenter)+[self leftViewWidthRange].location);
+    BOOL positiveTranslationDoesNotExceedHardLimit = (translation <= CGRectGetMinX(frameForFrontViewCenter)+[self leftViewWidthRange].length);
     
+    BOOL isNegativeTranslation = (translation <= CGRectGetMinX(frameForFrontViewCenter));
+    BOOL negativeTranslationDoesNotExceedSoftLimit = (translation >= CGRectGetMinX(frameForFrontViewCenter)-[self rightViewWidthRange].location);
+    BOOL negativeTranslationDoesNotExceedHardLimit = (translation >= CGRectGetMinX(frameForFrontViewCenter)-[self rightViewWidthRange].length);
+    
+    if (([self hasLeftViewController] && isPositiveTranslation && positiveTranslationDoesNotExceedSoftLimit)
+        || ([self hasRightViewController] && isNegativeTranslation && negativeTranslationDoesNotExceedSoftLimit))
+    {
+        frame.origin.x += delta;
+    }
+    else if (([self hasLeftViewController] && isPositiveTranslation && positiveTranslationDoesNotExceedHardLimit)
+             || ([self hasRightViewController] && isNegativeTranslation && negativeTranslationDoesNotExceedHardLimit))
+    {
+        frame.origin.x += delta;
+        NSLog(@"Overdraw with delta: %f", delta);
+    }
+              
     self.frontViewController.view.frame = frame;
 }
 
@@ -576,9 +560,10 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
 {
     if (_frontViewController != frontViewController)
     {
+        [self removeFrontViewController];
+        
         _frontViewController = frontViewController;
         
-        [self removeFrontViewController];
         [self addFrontViewController];
         
         [self showViewController:self.frontViewController animated:animated completion:completion];
@@ -743,7 +728,7 @@ NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealController
 
 - (CGRect)frontViewFrameForCenter
 {
-    CGRect frame = self.frontViewController.view.frame;
+    CGRect frame = self.view.bounds;
     frame.origin = CGPointMake(0.0f, 0.0f);
     return frame;
 }
