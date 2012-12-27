@@ -79,7 +79,7 @@
 	{
 		UIPanGestureRecognizer *navigationBarPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self.navigationController.parentViewController action:@selector(revealGesture:)];
 		[self.navigationController.navigationBar addGestureRecognizer:navigationBarPanGestureRecognizer];
-		
+		[self.view addGestureRecognizer:navigationBarPanGestureRecognizer];
 		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Reveal", @"Reveal") style:UIBarButtonItemStylePlain target:self.navigationController.parentViewController action:@selector(revealToggle:)];
 	}
 }
