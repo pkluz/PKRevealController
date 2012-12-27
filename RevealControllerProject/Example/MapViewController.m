@@ -11,6 +11,26 @@
 
 @implementation MapViewController
 
+static MapViewController *shareMapViewController = nil;
++(MapViewController *)sharedController{
+  @synchronized(self){
+    if(shareMapViewController == nil){
+      shareMapViewController = [[self alloc] init];
+    }
+  }
+  return shareMapViewController;
+}
+
++(id)allocWithZone:(NSZone *)zone{
+  @synchronized(self){
+    if (shareMapViewController == nil) {
+      shareMapViewController = [super allocWithZone:zone];
+      return  shareMapViewController;
+    }
+  }
+  return nil;
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
