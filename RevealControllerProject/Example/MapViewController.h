@@ -11,4 +11,7 @@
 
 @interface MapViewController : UIViewController
 
++(MapViewController *)sharedController;
++(id)allocWithZone:(NSZone *)zone;
+
 @end
