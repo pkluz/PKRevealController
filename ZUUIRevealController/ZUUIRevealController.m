@@ -867,10 +867,8 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 
 - (void)_addRearViewControllerToHierarchy:(UIViewController *)rearViewController
 {
-	// Ensures an extra StatusBar height isn't being added to the rear view
-	CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
-	CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
-	rearViewController.view.frame = CGRectMake(0.0, 0.0, appFrame.size.width, appFrame.size.height + statusBarFrame.size.height);
+	/* Let's set the rear view controller height from rear view bounds */
+	rearViewController.view.frame = self.rearView.bounds;
 	
 	[self addChildViewController:rearViewController];
 	[self.rearView addSubview:rearViewController.view];
@@ -882,11 +880,9 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 - (void)_addLearViewControllerToHierarchy:(UIViewController *)learViewController
 {
 	if (learViewController == nil) return;
-
-	// Ensures an extra StatusBar height isn't being added to the lear view
-	CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
-	CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
-	learViewController.view.frame = CGRectMake(0.0, 0.0, appFrame.size.width, appFrame.size.height + statusBarFrame.size.height);
+	
+	/* Let's set the lear view controller height from lear view bounds */
+	learViewController.view.frame = self.learView.bounds;
 
 	[self addChildViewController:learViewController];
 	[self.learView addSubview:learViewController.view];
