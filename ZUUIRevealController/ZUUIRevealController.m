@@ -404,39 +404,44 @@ typedef enum ZUUIRevealControllerFrontViewAnim: NSUInteger {
 
 - (void)showFrontViewCompletely:(BOOL)completely
 {
-	if (self.currentFrontViewPosition != FrontViewPositionRightMost && self.currentFrontViewPosition != FrontViewPositionLeftMost)
-		return;
+	if (self.currentFrontViewPosition == FrontViewPositionCenter) return;
+	
+	BOOL fromRear = (self.currentFrontViewPosition == FrontViewPositionRightMost || self.currentFrontViewPosition == FrontViewPositionRight);
+	BOOL backShownCompletely = (self.currentFrontViewPosition == FrontViewPositionRightMost || self.currentFrontViewPosition == FrontViewPositionLeftMost);
 
-	BOOL fromRear = (self.currentFrontViewPosition == FrontViewPositionRightMost);
-
-	if (fromRear) {
-		// Dispatch message to delegate, telling it the 'rearView' _WILL_ resign its full-screen presentation mode, if appropriate:
-		if ([self.delegate respondsToSelector:@selector(revealController:willResignRearViewControllerPresentationMode:)])
-			[self.delegate revealController:self willResignRearViewControllerPresentationMode:self.rearViewController];
-	} else {
-		// Dispatch message to delegate, telling it the 'learView' _WILL_ resign its full-screen presentation mode, if appropriate:
-		if ([self.delegate respondsToSelector:@selector(revealController:willResignLearViewControllerPresentationMode:)])
-			[self.delegate revealController:self willResignLearViewControllerPresentationMode:self.learViewController];
-	}
-
-	if (completely) {
+	if (backShownCompletely) {
 		if (fromRear) {
-			// Dispatch message to delegate, telling it the 'rearView' _WILL_ hide, if appropriate:
-			if ([self.delegate respondsToSelector:@selector(revealController:willHideRearViewController:)])
-				[self.delegate revealController:self willHideRearViewController:self.rearViewController];
+			// Dispatch message to delegate, telling it the 'rearView' _WILL_ resign its full-screen presentation mode, if appropriate:
+			if ([self.delegate respondsToSelector:@selector(revealController:willResignRearViewControllerPresentationMode:)])
+				[self.delegate revealController:self willResignRearViewControllerPresentationMode:self.rearViewController];
 		} else {
-			// Dispatch message to delegate, telling it the 'learView' _WILL_ hide, if appropriate:
-			if ([self.delegate respondsToSelector:@selector(revealController:willHideLearViewController:)])
-				[self.delegate revealController:self willHideLearViewController:self.learViewController];
+			// Dispatch message to delegate, telling it the 'learView' _WILL_ resign its full-screen presentation mode, if appropriate:
+			if ([self.delegate respondsToSelector:@selector(revealController:willResignLearViewControllerPresentationMode:)])
+				[self.delegate revealController:self willResignLearViewControllerPresentationMode:self.learViewController];
 		}
-
-		[self _concealAnimationWithDuration:self.toggleAnimationDuration fromRear:fromRear resigningCompletelyFromXearViewPresentationMode:YES];
-		self.tapGestureView.userInteractionEnabled = NO;
-		self.currentFrontViewPosition = FrontViewPositionCenter;
+		
+		if (completely) {
+			if (fromRear) {
+				// Dispatch message to delegate, telling it the 'rearView' _WILL_ hide, if appropriate:
+				if ([self.delegate respondsToSelector:@selector(revealController:willHideRearViewController:)])
+					[self.delegate revealController:self willHideRearViewController:self.rearViewController];
+			} else {
+				// Dispatch message to delegate, telling it the 'learView' _WILL_ hide, if appropriate:
+				if ([self.delegate respondsToSelector:@selector(revealController:willHideLearViewController:)])
+					[self.delegate revealController:self willHideLearViewController:self.learViewController];
+			}
+			
+			[self _concealAnimationWithDuration:self.toggleAnimationDuration fromRear:fromRear resigningCompletelyFromXearViewPresentationMode:YES];
+			self.tapGestureView.userInteractionEnabled = NO;
+			self.currentFrontViewPosition = FrontViewPositionCenter;
+		} else {
+			[self _concealPartiallyAnimationWithDuration:self.toggleAnimationDuration*0.5f fromRear:fromRear];
+			self.tapGestureView.userInteractionEnabled = YES;
+			self.currentFrontViewPosition = fromRear? FrontViewPositionRight: FrontViewPositionLeft;
+		}
 	} else {
-		[self _concealPartiallyAnimationWithDuration:self.toggleAnimationDuration*0.5f fromRear:fromRear];
-		self.tapGestureView.userInteractionEnabled = YES;
-		self.currentFrontViewPosition = fromRear? FrontViewPositionRight: FrontViewPositionLeft;
+		if (fromRear) [self revealRearToggle:self];
+		else          [self revealLearToggle:self];
 	}
 }
 
