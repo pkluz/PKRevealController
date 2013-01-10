@@ -55,7 +55,7 @@
 - (void)_addRearViewControllerToHierarchy:(UIViewController *)rearViewController;
 - (void)_removeViewControllerFromHierarchy:(UIViewController *)frontViewController;
 
-- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated;
+- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated toggleRear:(BOOL)toggleRear;
 
 @end
 
@@ -485,7 +485,7 @@
 	return result;
 }
 
-- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated
+- (void)_swapCurrentFrontViewControllerWith:(UIViewController *)newFrontViewController animated:(BOOL)animated toggleRear:(BOOL)toggleRear
 {
 	if ([self.delegate respondsToSelector:@selector(revealController:willSwapToFrontViewController:)])
 	{
@@ -533,7 +533,9 @@
 			}
 			completion:^(BOOL finished)
 			{
-				[self revealToggle:self];
+				if (toggleRear) {
+                    [self revealToggle:self];
+                }
 				  
 				if ([self.delegate respondsToSelector:@selector(revealController:didSwapToFrontViewController:)])
 				{
@@ -565,7 +567,9 @@
 			[self.delegate revealController:self didSwapToFrontViewController:newFrontViewController];
 		}
 		
-		[self revealToggle:self];
+        if (toggleRear) {
+            [self revealToggle:self];
+        }
 	}
 }
 
@@ -578,13 +582,18 @@
 
 - (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated
 {
+    [self _swapCurrentFrontViewControllerWith:frontViewController animated:animated toggleRear:YES];
+}
+
+- (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated toggleRear:(BOOL)toggleRear
+{
 	if (nil != frontViewController && _frontViewController == frontViewController)
 	{
 		[self revealToggle:self];
 	}
 	else if (nil != frontViewController)
 	{
-		[self _swapCurrentFrontViewControllerWith:frontViewController animated:animated];
+		[self _swapCurrentFrontViewControllerWith:frontViewController animated:animated toggleRear:toggleRear];
 	}
 }
 
