@@ -13,6 +13,8 @@
 #import "PKAppDelegate.h"
 #import "PKRevealController.h"
 #import "PKRotationPreventionViewController.h"
+#import "LeftDemoViewController.h"
+#import "RightDemoViewController.h"
 #import <MapKit/MapKit.h>
 
 @interface PKAppDelegate()
@@ -31,17 +33,19 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     self.frontViewController = [[UINavigationController alloc] initWithRootViewController:[[PKRotationPreventionViewController alloc] init]];
-    self.rightViewController = [[UIViewController alloc] init];
-    self.leftViewController = [[UIViewController alloc] init];
+    self.rightViewController = [[RightDemoViewController alloc] init];
+    self.leftViewController = [[LeftDemoViewController alloc] init];
     
     NSDictionary *options = @{
         PKRevealControllerAnimationDurationKey : [NSNumber numberWithFloat:0.22f],
         PKRevealControllerAnimationTypeKey : [NSNumber numberWithInteger:PKRevealControllerAnimationTypeLinear],
-        PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES]
+        PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES],
+        PKRevealControllerLeftViewWidthRangeKey : [NSValue valueWithRange:NSMakeRange(280.0f, 323.0f)]
     };
     
     self.revealController = [PKRevealController revealControllerWithFrontViewController:self.frontViewController
                                                                      leftViewController:self.leftViewController
+                                                                    rightViewController:self.rightViewController
                                                                                 options:options];
     
     self.revealController.view.backgroundColor = [UIColor blackColor];
@@ -49,27 +53,6 @@
     self.frontViewController.view.backgroundColor = [UIColor orangeColor];
     self.leftViewController.view.backgroundColor = [UIColor greenColor];
     self.rightViewController.view.backgroundColor = [UIColor purpleColor];
-    
-    UIViewController *newController = [[UIViewController alloc] init];
-    newController.view.backgroundColor = [UIColor blueColor];
-    
-    MKMapView *mapViewRight = [[MKMapView alloc] initWithFrame:newController.view.bounds];
-    //mapViewRight.alpha = 0.15f;
-    mapViewRight.autoresizingMask = (UIViewAutoresizingFlexibleWidth);
-    [newController.view addSubview:mapViewRight];
-    
-    MKMapView *mapViewLeft = [[MKMapView alloc] initWithFrame:newController.view.bounds];
-    //mapViewLeft.alpha = 0.15f;
-    mapViewLeft.autoresizingMask = (UIViewAutoresizingFlexibleWidth);
-    [self.leftViewController.view addSubview:mapViewLeft];
-    
-    //int64_t delayInSeconds = 5.0f;
-    //dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    //dispatch_after(popTime, dispatch_get_main_queue(), ^(void)
-    //{
-        [self.revealController showViewController:self.leftViewController animated:YES completion:NULL];
-        [self.revealController setRightViewController:newController];
-    // });
     
     self.window.rootViewController = self.revealController;
     
