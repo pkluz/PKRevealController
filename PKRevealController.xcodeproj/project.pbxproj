@@ -7,7 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F9A90B2E168A54320003D5E0 /* PKRotationPreventionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A90B2C168A54320003D5E0 /* PKRotationPreventionViewController.m */; };
+		F96610D5168B317200A031E7 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F96610D4168B317200A031E7 /* MapKit.framework */; };
+		F96610D9168B773E00A031E7 /* reveal_menu_icon_landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = F96610D7168B773E00A031E7 /* reveal_menu_icon_landscape.png */; };
+		F96610DA168B773E00A031E7 /* reveal_menu_icon_landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F96610D8168B773E00A031E7 /* reveal_menu_icon_landscape@2x.png */; };
+		F9A87D3316A7240C005534DF /* PKRevealControllerContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A87D3216A7240C005534DF /* PKRevealControllerContainerView.m */; };
+		F9A90B3A168A76A50003D5E0 /* PKRotationPreventionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A90B39168A76A40003D5E0 /* PKRotationPreventionViewController.m */; };
+		F9A90B3D168A76B00003D5E0 /* reveal_menu_icon_portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = F9A90B3B168A76B00003D5E0 /* reveal_menu_icon_portrait.png */; };
+		F9A90B3E168A76B00003D5E0 /* reveal_menu_icon_portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F9A90B3C168A76B00003D5E0 /* reveal_menu_icon_portrait@2x.png */; };
+		F9A90B43168A778A0003D5E0 /* PKRevealController+Categories.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A90B42168A778A0003D5E0 /* PKRevealController+Categories.m */; };
 		F9E6F19E1688B76F00C7CF25 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E6F19D1688B76F00C7CF25 /* UIKit.framework */; };
 		F9E6F1A01688B76F00C7CF25 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E6F19F1688B76F00C7CF25 /* Foundation.framework */; };
 		F9E6F1A21688B76F00C7CF25 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E6F1A11688B76F00C7CF25 /* CoreGraphics.framework */; };
@@ -22,8 +29,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F9A90B2B168A54320003D5E0 /* PKRotationPreventionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PKRotationPreventionViewController.h; path = Classes/PKRotationPreventionViewController.h; sourceTree = "<group>"; };
-		F9A90B2C168A54320003D5E0 /* PKRotationPreventionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PKRotationPreventionViewController.m; path = Classes/PKRotationPreventionViewController.m; sourceTree = "<group>"; };
+		F96610D4168B317200A031E7 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		F96610D7168B773E00A031E7 /* reveal_menu_icon_landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = reveal_menu_icon_landscape.png; path = Classes/reveal_menu_icon_landscape.png; sourceTree = "<group>"; };
+		F96610D8168B773E00A031E7 /* reveal_menu_icon_landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reveal_menu_icon_landscape@2x.png"; path = "Classes/reveal_menu_icon_landscape@2x.png"; sourceTree = "<group>"; };
+		F9A87D3116A7240C005534DF /* PKRevealControllerContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKRevealControllerContainerView.h; sourceTree = "<group>"; };
+		F9A87D3216A7240C005534DF /* PKRevealControllerContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKRevealControllerContainerView.m; sourceTree = "<group>"; };
+		F9A90B38168A76A40003D5E0 /* PKRotationPreventionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKRotationPreventionViewController.h; sourceTree = "<group>"; };
+		F9A90B39168A76A40003D5E0 /* PKRotationPreventionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKRotationPreventionViewController.m; sourceTree = "<group>"; };
+		F9A90B3B168A76B00003D5E0 /* reveal_menu_icon_portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = reveal_menu_icon_portrait.png; path = Classes/reveal_menu_icon_portrait.png; sourceTree = "<group>"; };
+		F9A90B3C168A76B00003D5E0 /* reveal_menu_icon_portrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reveal_menu_icon_portrait@2x.png"; path = "Classes/reveal_menu_icon_portrait@2x.png"; sourceTree = "<group>"; };
+		F9A90B41168A778A0003D5E0 /* PKRevealController+Categories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "PKRevealController+Categories.h"; path = "Classes/PKRevealController+Categories.h"; sourceTree = "<group>"; };
+		F9A90B42168A778A0003D5E0 /* PKRevealController+Categories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PKRevealController+Categories.m"; path = "Classes/PKRevealController+Categories.m"; sourceTree = "<group>"; };
 		F9E6F1991688B76F00C7CF25 /* PKRevealController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PKRevealController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9E6F19D1688B76F00C7CF25 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F9E6F19F1688B76F00C7CF25 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -47,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F96610D5168B317200A031E7 /* MapKit.framework in Frameworks */,
 				F9E6F1BE1688B85900C7CF25 /* QuartzCore.framework in Frameworks */,
 				F9E6F19E1688B76F00C7CF25 /* UIKit.framework in Frameworks */,
 				F9E6F1A01688B76F00C7CF25 /* Foundation.framework in Frameworks */,
@@ -57,6 +74,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F9A90B3F168A76B70003D5E0 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				F9A90B38168A76A40003D5E0 /* PKRotationPreventionViewController.h */,
+				F9A90B39168A76A40003D5E0 /* PKRotationPreventionViewController.m */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		F9A90B40168A76C20003D5E0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F9A90B3B168A76B00003D5E0 /* reveal_menu_icon_portrait.png */,
+				F9A90B3C168A76B00003D5E0 /* reveal_menu_icon_portrait@2x.png */,
+				F96610D7168B773E00A031E7 /* reveal_menu_icon_landscape.png */,
+				F96610D8168B773E00A031E7 /* reveal_menu_icon_landscape@2x.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		F9E6F18E1688B76F00C7CF25 = {
 			isa = PBXGroup;
 			children = (
@@ -77,6 +114,7 @@
 		F9E6F19C1688B76F00C7CF25 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F96610D4168B317200A031E7 /* MapKit.framework */,
 				F9E6F1BD1688B85900C7CF25 /* QuartzCore.framework */,
 				F9E6F19D1688B76F00C7CF25 /* UIKit.framework */,
 				F9E6F19F1688B76F00C7CF25 /* Foundation.framework */,
@@ -92,8 +130,12 @@
 				F9E6F1AD1688B76F00C7CF25 /* PKAppDelegate.m */,
 				F9E6F1BA1688B7AE00C7CF25 /* PKRevealController.h */,
 				F9E6F1BB1688B7AE00C7CF25 /* PKRevealController.m */,
-				F9A90B2B168A54320003D5E0 /* PKRotationPreventionViewController.h */,
-				F9A90B2C168A54320003D5E0 /* PKRotationPreventionViewController.m */,
+				F9A87D3116A7240C005534DF /* PKRevealControllerContainerView.h */,
+				F9A87D3216A7240C005534DF /* PKRevealControllerContainerView.m */,
+				F9A90B41168A778A0003D5E0 /* PKRevealController+Categories.h */,
+				F9A90B42168A778A0003D5E0 /* PKRevealController+Categories.m */,
+				F9A90B3F168A76B70003D5E0 /* View Controllers */,
+				F9A90B40168A76C20003D5E0 /* Resources */,
 				F9E6F1A41688B76F00C7CF25 /* Supporting Files */,
 			);
 			path = PKRevealController;
@@ -169,6 +211,10 @@
 				F9E6F1B01688B76F00C7CF25 /* Default.png in Resources */,
 				F9E6F1B21688B76F00C7CF25 /* Default@2x.png in Resources */,
 				F9E6F1B41688B76F00C7CF25 /* Default-568h@2x.png in Resources */,
+				F9A90B3D168A76B00003D5E0 /* reveal_menu_icon_portrait.png in Resources */,
+				F9A90B3E168A76B00003D5E0 /* reveal_menu_icon_portrait@2x.png in Resources */,
+				F96610D9168B773E00A031E7 /* reveal_menu_icon_landscape.png in Resources */,
+				F96610DA168B773E00A031E7 /* reveal_menu_icon_landscape@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,7 +228,9 @@
 				F9E6F1AA1688B76F00C7CF25 /* main.m in Sources */,
 				F9E6F1AE1688B76F00C7CF25 /* PKAppDelegate.m in Sources */,
 				F9E6F1BC1688B7AE00C7CF25 /* PKRevealController.m in Sources */,
-				F9A90B2E168A54320003D5E0 /* PKRotationPreventionViewController.m in Sources */,
+				F9A90B3A168A76A50003D5E0 /* PKRotationPreventionViewController.m in Sources */,
+				F9A90B43168A778A0003D5E0 /* PKRevealController+Categories.m in Sources */,
+				F9A87D3316A7240C005534DF /* PKRevealControllerContainerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

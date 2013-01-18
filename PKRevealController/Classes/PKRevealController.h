@@ -11,13 +11,19 @@
  */
 
 #import <UIKit/UIKit.h>
-#import <QuartzCore/QuartzCore.h>
+#import "PKRevealController+Categories.h"
 
 typedef NS_ENUM(NSUInteger, PKRevealControllerState)
 {
     PKRevealControllerShowsLeftViewController,
     PKRevealControllerShowsRightViewController,
     PKRevealControllerShowsFrontViewController
+};
+
+typedef NS_ENUM(NSUInteger, PKRevealControllerAnimationType)
+{
+    PKRevealControllerAnimationTypeLinear,
+    PKRevealControllerAnimationTypeParallax
 };
 
 typedef NS_OPTIONS(NSUInteger, PKRevealControllerType)
@@ -32,6 +38,10 @@ extern NSString * const PKRevealControllerAnimationDurationKey;
 extern NSString * const PKRevealControllerAnimationCurveKey;
 extern NSString * const PKRevealControllerLeftViewWidthRangeKey;
 extern NSString * const PKRevealControllerRightViewWidthRangeKey;
+extern NSString * const PKRevealControllerAnimationTypeKey;
+extern NSString * const PKRevealControllerAllowsOverdrawKey;
+extern NSString * const PKRevealControllerQuickSwipeToggleVelocityKey;
+extern NSString * const PKRevealControllerDisablesFrontViewInteractionKey;
 
 typedef void(^PKDefaultCompletionHandler)(BOOL finished);
 typedef void(^PKDefaultErrorHandler)(NSError *error);

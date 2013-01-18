@@ -11,8 +11,48 @@
  */
 
 #import "PKRotationPreventionViewController.h"
+#import "PKRevealController.h"
 
 @implementation PKRotationPreventionViewController
+
+#pragma mark - Setup
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    UIImage *revealImagePortrait = [UIImage imageNamed:@"reveal_menu_icon_portrait"];
+    UIImage *revealImageLandscape = [UIImage imageNamed:@"reveal_menu_icon_landscape"];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:revealImagePortrait landscapeImagePhone:revealImageLandscape style:UIBarButtonItemStylePlain target:self action:@selector(showLeftView:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:revealImagePortrait landscapeImagePhone:revealImageLandscape style:UIBarButtonItemStylePlain target:self action:@selector(showRightView:)];
+}
+
+#pragma mark - Actions
+
+- (void)showLeftView:(id)sender
+{
+    if (self.navigationController.revealController.currentlyActiveController == self.navigationController.revealController.leftViewController)
+    {
+        [self.navigationController.revealController showViewController:self.navigationController.revealController.frontViewController animated:YES completion:NULL];
+    }
+    else
+    {
+        [self.navigationController.revealController showViewController:self.navigationController.revealController.leftViewController animated:YES completion:NULL];
+    }
+}
+
+- (void)showRightView:(id)sender
+{
+    if (self.navigationController.revealController.currentlyActiveController == self.navigationController.revealController.rightViewController)
+    {
+        [self.navigationController.revealController showViewController:self.navigationController.revealController.frontViewController animated:YES completion:NULL];
+    }
+    else
+    {
+        [self.navigationController.revealController showViewController:self.navigationController.revealController.rightViewController animated:YES completion:NULL];
+    }
+}
 
 #pragma mark - Autorotation
 
