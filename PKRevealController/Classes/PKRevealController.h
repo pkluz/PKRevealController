@@ -22,8 +22,7 @@ typedef NS_ENUM(NSUInteger, PKRevealControllerState)
 
 typedef NS_ENUM(NSUInteger, PKRevealControllerAnimationType)
 {
-    PKRevealControllerAnimationTypeLinear,
-    PKRevealControllerAnimationTypeParallax
+    PKRevealControllerAnimationTypeLinear
 };
 
 typedef NS_OPTIONS(NSUInteger, PKRevealControllerType)

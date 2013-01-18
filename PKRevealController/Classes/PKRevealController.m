@@ -209,6 +209,18 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     self.revealResetTapGestureRecognizer.delegate = self;
 }
 
+#pragma mark - Options
+
+- (void)setOptions:(NSDictionary *)options
+{
+    if (_options != options)
+    {
+        _options = options;
+    }
+    
+    [self updateConfigurationWithNewOptions];
+}
+
 - (void)updateConfigurationWithNewOptions
 {
     self.animationDuration = [self extractAnimationDurationFromOptions];
@@ -221,7 +233,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     self.disablesFrontViewInteraction = [self extractDisablesFrontViewInteractionFromOptions];
 }
 
-#pragma mark - Options
+#pragma mark -
 
 - (CGFloat)extractAnimationDurationFromOptions
 {
@@ -317,18 +329,6 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     }
     
     return DEFAULT_DISABLES_FRONT_VIEW_INTERACTION_VALUE;
-}
-
-#pragma mark -
-
-- (void)setOptions:(NSDictionary *)options
-{
-    if (_options != options)
-    {
-        _options = options;
-    }
-    
-    [self updateConfigurationWithNewOptions];
 }
 
 #pragma mark - API
@@ -611,33 +611,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
         {
             [self moveViewsLinearlyBy:delta isOverdrawing:isOverdrawing];
         }
-        else if (animationType == PKRevealControllerAnimationTypeParallax)
-        {
-            [self moveViewsParallaxicallyBy:delta isOverdrawing:isOverdrawing];
-        }
     }
-}
-
-- (void)moveViewsParallaxicallyBy:(CGFloat)delta isOverdrawing:(BOOL)overdraw
-{
-    UIView *parallaxView = [self isLeftViewVisible] ? self.leftViewContainer : ([self isRightViewVisible] ? self.rightViewContainer : nil);
-    
-    CGRect frontViewFrame = self.frontViewContainer.frame;
-    CGRect parallaxViewFrame = parallaxView.frame;
-    
-    if (overdraw && self.allowsOverdraw)
-    {
-        frontViewFrame.origin.x += delta / 2.0f;
-        parallaxViewFrame.origin.x += delta / 4.0f;
-    }
-    else if (!overdraw)
-    {
-        frontViewFrame.origin.x += delta;
-        parallaxViewFrame.origin.x += delta / 2.0f;
-    }
-    
-    self.frontViewContainer.frame = frontViewFrame;
-    parallaxView.frame = parallaxViewFrame;
 }
 
 - (void)moveViewsLinearlyBy:(CGFloat)delta isOverdrawing:(BOOL)overdraw
@@ -792,7 +766,99 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     [self.frontViewContainer removeGestureRecognizer:self.revealResetTapGestureRecognizer];
 }
 
-#pragma mark - Helpers (Internal)
+#pragma mark - Helper (Internal)
+
+- (void)showLeftViewControllerAnimated:(BOOL)animated
+                            completion:(PKDefaultCompletionHandler)completion
+{
+    [self removeRightViewController];
+    [self addLeftViewController];
+    
+    __weak PKRevealController *weakSelf = self;
+    
+    [self setFrontViewFrame:[self frontViewFrameForVisibleLeftView]
+                   animated:animated
+                 completion:^(BOOL finished)
+     {
+         weakSelf.disablesFrontViewInteraction ? [weakSelf.frontViewContainer disableUserInteractionForContainedView] : nil;
+         weakSelf.state = PKRevealControllerShowsLeftViewController;
+         (completion != NULL) ? completion(finished) : nil;
+         
+         [weakSelf removeRightViewController];
+     }];
+}
+
+
+- (void)showRightViewControllerAnimated:(BOOL)animated
+                             completion:(PKDefaultCompletionHandler)completion
+{
+    [self removeLeftViewController];
+    [self addRightViewController];
+    
+    __weak PKRevealController *weakSelf = self;
+    
+    [self setFrontViewFrame:[self frontViewFrameForVisibleRightView]
+                   animated:animated
+                 completion:^(BOOL finished)
+     {
+         weakSelf.disablesFrontViewInteraction ? [weakSelf.frontViewContainer disableUserInteractionForContainedView] : nil;
+         weakSelf.state = PKRevealControllerShowsRightViewController;
+         (completion != NULL) ? completion(finished) : nil;
+         
+         [weakSelf removeLeftViewController];
+     }];
+}
+
+
+- (void)showFrontViewControllerAnimated:(BOOL)animated
+                             completion:(PKDefaultCompletionHandler)completion
+{
+    __weak PKRevealController *weakSelf = self;
+    
+    [self setFrontViewFrame:[self frontViewFrameForCenter]
+                   animated:animated
+                 completion:^(BOOL finished)
+     {
+         weakSelf.disablesFrontViewInteraction ? [weakSelf.frontViewContainer enableUserInteractionForContainedView] : nil;
+         
+         weakSelf.state = PKRevealControllerShowsFrontViewController;
+         (completion != NULL) ? completion(finished) : nil;
+         
+         [weakSelf removeRightViewController];
+         [weakSelf removeLeftViewController];
+     }];
+}
+
+- (void)setFrontViewFrame:(CGRect)frame
+                 animated:(BOOL)animated
+               completion:(PKDefaultCompletionHandler)completion
+{
+    CGFloat duration = [self animationDuration];
+    UIViewAnimationOptions options = (UIViewAnimationOptionBeginFromCurrentState | [self animationCurve]);
+    
+    if (self.animationType == PKRevealControllerAnimationTypeLinear)
+    {
+        [self setFrontViewFrameLinearly:frame animated:animated duration:duration options:options completion:completion];
+    }
+}
+
+- (void)setFrontViewFrameLinearly:(CGRect)frame
+                         animated:(BOOL)animated
+                         duration:(CGFloat)duration
+                          options:(UIViewAnimationOptions)options
+                       completion:(PKDefaultCompletionHandler)completion
+{
+    [UIView animateWithDuration:duration delay:0.0f options:options animations:^
+     {
+         self.frontViewContainer.frame = frame;
+     }
+                     completion:^(BOOL finished)
+     {
+         (completion != NULL) ? completion(finished) : nil;
+     }];
+}
+
+#pragma mark - Helpers (States)
 
 - (BOOL)hasLeftViewController
 {
@@ -835,6 +901,8 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     }
 }
 
+#pragma mark - Helper (Sizing)
+
 - (CGFloat)leftViewMaxWidth
 {
     return self.allowsOverdraw ? self.leftViewWidthRange.length : [self leftViewMinWidth];
@@ -855,147 +923,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     return self.rightViewWidthRange.location;
 }
 
-#pragma mark - Helper (Internal)
-
-- (void)showLeftViewControllerAnimated:(BOOL)animated
-                            completion:(PKDefaultCompletionHandler)completion
-{
-    [self removeRightViewController];
-    [self addLeftViewController];
-    
-    __weak PKRevealController *weakSelf = self;
-    
-    [self setFrontViewFrame:[self frontViewFrameForVisibleLeftView]
-                   animated:animated
-                 completion:^(BOOL finished)
-    {
-        weakSelf.disablesFrontViewInteraction ? [weakSelf.frontViewContainer disableUserInteractionForContainedView] : nil;
-        weakSelf.state = PKRevealControllerShowsLeftViewController;
-        (completion != NULL) ? completion(finished) : nil;
-        
-        [weakSelf removeRightViewController];
-    }];
-}
-
-
-- (void)showRightViewControllerAnimated:(BOOL)animated
-                             completion:(PKDefaultCompletionHandler)completion
-{
-    [self removeLeftViewController];
-    [self addRightViewController];
-    
-    __weak PKRevealController *weakSelf = self;
-    
-    [self setFrontViewFrame:[self frontViewFrameForVisibleRightView]
-                   animated:animated
-                 completion:^(BOOL finished)
-    {
-        weakSelf.disablesFrontViewInteraction ? [weakSelf.frontViewContainer disableUserInteractionForContainedView] : nil;
-        weakSelf.state = PKRevealControllerShowsRightViewController;
-        (completion != NULL) ? completion(finished) : nil;
-        
-        [weakSelf removeLeftViewController];
-    }];
-}
-
-
-- (void)showFrontViewControllerAnimated:(BOOL)animated
-                             completion:(PKDefaultCompletionHandler)completion
-{
-    __weak PKRevealController *weakSelf = self;
-    
-    [self setFrontViewFrame:[self frontViewFrameForCenter]
-                   animated:animated
-                 completion:^(BOOL finished)
-    {
-        weakSelf.disablesFrontViewInteraction ? [weakSelf.frontViewContainer enableUserInteractionForContainedView] : nil;
-         
-        weakSelf.state = PKRevealControllerShowsFrontViewController;
-        (completion != NULL) ? completion(finished) : nil;
-        
-        [weakSelf removeRightViewController];
-        [weakSelf removeLeftViewController];
-    }];
-}
-
-- (void)setFrontViewFrame:(CGRect)frame
-                 animated:(BOOL)animated
-               completion:(PKDefaultCompletionHandler)completion
-{
-    CGFloat duration = [self animationDuration];
-    UIViewAnimationOptions options = (UIViewAnimationOptionBeginFromCurrentState | [self animationCurve]);
-    
-    if (self.animationType == PKRevealControllerAnimationTypeLinear)
-    {
-        [self setFrontViewFrameLinearly:frame animated:animated duration:duration options:options completion:completion];
-    }
-    else if (self.animationType == PKRevealControllerAnimationTypeParallax)
-    {
-        [self setFrontViewFrameParallaxically:frame animated:animated duration:duration options:options completion:completion];
-    }
-}
-
-- (void)setFrontViewFrameLinearly:(CGRect)frame
-                         animated:(BOOL)animated
-                         duration:(CGFloat)duration
-                          options:(UIViewAnimationOptions)options
-                       completion:(PKDefaultCompletionHandler)completion
-{
-    [UIView animateWithDuration:duration delay:0.0f options:options animations:^
-    {
-        self.frontViewContainer.frame = frame;
-    }
-    completion:^(BOOL finished)
-    {
-        (completion != NULL) ? completion(finished) : nil;
-    }];
-}
-
-- (void)setFrontViewFrameParallaxically:(CGRect)frame
-                               animated:(BOOL)animated
-                               duration:(CGFloat)duration
-                                options:(UIViewAnimationOptions)options
-                             completion:(PKDefaultCompletionHandler)completion
-{
-    CGFloat delta = CGRectGetMinX(frame) - CGRectGetMinX(self.frontViewContainer.frame);
-    CGFloat parallaxDelta = delta / 2.0f;
-    
-    UIView *parallaxView = nil;
-    
-    if ([self isFrontViewEntirelyVisible])
-    {
-        if (isPositive(parallaxDelta))
-        {
-            self.leftViewContainer.frame = [self leftViewFrame];
-            parallaxView = self.leftViewContainer;
-        }
-        else
-        {
-            self.rightViewContainer.frame = [self rightViewFrame];
-            parallaxView = self.rightViewContainer;
-        }
-    }
-    else if ([self isLeftViewVisible])
-    {
-        self.leftViewContainer.frame = [self leftViewFrame];
-        parallaxView = self.leftViewContainer;
-    }
-    else
-    {
-        self.rightViewContainer.frame = [self rightViewFrame];
-        parallaxView = self.rightViewContainer;
-    }
-    
-    [UIView animateWithDuration:duration delay:0.0f options:options animations:^
-    {
-        self.frontViewContainer.frame = frame;
-        parallaxView.frame = CGRectOffset(parallaxView.frame, parallaxDelta, 0.0f);
-    }
-    completion:^(BOOL finished)
-    {
-        (completion != NULL) ? completion(finished) : nil;
-    }];
-}
+#pragma mark - Helper (Frames)
 
 - (CGRect)frontViewFrameForCurrentState
 {
@@ -1041,11 +969,6 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     frame.size = CGSizeMake([self leftViewMaxWidth], CGRectGetHeight(self.view.bounds));
     frame.origin = CGPointZero;
     
-    if (self.animationType == PKRevealControllerAnimationTypeParallax)
-    {
-        frame.origin.x = -CGRectGetMidX(frame);
-    }
-    
     return frame;
 }
 
@@ -1060,15 +983,11 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
         frame.origin.x = CGRectGetWidth(self.frontViewContainer.bounds)-CGRectGetWidth(frame);
         frame.origin.y = 0.0f;
     }
-    else if (self.animationType == PKRevealControllerAnimationTypeParallax)
-    {
-        frame.size = CGSizeMake([self rightViewMaxWidth], CGRectGetHeight(self.view.bounds));
-        frame.origin.x = CGRectGetWidth(self.view.bounds)-floorf((CGRectGetWidth(frame)/2.0f));
-        frame.origin.y = 0.0f;
-    }
     
     return frame;
 }
+
+#pragma mark - Helper (Autoresizing)
 
 - (UIViewAutoresizing)autoresizingMaskForFrontViewContainer
 {
@@ -1142,11 +1061,6 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     [self.frontViewContainer refreshShadowWithAnimationDuration:duration];
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    NSLog(@"Rotated!");
 }
 
 #pragma mark - Memory Management
