@@ -177,7 +177,146 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     self.state = PKRevealControllerShowsFrontViewController;
 }
 
-#pragma mark - View Lifecycle
+#pragma mark - API
+
+- (void)showViewController:(UIViewController *)controller
+{
+    [self showViewController:controller animated:NO completion:NULL];
+}
+
+- (void)showViewController:(UIViewController *)controller
+                  animated:(BOOL)animated
+                completion:(PKDefaultCompletionHandler)completion
+{
+    if (controller == self.leftViewController)
+    {
+        [self hasLeftViewController] ? [self showLeftViewControllerAnimated:animated completion:completion] : nil;
+    }
+    else if (controller == self.rightViewController)
+    {
+        [self hasRightViewController] ? [self showRightViewControllerAnimated:animated completion:completion] : nil;
+    }
+    else if (controller == self.frontViewController)
+    {
+        [self showFrontViewControllerAnimated:animated completion:completion];
+    }
+}
+
+- (void)setFrontViewController:(UIViewController *)frontViewController
+{
+    [self setFrontViewController:frontViewController animated:NO showAfterChange:NO completion:NULL];
+}
+
+- (void)setFrontViewController:(UIViewController *)frontViewController
+                      animated:(BOOL)animated
+               showAfterChange:(BOOL)show
+                    completion:(PKDefaultCompletionHandler)completion
+{
+    if (_frontViewController != frontViewController)
+    {
+        [self removeFrontViewController];
+        
+        _frontViewController = frontViewController;
+        _frontViewController.revealController = self;
+        
+        [self addFrontViewController];
+        
+        if (show)
+        {
+            [self showViewController:self.frontViewController animated:animated completion:completion];
+        }
+        else
+        {
+            (completion != NULL) ? completion(YES) : nil;
+        }
+    }
+}
+
+- (void)setLeftViewController:(UIViewController *)leftViewController
+{
+    BOOL isLeftViewVisible = (self.state == PKRevealControllerShowsLeftViewController);
+    
+    if (_leftViewController != leftViewController)
+    {
+        if (isLeftViewVisible)
+        {
+            [self removeLeftViewController];
+        }
+        
+        _leftViewController = leftViewController;
+        _leftViewController.revealController = self;
+        
+        if (isLeftViewVisible)
+        {
+            [self removeRightViewController];
+            [self addLeftViewController];
+        }
+    }
+}
+
+- (void)setRightViewController:(UIViewController *)rightViewController
+{
+    BOOL isRightViewVisible = (self.state == PKRevealControllerShowsRightViewController);
+    
+    if (_rightViewController != rightViewController)
+    {
+        if (isRightViewVisible)
+        {
+            [self removeRightViewController];
+        }
+        
+        _rightViewController = rightViewController;
+        _rightViewController.revealController = self;
+        
+        if (isRightViewVisible)
+        {
+            [self removeLeftViewController];
+            [self addRightViewController];
+        }
+    }
+}
+
+- (PKRevealControllerType)type
+{
+    if (self.frontViewController != nil && self.leftViewController != nil && self.rightViewController != nil)
+    {
+        return PKRevealControllerTypeBoth;
+    }
+    else if (self.frontViewController != nil && self.leftViewController != nil)
+    {
+        return PKRevealControllerTypeLeft;
+    }
+    else if (self.frontViewController != nil && self.rightViewController != nil)
+    {
+        return PKRevealControllerTypeRight;
+    }
+    
+    return PKRevealControllerTypeUndefined;
+}
+
+- (UIViewController *)currentlyActiveController
+{
+    switch (self.state)
+    {
+        case PKRevealControllerShowsFrontViewController:
+            return self.frontViewController;
+            break;
+            
+        case PKRevealControllerShowsLeftViewController:
+            return self.leftViewController;
+            break;
+            
+        case PKRevealControllerShowsRightViewController:
+            return self.rightViewController;
+            break;
+            
+        default:
+            return nil;
+            break;
+    }
+}
+
+#pragma mark - View Lifecycle (System)
 
 - (void)viewDidLoad
 {
@@ -186,6 +325,118 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     [self setup];
     [self setupPanGestureRecognizer];
     [self setupTapGestureRecognizer];
+}
+
+#pragma mark - View Lifecycle (Controller)
+
+- (void)addFrontViewController
+{
+    if (self.frontViewController != nil && ![self.childViewControllers containsObject:self.frontViewController])
+    {
+        [self addChildViewController:self.frontViewController];
+        [self.frontViewContainer prepareForReuseWithController:self.frontViewController];
+        
+        if (self.frontViewContainer == nil)
+        {
+            self.frontViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.frontViewController withShadow:YES];
+            self.frontViewContainer.autoresizingMask = [self autoresizingMaskForFrontViewContainer];
+        }
+        
+        self.frontViewContainer.frame = [self frontViewFrameForCurrentState];
+        [self.view addSubview:self.frontViewContainer];
+        [self.frontViewController didMoveToParentViewController:self];
+        
+        [self addTapGestureRecognizer];
+        [self addPanGestureRecognizer];
+    }
+}
+
+- (void)removeFrontViewController
+{
+    if ([self.childViewControllers containsObject:self.frontViewController])
+    {
+        [self.frontViewContainer removeFromSuperview];
+        [self.frontViewController removeFromParentViewController];
+        
+        [self removeTapGestureRecognizer];
+        [self removePanGestureRecognizer];
+    }
+}
+
+- (void)addLeftViewController
+{
+    if (self.leftViewController != nil && ![self.childViewControllers containsObject:self.leftViewController])
+    {
+        [self addChildViewController:self.leftViewController];
+        [self.leftViewContainer prepareForReuseWithController:self.leftViewController];
+        
+        if (self.leftViewContainer == nil)
+        {
+            self.leftViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.leftViewController withShadow:NO];
+            self.leftViewContainer.autoresizingMask = [self autoresizingMaskForLeftViewContainer];
+        }
+        
+        self.leftViewContainer.frame = [self leftViewFrame];
+        [self.view insertSubview:self.leftViewContainer belowSubview:self.frontViewContainer];
+        [self.leftViewController didMoveToParentViewController:self];
+    }
+}
+
+- (void)removeLeftViewController
+{
+    if ([self.childViewControllers containsObject:self.leftViewController])
+    {
+        [self.leftViewContainer removeFromSuperview];
+        [self.leftViewController removeFromParentViewController];
+    }
+}
+
+- (void)addRightViewController
+{
+    if (self.rightViewController != nil && ![self.childViewControllers containsObject:self.rightViewController])
+    {
+        [self addChildViewController:self.rightViewController];
+        [self.rightViewContainer prepareForReuseWithController:self.rightViewController];
+        
+        if (self.rightViewContainer == nil)
+        {
+            self.rightViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.rightViewController withShadow:NO];
+            self.rightViewContainer.autoresizingMask = [self autoresizingMaskForRightViewContainer];
+        }
+        
+        self.rightViewContainer.frame = [self rightViewFrame];
+        [self.view insertSubview:self.rightViewContainer belowSubview:self.frontViewContainer];
+        [self.rightViewController didMoveToParentViewController:self];
+    }
+}
+
+- (void)removeRightViewController
+{
+    if ([self.childViewControllers containsObject:self.rightViewController])
+    {
+        [self.rightViewContainer removeFromSuperview];
+        [self.rightViewController removeFromParentViewController];
+    }
+}
+
+- (void)addPanGestureRecognizer
+{
+    [self.frontViewContainer addGestureRecognizer:self.revealPanGestureRecognizer];
+}
+
+- (void)removePanGestureRecognizer
+{
+    [self.frontViewContainer removeGestureRecognizer:self.revealPanGestureRecognizer];
+}
+
+- (void)addTapGestureRecognizer
+{
+    [self.frontViewContainer addGestureRecognizer:self.revealResetTapGestureRecognizer];
+}
+
+- (void)removeTapGestureRecognizer
+{
+    [self.frontViewContainer removeGestureRecognizer:self.revealResetTapGestureRecognizer];
 }
 
 #pragma mark - Setup
@@ -331,145 +582,6 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     return DEFAULT_DISABLES_FRONT_VIEW_INTERACTION_VALUE;
 }
 
-#pragma mark - API
-
-- (void)showViewController:(UIViewController *)controller
-{
-    [self showViewController:controller animated:NO completion:NULL];
-}
-
-- (void)showViewController:(UIViewController *)controller
-                  animated:(BOOL)animated
-                completion:(PKDefaultCompletionHandler)completion
-{
-    if (controller == self.leftViewController)
-    {
-        [self hasLeftViewController] ? [self showLeftViewControllerAnimated:animated completion:completion] : nil;
-    }
-    else if (controller == self.rightViewController)
-    {
-        [self hasRightViewController] ? [self showRightViewControllerAnimated:animated completion:completion] : nil;
-    }
-    else if (controller == self.frontViewController)
-    {
-        [self showFrontViewControllerAnimated:animated completion:completion];
-    }
-}
-
-- (void)setFrontViewController:(UIViewController *)frontViewController
-{
-    [self setFrontViewController:frontViewController animated:NO showAfterChange:NO completion:NULL];
-}
-
-- (void)setFrontViewController:(UIViewController *)frontViewController
-                      animated:(BOOL)animated
-               showAfterChange:(BOOL)show
-                    completion:(PKDefaultCompletionHandler)completion
-{
-    if (_frontViewController != frontViewController)
-    {
-        [self removeFrontViewController];
-        
-        _frontViewController = frontViewController;
-        _frontViewController.revealController = self;
-        
-        [self addFrontViewController];
-        
-        if (show)
-        {
-            [self showViewController:self.frontViewController animated:animated completion:completion];
-        }
-        else
-        {
-            (completion != NULL) ? completion(YES) : nil;
-        }
-    }
-}
-
-- (void)setLeftViewController:(UIViewController *)leftViewController
-{
-    BOOL isLeftViewVisible = (self.state == PKRevealControllerShowsLeftViewController);
-    
-    if (_leftViewController != leftViewController)
-    {
-        if (isLeftViewVisible)
-        {
-            [self removeLeftViewController];
-        }
-        
-        _leftViewController = leftViewController;
-        _leftViewController.revealController = self;
-        
-        if (isLeftViewVisible)
-        {
-            [self removeRightViewController];
-            [self addLeftViewController];
-        }
-    }
-}
-
-- (void)setRightViewController:(UIViewController *)rightViewController
-{
-    BOOL isRightViewVisible = (self.state == PKRevealControllerShowsRightViewController);
-    
-    if (_rightViewController != rightViewController)
-    {
-        if (isRightViewVisible)
-        {
-            [self removeRightViewController];
-        }
-        
-        _rightViewController = rightViewController;
-        _rightViewController.revealController = self;
-        
-        if (isRightViewVisible)
-        {
-            [self removeLeftViewController];
-            [self addRightViewController];
-        }
-    }
-}
-
-- (PKRevealControllerType)type
-{
-    if (self.frontViewController != nil && self.leftViewController != nil && self.rightViewController != nil)
-    {
-        return PKRevealControllerTypeBoth;
-    }
-    else if (self.frontViewController != nil && self.leftViewController != nil)
-    {
-        return PKRevealControllerTypeLeft;
-    }
-    else if (self.frontViewController != nil && self.rightViewController != nil)
-    {
-        return PKRevealControllerTypeRight;
-    }
-    
-    return PKRevealControllerTypeUndefined;
-}
-
-- (UIViewController *)currentlyActiveController
-{
-    switch (self.state)
-    {
-        case PKRevealControllerShowsFrontViewController:
-            return self.frontViewController;
-            break;
-            
-        case PKRevealControllerShowsLeftViewController:
-            return self.leftViewController;
-            break;
-            
-        case PKRevealControllerShowsRightViewController:
-            return self.rightViewController;
-            break;
-            
-        default:
-            return nil;
-            break;
-    }
-}
-
 #pragma mark - Gesture Recognition
 
 - (void)didRecognizeTapWithGestureRecognizer:(UITapGestureRecognizer *)recognizer
@@ -563,7 +675,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     [self showViewController:controllerToShow animated:YES completion:NULL];
 }
 
-#pragma mark - Gesture Delegate
+#pragma mark - Gesture Delegation
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
@@ -581,7 +693,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     return YES;
 }
 
-#pragma mark - Internal
+#pragma mark - Translation
 
 - (void)moveViewsBy:(CGFloat)delta animationType:(PKRevealControllerAnimationType)animationType
 {
@@ -652,118 +764,6 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     {
         [self showViewController:self.rightViewController animated:YES completion:NULL];
     }
-}
-
-#pragma mark -
-
-- (void)addFrontViewController
-{
-    if (self.frontViewController != nil && ![self.childViewControllers containsObject:self.frontViewController])
-    {
-        [self addChildViewController:self.frontViewController];
-        [self.frontViewContainer prepareForReuseWithController:self.frontViewController];
-        
-        if (self.frontViewContainer == nil)
-        {
-            self.frontViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.frontViewController withShadow:YES];
-            self.frontViewContainer.autoresizingMask = [self autoresizingMaskForFrontViewContainer];
-        }
-        
-        self.frontViewContainer.frame = [self frontViewFrameForCurrentState];
-        [self.view addSubview:self.frontViewContainer];
-        [self.frontViewController didMoveToParentViewController:self];
-        
-        [self addTapGestureRecognizer];
-        [self addPanGestureRecognizer];
-    }
-}
-
-- (void)removeFrontViewController
-{
-    if ([self.childViewControllers containsObject:self.frontViewController])
-    {
-        [self.frontViewContainer removeFromSuperview];
-        [self.frontViewController removeFromParentViewController];
-        
-        [self removeTapGestureRecognizer];
-        [self removePanGestureRecognizer];
-    }
-}
-
-- (void)addLeftViewController
-{
-    if (self.leftViewController != nil && ![self.childViewControllers containsObject:self.leftViewController])
-    {
-        [self addChildViewController:self.leftViewController];
-        [self.leftViewContainer prepareForReuseWithController:self.leftViewController];
-        
-        if (self.leftViewContainer == nil)
-        {
-            self.leftViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.leftViewController withShadow:NO];
-            self.leftViewContainer.autoresizingMask = [self autoresizingMaskForLeftViewContainer];
-        }
-        
-        self.leftViewContainer.frame = [self leftViewFrame];
-        [self.view insertSubview:self.leftViewContainer belowSubview:self.frontViewContainer];
-        [self.leftViewController didMoveToParentViewController:self];
-    }
-}
-
-- (void)removeLeftViewController
-{
-    if ([self.childViewControllers containsObject:self.leftViewController])
-    {
-        [self.leftViewContainer removeFromSuperview];
-        [self.leftViewController removeFromParentViewController];
-    }
-}
-
-- (void)addRightViewController
-{
-    if (self.rightViewController != nil && ![self.childViewControllers containsObject:self.rightViewController])
-    {
-        [self addChildViewController:self.rightViewController];
-        [self.rightViewContainer prepareForReuseWithController:self.rightViewController];
-        
-        if (self.rightViewContainer == nil)
-        {
-            self.rightViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.rightViewController withShadow:NO];
-            self.rightViewContainer.autoresizingMask = [self autoresizingMaskForRightViewContainer];
-        }
-        
-        self.rightViewContainer.frame = [self rightViewFrame];
-        [self.view insertSubview:self.rightViewContainer belowSubview:self.frontViewContainer];
-        [self.rightViewController didMoveToParentViewController:self];
-    }
-}
-
-- (void)removeRightViewController
-{
-    if ([self.childViewControllers containsObject:self.rightViewController])
-    {
-        [self.rightViewContainer removeFromSuperview];
-        [self.rightViewController removeFromParentViewController];
-    }
-}
-
-- (void)addPanGestureRecognizer
-{
-    [self.frontViewContainer addGestureRecognizer:self.revealPanGestureRecognizer];
-}
-
-- (void)removePanGestureRecognizer
-{
-    [self.frontViewContainer removeGestureRecognizer:self.revealPanGestureRecognizer];
-}
-
-- (void)addTapGestureRecognizer
-{
-    [self.frontViewContainer addGestureRecognizer:self.revealResetTapGestureRecognizer];
-}
-
-- (void)removeTapGestureRecognizer
-{
-    [self.frontViewContainer removeGestureRecognizer:self.revealResetTapGestureRecognizer];
 }
 
 #pragma mark - Helper (Internal)

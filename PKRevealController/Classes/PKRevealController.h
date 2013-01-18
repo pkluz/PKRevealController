@@ -30,17 +30,21 @@ typedef NS_OPTIONS(NSUInteger, PKRevealControllerType)
     PKRevealControllerTypeUndefined,
     PKRevealControllerTypeLeft,
     PKRevealControllerTypeRight,
-    PKRevealControllerTypeBoth = (PKRevealControllerTypeLeft | PKRevealControllerTypeRight)
+    PKRevealControllerTypeBoth = (PKRevealControllerTypeLeft & PKRevealControllerTypeRight)
 };
 
-extern NSString * const PKRevealControllerAnimationDurationKey;
-extern NSString * const PKRevealControllerAnimationCurveKey;
-extern NSString * const PKRevealControllerLeftViewWidthRangeKey;
-extern NSString * const PKRevealControllerRightViewWidthRangeKey;
-extern NSString * const PKRevealControllerAnimationTypeKey;
-extern NSString * const PKRevealControllerAllowsOverdrawKey;
-extern NSString * const PKRevealControllerQuickSwipeToggleVelocityKey;
-extern NSString * const PKRevealControllerDisablesFrontViewInteractionKey;
+/*
+ * List of option keys that can be passed in the options dictionary.
+ * See the key's descriptions for what their respective values are.
+ */
+extern NSString * const PKRevealControllerAnimationDurationKey;             // NSNumber containing CGFloat
+extern NSString * const PKRevealControllerAnimationCurveKey;                // NSNumber containing NSInteger
+extern NSString * const PKRevealControllerLeftViewWidthRangeKey;            // NSValue containing NSRange(minWidth, maxWidth)
+extern NSString * const PKRevealControllerRightViewWidthRangeKey;           // NSValue containing NSRange(minWidth, maxWidth)
+extern NSString * const PKRevealControllerAnimationTypeKey;                 // NSNumber containing NSInteger
+extern NSString * const PKRevealControllerAllowsOverdrawKey;                // NSNumber containing BOOL
+extern NSString * const PKRevealControllerQuickSwipeToggleVelocityKey;      // NSNumber containing CGFloat
+extern NSString * const PKRevealControllerDisablesFrontViewInteractionKey;  // NSNumber containing BOOL
 
 typedef void(^PKDefaultCompletionHandler)(BOOL finished);
 typedef void(^PKDefaultErrorHandler)(NSError *error);
