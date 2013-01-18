@@ -17,7 +17,9 @@ typedef NS_ENUM(NSUInteger, PKRevealControllerState)
 {
     PKRevealControllerShowsLeftViewController,
     PKRevealControllerShowsRightViewController,
-    PKRevealControllerShowsFrontViewController
+    PKRevealControllerShowsFrontViewController,
+    PKRevealControllerShowsLeftViewControllerInPresentationMode,
+    PKRevealControllerShowsRightViewControllerInPresentationMode
 };
 
 typedef NS_ENUM(NSUInteger, PKRevealControllerAnimationType)
@@ -30,7 +32,7 @@ typedef NS_OPTIONS(NSUInteger, PKRevealControllerType)
     PKRevealControllerTypeUndefined,
     PKRevealControllerTypeLeft,
     PKRevealControllerTypeRight,
-    PKRevealControllerTypeBoth = (PKRevealControllerTypeLeft & PKRevealControllerTypeRight)
+    PKRevealControllerTypeBoth = (PKRevealControllerTypeLeft | PKRevealControllerTypeRight)
 };
 
 /*
@@ -88,6 +90,13 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 - (void)showViewController:(UIViewController *)controller
                   animated:(BOOL)animated
                 completion:(PKDefaultCompletionHandler)completion;
+
+- (void)enterPresentationModeAnimated:(BOOL)animated
+                           completion:(PKDefaultCompletionHandler)completion;
+
+- (void)resignPresentationModeEntirely:(BOOL)entirely
+                              animated:(BOOL)animated
+                            completion:(PKDefaultCompletionHandler)completion;
 
 - (void)setFrontViewController:(UIViewController *)frontViewController;
 - (void)setFrontViewController:(UIViewController *)frontViewController

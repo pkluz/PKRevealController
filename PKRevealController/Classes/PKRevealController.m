@@ -202,6 +202,34 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     }
 }
 
+
+- (void)enterPresentationModeAnimated:(BOOL)animated
+                           completion:(PKDefaultCompletionHandler)completion;
+{
+    if (self.state == PKRevealControllerShowsLeftViewController)
+    {
+        [self enterPresentationModeForLeftViewControllerAnimated:animated completion:completion];
+    }
+    else if (self.state == PKRevealControllerShowsRightViewController)
+    {
+        [self enterPresentationModeForRightViewControllerAnimated:animated completion:completion];
+    }
+}
+
+- (void)resignPresentationModeEntirely:(BOOL)entirely
+                              animated:(BOOL)animated
+                            completion:(PKDefaultCompletionHandler)completion
+{
+    if (self.state == PKRevealControllerShowsLeftViewControllerInPresentationMode)
+    {
+        [self resignPresentationModeForLeftViewControllerEntirely:entirely animated:animated completion:completion];
+    }
+    else if (self.state == PKRevealControllerShowsRightViewControllerInPresentationMode)
+    {
+        [self resignPresentationModeForRightViewControllerEntirely:entirely animated:animated completion:completion];
+    }
+}
+
 - (void)setFrontViewController:(UIViewController *)frontViewController
 {
     [self setFrontViewController:frontViewController animated:NO showAfterChange:NO completion:NULL];
@@ -227,7 +255,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
         }
         else
         {
-            (completion != NULL) ? completion(YES) : nil;
+            safelyExecuteCompletionBlock(completion, YES);
         }
     }
 }
@@ -744,7 +772,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
 
 - (void)moveFrontViewRightwardsIfPossible
 {
-    if (self.state == PKRevealControllerShowsRightViewController)
+    if (self.state == PKRevealControllerShowsRightViewController || self.state == PKRevealControllerShowsRightViewControllerInPresentationMode)
     {
         [self showViewController:self.frontViewController animated:YES completion:NULL];
     }
@@ -756,7 +784,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
 
 - (void)moveFrontViewLeftwardsIfPossible
 {
-    if (self.state == PKRevealControllerShowsLeftViewController)
+    if (self.state == PKRevealControllerShowsLeftViewController || self.state == PKRevealControllerShowsLeftViewControllerInPresentationMode)
     {
         [self showViewController:self.frontViewController animated:YES completion:NULL];
     }
@@ -782,7 +810,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
      {
          weakSelf.disablesFrontViewInteraction ? [weakSelf.frontViewContainer disableUserInteractionForContainedView] : nil;
          weakSelf.state = PKRevealControllerShowsLeftViewController;
-         (completion != NULL) ? completion(finished) : nil;
+         safelyExecuteCompletionBlock(completion, finished);
          
          [weakSelf removeRightViewController];
      }];
@@ -803,7 +831,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
      {
          weakSelf.disablesFrontViewInteraction ? [weakSelf.frontViewContainer disableUserInteractionForContainedView] : nil;
          weakSelf.state = PKRevealControllerShowsRightViewController;
-         (completion != NULL) ? completion(finished) : nil;
+         safelyExecuteCompletionBlock(completion, finished);
          
          [weakSelf removeLeftViewController];
      }];
@@ -820,14 +848,102 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
                  completion:^(BOOL finished)
      {
          weakSelf.disablesFrontViewInteraction ? [weakSelf.frontViewContainer enableUserInteractionForContainedView] : nil;
-         
          weakSelf.state = PKRevealControllerShowsFrontViewController;
-         (completion != NULL) ? completion(finished) : nil;
+         
+         safelyExecuteCompletionBlock(completion, finished);
          
          [weakSelf removeRightViewController];
          [weakSelf removeLeftViewController];
      }];
 }
+
+- (void)enterPresentationModeForLeftViewControllerAnimated:(BOOL)animated
+                                                completion:(PKDefaultCompletionHandler)completion
+{
+    __weak PKRevealController *weakSelf = self;
+    
+    [self setFrontViewFrame:[self frontViewFrameForLeftViewPresentationMode]
+                   animated:animated
+                 completion:^(BOOL finished)
+    {
+        weakSelf.state = PKRevealControllerShowsLeftViewControllerInPresentationMode;
+        safelyExecuteCompletionBlock(completion, finished);
+    }];
+}
+
+- (void)enterPresentationModeForRightViewControllerAnimated:(BOOL)animated
+                                                 completion:(PKDefaultCompletionHandler)completion
+{
+    __weak PKRevealController *weakSelf = self;
+    
+    [self setFrontViewFrame:[self frontViewFrameForRightViewPresentationMode]
+                   animated:animated
+                 completion:^(BOOL finished)
+    {
+        weakSelf.state = PKRevealControllerShowsRightViewControllerInPresentationMode;
+        safelyExecuteCompletionBlock(completion, finished);
+    }];
+}
+
+- (void)resignPresentationModeForLeftViewControllerEntirely:(BOOL)entirely
+                                                   animated:(BOOL)animated
+                                                 completion:(PKDefaultCompletionHandler)completion
+{
+    __weak PKRevealController *weakSelf = self;
+    
+    CGRect frame;
+    PKRevealControllerState state;
+    
+    if (entirely)
+    {
+        frame = [self frontViewFrameForCenter];
+        state = PKRevealControllerShowsFrontViewController;
+    }
+    else
+    {
+        frame = [self frontViewFrameForVisibleLeftView];
+        state = PKRevealControllerShowsLeftViewController;
+    }
+    
+    [self setFrontViewFrame:frame
+                   animated:animated
+                 completion:^(BOOL finished)
+    {
+        weakSelf.state = state;
+        safelyExecuteCompletionBlock(completion, finished);
+    }];
+}
+
+- (void)resignPresentationModeForRightViewControllerEntirely:(BOOL)entirely
+                                                    animated:(BOOL)animated
+                                                  completion:(PKDefaultCompletionHandler)completion
+{
+    __weak PKRevealController *weakSelf = self;
+    
+    CGRect frame;
+    PKRevealControllerState state;
+    
+    if (entirely)
+    {
+        frame = [self frontViewFrameForCenter];
+        state = PKRevealControllerShowsFrontViewController;
+    }
+    else
+    {
+        frame = [self frontViewFrameForVisibleRightView];
+        state = PKRevealControllerShowsRightViewController;
+    }
+    
+    [self setFrontViewFrame:frame
+                   animated:animated
+                 completion:^(BOOL finished)
+    {
+        weakSelf.state = state;
+        safelyExecuteCompletionBlock(completion, finished);
+    }];
+}
+
+#pragma mark -
 
 - (void)setFrontViewFrame:(CGRect)frame
                  animated:(BOOL)animated
@@ -854,7 +970,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
      }
                      completion:^(BOOL finished)
      {
-         (completion != NULL) ? completion(finished) : nil;
+         safelyExecuteCompletionBlock(completion, finished);
      }];
 }
 
@@ -959,6 +1075,20 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
 {
     CGRect frame = self.view.bounds;
     frame.origin = CGPointMake(0.0f, 0.0f);
+    return frame;
+}
+
+- (CGRect)frontViewFrameForLeftViewPresentationMode
+{
+    CGRect frame = [self frontViewFrameForCenter];
+    frame.origin.x = [self leftViewMaxWidth];
+    return frame;
+}
+
+- (CGRect)frontViewFrameForRightViewPresentationMode
+{
+    CGRect frame = [self frontViewFrameForCenter];
+    frame.origin.x = -[self rightViewMaxWidth];
     return frame;
 }
 
@@ -1095,6 +1225,22 @@ NS_INLINE BOOL isNegative(CGFloat value)
 NS_INLINE BOOL isZero(CGFloat value)
 {
     return (value == 0.0f);
+}
+
+NS_INLINE void safelyExecuteCompletionBlock(PKDefaultCompletionHandler block, BOOL param)
+{
+    dispatch_async(dispatch_get_main_queue(), ^
+    {
+        (block != NULL) ? block(param) : nil;
+    });
+}
+
+NS_INLINE void safelyExecuteErrorBlock(PKDefaultErrorHandler block, NSError *error)
+{
+    dispatch_async(dispatch_get_main_queue(), ^
+    {
+        (block != NULL) ? block(error) : nil;
+    });
 }
 
 @end

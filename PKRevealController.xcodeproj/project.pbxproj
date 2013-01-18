@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F9595E8716A9C045001E83AF /* LeftDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9595E8616A9C045001E83AF /* LeftDemoViewController.m */; };
+		F9595E8B16A9D4E2001E83AF /* RightDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9595E8A16A9D4E2001E83AF /* RightDemoViewController.m */; };
 		F96610D5168B317200A031E7 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F96610D4168B317200A031E7 /* MapKit.framework */; };
 		F9A90B3A168A76A50003D5E0 /* PKRotationPreventionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A90B39168A76A40003D5E0 /* PKRotationPreventionViewController.m */; };
 		F9A90B43168A778A0003D5E0 /* PKRevealController+Categories.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A90B42168A778A0003D5E0 /* PKRevealController+Categories.m */; };
@@ -26,6 +28,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F9595E8516A9C045001E83AF /* LeftDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftDemoViewController.h; sourceTree = "<group>"; };
+		F9595E8616A9C045001E83AF /* LeftDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftDemoViewController.m; sourceTree = "<group>"; };
+		F9595E8916A9D4E1001E83AF /* RightDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightDemoViewController.h; sourceTree = "<group>"; };
+		F9595E8A16A9D4E2001E83AF /* RightDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightDemoViewController.m; sourceTree = "<group>"; };
 		F96610D4168B317200A031E7 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		F9A90B38168A76A40003D5E0 /* PKRotationPreventionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKRotationPreventionViewController.h; sourceTree = "<group>"; };
 		F9A90B39168A76A40003D5E0 /* PKRotationPreventionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKRotationPreventionViewController.m; sourceTree = "<group>"; };
@@ -73,6 +79,10 @@
 			children = (
 				F9A90B38168A76A40003D5E0 /* PKRotationPreventionViewController.h */,
 				F9A90B39168A76A40003D5E0 /* PKRotationPreventionViewController.m */,
+				F9595E8516A9C045001E83AF /* LeftDemoViewController.h */,
+				F9595E8616A9C045001E83AF /* LeftDemoViewController.m */,
+				F9595E8916A9D4E1001E83AF /* RightDemoViewController.h */,
+				F9595E8A16A9D4E2001E83AF /* RightDemoViewController.m */,
 			);
 			name = "Demo View Controllers";
 			sourceTree = "<group>";
@@ -252,6 +262,8 @@
 				F9A90B3A168A76A50003D5E0 /* PKRotationPreventionViewController.m in Sources */,
 				F9A90B43168A778A0003D5E0 /* PKRevealController+Categories.m in Sources */,
 				F9DD514116A972B600F392F1 /* PKRevealControllerContainerView.m in Sources */,
+				F9595E8716A9C045001E83AF /* LeftDemoViewController.m in Sources */,
+				F9595E8B16A9D4E2001E83AF /* RightDemoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
