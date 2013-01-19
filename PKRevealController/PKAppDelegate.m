@@ -12,9 +12,10 @@
 
 #import "PKAppDelegate.h"
 #import "PKRevealController.h"
-#import "PKRotationPreventionViewController.h"
+#import "FrontViewController.h"
 #import "LeftDemoViewController.h"
 #import "RightDemoViewController.h"
+
 #import <MapKit/MapKit.h>
 
 @interface PKAppDelegate()
@@ -29,46 +30,34 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    UINavigationController *frontViewController = [[UINavigationController alloc] initWithRootViewController:[[PKRotationPreventionViewController alloc] init]];
+    // Step 1: Create your controllers.
+    UINavigationController *frontViewController = [[UINavigationController alloc] initWithRootViewController:[[FrontViewController alloc] init]];
     UIViewController *rightViewController = [[RightDemoViewController alloc] init];
     UIViewController *leftViewController = [[LeftDemoViewController alloc] init];
     
+    // Step 2: Configure an options dictionary for the PKRevealController. See PKRevealController.h for more option keys.
     NSDictionary *options = @{
-        PKRevealControllerAnimationTypeKey : [NSNumber numberWithInteger:PKRevealControllerAnimationTypeStatic],
-        PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES]
+        PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES],
+        PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
     };
     
+    // Step 3: Instantiate your PKRevealController.
     self.revealController = [PKRevealController revealControllerWithFrontViewController:frontViewController
                                                                      leftViewController:leftViewController
                                                                     rightViewController:rightViewController
                                                                                 options:options];
     
-    self.revealController.view.backgroundColor = [UIColor blackColor];
-    self.revealController.leftViewWidthRange = NSMakeRange(100.0f, 150.0f);
+    // Step 4: Some additional configuration to specify how much of the left view should be shown.
+    CGFloat leftViewMinWidth = CGRectGetWidth(leftViewController.view.bounds)-100.0f;
+    CGFloat leftViewMaxWidth = leftViewMinWidth + 20.0f;
+    self.revealController.leftViewWidthRange = NSMakeRange(leftViewMinWidth, leftViewMaxWidth);
     
+    // Step 5: Set it as your root view controller.
     self.window.rootViewController = self.revealController;
     
     [self.window makeKeyAndVisible];
     
-    [self.revealController showViewController:self.revealController.rightViewController];
-    
     return YES;
-}
-
-- (void)frontViewReplacement
-{
-    int64_t delayInSeconds = 3.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void)
-    {
-        UIViewController *viewController = [[LeftDemoViewController alloc] init];
-        UINavigationController *frontViewController = [[UINavigationController alloc] initWithRootViewController:viewController];
-        
-        [self.revealController setFrontViewController:frontViewController focusAfterChange:YES completion:^(void)
-        {
-            NSLog(@"Finished!");
-        }];
-    });
 }
 
 @end

@@ -362,7 +362,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     return PKRevealControllerTypeNone;
 }
 
-- (UIViewController *)currentlyFocusedController
+- (UIViewController *)focusedController
 {
     switch (self.state)
     {
@@ -684,28 +684,13 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
 
 - (void)handleGestureEndedWithRecognizer:(UIPanGestureRecognizer *)recognizer
 {
-    self.overdrawAccumulator = 0.0f;
-    
     CGFloat velocity = [recognizer velocityInView:self.view].x;
+    BOOL velocityTriggeredViewChange = [self attemptInstantViewChangeViaVelocity:velocity];
     
-    UIViewController *controllerToShow = nil;
-    
-    if (fabsf(velocity) > self.quickSwipeVelocity)
+    if (!velocityTriggeredViewChange)
     {
-        if (isPositive(velocity))
-        {
-            [self moveFrontViewRightwardsIfPossible];
-        }
-        else
-        {
-            [self moveFrontViewLeftwardsIfPossible];
-
-        }
+        UIViewController *controllerToShow = nil;
         
-        return;
-    }
-    else
-    {
         if ([self isLeftViewVisible])
         {
             BOOL showLeftView = CGRectGetWidth(CGRectIntersection(self.frontViewContainer.frame, self.leftViewContainer.frame)) <= CGRectGetMidX(self.leftViewContainer.bounds);
@@ -720,9 +705,31 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
         {
             controllerToShow = self.frontViewController;
         }
+        
+        [self showViewController:controllerToShow animated:YES completion:NULL];
+    }
+}
+
+- (BOOL)attemptInstantViewChangeViaVelocity:(CGFloat)velocity
+{
+    BOOL success = NO;
+    
+    if (fabsf(velocity) > self.quickSwipeVelocity)
+    {
+        if (isPositive(velocity))
+        {
+            [self moveFrontViewRightwardsIfPossible];
+        }
+        else
+        {
+            [self moveFrontViewLeftwardsIfPossible];
+            
+        }
+        
+        success = YES;
     }
     
-    [self showViewController:controllerToShow animated:YES completion:NULL];
+    return success;
 }
 
 #pragma mark - Gesture Delegation

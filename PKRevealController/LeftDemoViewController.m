@@ -9,11 +9,9 @@
 #import "LeftDemoViewController.h"
 #import "PKRevealController.h"
 
-@interface LeftDemoViewController ()
-
-@end
-
 @implementation LeftDemoViewController
+
+#pragma mark - View Lifecycle
 
 - (void)viewDidLoad
 {
@@ -22,7 +20,8 @@
     self.view.backgroundColor = [UIColor redColor];
     
     UIButton *toggleFrontViewButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    toggleFrontViewButton.frame = CGRectMake(0.0f, 0.0f, 200.0f, 30.0f);
+    toggleFrontViewButton.frame = CGRectMake(0.0f, 0.0f, 180.0f, 30.0f);
+    toggleFrontViewButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin);
     [toggleFrontViewButton setTitle:@"Toggle Front View" forState:UIControlStateNormal];
     [toggleFrontViewButton addTarget:self action:@selector(toggleFrontViewVisibility:) forControlEvents:UIControlEventTouchUpInside];
     toggleFrontViewButton.center = self.view.center;

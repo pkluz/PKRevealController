@@ -196,7 +196,7 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 /**
  * @return UIViewController - Returns the currently focused controller, i.e. the one that's most prominent at any given point in time. 
  */
-- (UIViewController *)currentlyFocusedController;
+- (UIViewController *)focusedController;
 
 /**
  * @return PKRevealControllerType - Returns the controller type, i.e. whether it has a left side, a right side, both or none.

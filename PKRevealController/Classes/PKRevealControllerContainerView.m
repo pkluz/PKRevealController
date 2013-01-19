@@ -27,7 +27,6 @@
     if (self != nil)
     {
         self.controller = controller;
-        //self.alpha = 0.4f;
     }
     
     return self;
@@ -40,7 +39,6 @@
     if (self != nil)
     {
         self.controller = controller;
-        // self.alpha = 0.4f;
         self.hasShadow = hasShadow;
     }
     

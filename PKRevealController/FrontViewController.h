@@ -12,6 +12,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PKRotationPreventionViewController : UIViewController
+@interface FrontViewController : UIViewController
 
 @end

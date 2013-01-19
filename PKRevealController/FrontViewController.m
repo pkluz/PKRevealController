@@ -10,12 +10,12 @@
  
  */
 
-#import "PKRotationPreventionViewController.h"
+#import "FrontViewController.h"
 #import "PKRevealController.h"
 
-@implementation PKRotationPreventionViewController
+@implementation FrontViewController
 
-#pragma mark - Setup
+#pragma mark - View Lifecycle
 
 - (void)viewDidLoad
 {
@@ -28,32 +28,22 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:revealImagePortrait landscapeImagePhone:revealImageLandscape style:UIBarButtonItemStylePlain target:self action:@selector(showLeftView:)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:revealImagePortrait landscapeImagePhone:revealImageLandscape style:UIBarButtonItemStylePlain target:self action:@selector(showRightView:)];
+    
+    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    tableView.autoresizingMask = ( UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth );
+    [self.view addSubview:tableView];
 }
 
 #pragma mark - Actions
 
 - (void)showLeftView:(id)sender
 {
-    if (self.navigationController.revealController.currentlyFocusedController == self.navigationController.revealController.leftViewController)
-    {
-        [self.navigationController.revealController showViewController:self.navigationController.revealController.frontViewController animated:YES completion:NULL];
-    }
-    else
-    {
-        [self.navigationController.revealController showViewController:self.navigationController.revealController.leftViewController animated:YES completion:NULL];
-    }
+    [self.navigationController.revealController showViewController:self.navigationController.revealController.leftViewController];
 }
 
 - (void)showRightView:(id)sender
 {
-    if (self.navigationController.revealController.currentlyFocusedController == self.navigationController.revealController.rightViewController)
-    {
-        [self.navigationController.revealController showViewController:self.navigationController.revealController.frontViewController animated:YES completion:NULL];
-    }
-    else
-    {
-        [self.navigationController.revealController showViewController:self.navigationController.revealController.rightViewController animated:YES completion:NULL];
-    }
+    [self.navigationController.revealController showViewController:self.navigationController.revealController.rightViewController];
 }
 
 #pragma mark - Autorotation
@@ -76,32 +66,6 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
     return YES;
-}
-
-#pragma mark - View Lifecycle
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    NSLog(@"Rotation Preventer View Controller Will Appear!");
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    NSLog(@"Rotation Preventer View Controller Did Appear!");
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    NSLog(@"Rotation Preventer View Controller Will Disappear!");
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    NSLog(@"Rotation Preventer View Controller Did Disappear!");
 }
 
 @end
