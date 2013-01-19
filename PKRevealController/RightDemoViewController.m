@@ -9,10 +9,6 @@
 #import "RightDemoViewController.h"
 #import "PKRevealController.h"
 
-@interface RightDemoViewController ()
-
-@end
-
 @implementation RightDemoViewController
 
 - (void)viewDidLoad
@@ -20,6 +16,8 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor purpleColor];
+    
+    [self.revealController setMinimumWidth:150.0f maximumWidth:180.0f forViewController:self];
     
     UIButton *toggleFrontViewButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     toggleFrontViewButton.frame = CGRectMake(0.0f, 0.0f, 180.0f, 30.0f);

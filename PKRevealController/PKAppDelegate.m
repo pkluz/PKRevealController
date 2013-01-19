@@ -47,13 +47,10 @@
                                                                     rightViewController:rightViewController
                                                                                 options:options];
     
-    // Step 4: Some additional configuration to specify how much of the left view should be shown.
-    CGFloat leftViewMinWidth = CGRectGetWidth(leftViewController.view.bounds)-100.0f;
-    CGFloat leftViewMaxWidth = leftViewMinWidth + 20.0f;
-    self.revealController.leftViewWidthRange = NSMakeRange(leftViewMinWidth, leftViewMaxWidth);
-    
-    // Step 5: Set it as your root view controller.
+    // Step 4: Set it as your root view controller.
     self.window.rootViewController = self.revealController;
+    
+    // Step 5: Take a look at the Left/RightDemoViewController files. They're self-sufficient as to the configuration of their reveal widths for instance.
     
     [self.window makeKeyAndVisible];
     

@@ -17,6 +17,9 @@
 {
     [super viewDidLoad];
     
+    // Each view can dynamically specify the min/max width that can be revealed.
+    [self.revealController setMinimumWidth:100.0f maximumWidth:130.0f forViewController:self];
+    
     self.view.backgroundColor = [UIColor redColor];
     
     UIButton *toggleFrontViewButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
