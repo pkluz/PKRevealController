@@ -15,11 +15,11 @@
 
 typedef NS_ENUM(NSUInteger, PKRevealControllerState)
 {
-    PKRevealControllerShowsLeftViewController,
-    PKRevealControllerShowsRightViewController,
-    PKRevealControllerShowsFrontViewController,
-    PKRevealControllerShowsLeftViewControllerInPresentationMode,
-    PKRevealControllerShowsRightViewControllerInPresentationMode
+    PKRevealControllerFocusesLeftViewController,
+    PKRevealControllerFocusesRightViewController,
+    PKRevealControllerFocusesFrontViewController,
+    PKRevealControllerFocusesLeftViewControllerInPresentationMode,
+    PKRevealControllerFocusesRightViewControllerInPresentationMode
 };
 
 typedef NS_ENUM(NSUInteger, PKRevealControllerAnimationType)
@@ -29,7 +29,7 @@ typedef NS_ENUM(NSUInteger, PKRevealControllerAnimationType)
 
 typedef NS_OPTIONS(NSUInteger, PKRevealControllerType)
 {
-    PKRevealControllerTypeUndefined,
+    PKRevealControllerTypeNone,
     PKRevealControllerTypeLeft,
     PKRevealControllerTypeRight,
     PKRevealControllerTypeBoth = (PKRevealControllerTypeLeft | PKRevealControllerTypeRight)
@@ -46,7 +46,7 @@ extern NSString * const PKRevealControllerAllowsOverdrawKey;                // N
 extern NSString * const PKRevealControllerQuickSwipeToggleVelocityKey;      // NSNumber containing CGFloat
 extern NSString * const PKRevealControllerDisablesFrontViewInteractionKey;  // NSNumber containing BOOL
 
-typedef void(^PKDefaultCompletionHandler)(BOOL finished);
+typedef void(^PKDefaultCompletionHandler)(void);
 typedef void(^PKDefaultErrorHandler)(NSError *error);
 
 @interface PKRevealController : UIViewController <UIGestureRecognizerDelegate>
@@ -67,7 +67,7 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 #pragma mark - Methods
 
 /**
- * Initializers. Options and/or left/right controllers can be added/exchanged/removed dynamically after initialization.
+ * Initializers. Left/right controllers can be added/exchanged/removed dynamically after initialization.
  */
 + (instancetype)revealControllerWithFrontViewController:(UIViewController *)frontViewController
                                      leftViewController:(UIViewController *)leftViewController
@@ -96,23 +96,29 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
                           options:(NSDictionary *)options;
 
 /**
- * Animates the front view to the position that's best suited to present the requested controller.
- * 
+ * Shifts the front view to the position that's best suited to present the desired controller's view. (Animates by default)
+ *
+ * @param UIViewController controller - This is either the left or the right view controller (if present - respectively).
+ */
+- (void)showViewController:(UIViewController *)controller;
+
+/**
+ * Shifts the front view to the position that's best suited to present the desired controller's view.
+ *
  * @param UIViewController controller - This is either the left or the right view controller (if present - respectively).
  * @param BOOL animated - Whether the frame adjustments should be animated or not.
  * @param PKDefaultCompletionHandler completion - Executed on the main thread after the show animation is completed.
  */
-- (void)showViewController:(UIViewController *)controller;
 - (void)showViewController:(UIViewController *)controller
                   animated:(BOOL)animated
                 completion:(PKDefaultCompletionHandler)completion;
 
 /**
  * Takes the currently active controller and enters presentation mode, thereby revealing the maximum width
- * of the view, which can be specified via PKRevealControllerLeft/RightViewWidthRangeKey.
+ * of the view, which can be specified via the left/rightViewWidthRange properties.
  *
  * @param BOOL animated - Whether the frame adjustments should be animated or not.
- *  @param PKDefaultCompletionHandler completion - Executed on the main thread after the show animation is completed.
+ * @param PKDefaultCompletionHandler completion - Executed on the main thread after the show animation is completed.
  */
 - (void)enterPresentationModeAnimated:(BOOL)animated
                            completion:(PKDefaultCompletionHandler)completion;
@@ -120,38 +126,80 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 /**
  * If active, this method will resign the presentation mode.
  * 
- * @param BOOL entirely - By passing YES for this parameter, the presentation mode will resign as far as the front view.
+ * @param BOOL entirely - By passing YES for this parameter, not only the presentation mode will resign, but the entire
+ *                        controller will go back to showing the front view only.
  * @param BOOL animated - Whether the frame adjustments should be animated or not.
  * @param PKDefaultCompletionHandler completion - Executed on the main thread after the show animation is completed.
  */
 - (void)resignPresentationModeEntirely:(BOOL)entirely
                               animated:(BOOL)animated
                             completion:(PKDefaultCompletionHandler)completion;
+
 /**
- * Exchanges the current FrontViewController for a new one.
+ * Exchanges the current front view controller for a new one.
  *
- * @param UIViewController frontViewController - Thew new FrontViewController.
- * @param BOOL animated - Whether the frame adjustments should be animated or not.
- * @param BOOL showAfterChange - Whether the FrontViewController snaps back to center position after it was set.
- * @param PKDefaultCompletionHandler completion - Executed on the main thread after the show animation is completed.
+ * @param UIViewController frontViewController - Thew new front view controller.
  */
 - (void)setFrontViewController:(UIViewController *)frontViewController;
+
+/**
+ * Exchanges the current front view controller for a new one.
+ *
+ * @param UIViewController frontViewController - Thew new front view controller.
+ * @param BOOL focus - Whether the front view controller's view animates back to its center position after it was set.
+ * @param PKDefaultCompletionHandler completion - Executed on the main thread after the show animation is completed.
+ */
 - (void)setFrontViewController:(UIViewController *)frontViewController
-                      animated:(BOOL)animated
-               showAfterChange:(BOOL)showAfterChange
+              focusAfterChange:(BOOL)focus
                     completion:(PKDefaultCompletionHandler)completion;
 
-// These methods add or exchange the current left/right controllers for new ones.
+/**
+ * Exchanges the current left view controller for a new one.
+ *
+ * @param UIViewController leftViewController - Thew new left view controller.
+ */
 - (void)setLeftViewController:(UIViewController *)leftViewController;
+
+/**
+ * Exchanges the current left view controller for a new one.
+ *
+ * @param UIViewController leftViewController - Thew new left view controller.
+ * @param BOOL animated - Whether the addition/replacement should be animated. If YES is passed, the front view
+ *                        will first animate to its center position, thereby concealing the sudden replacement
+ *                        of the left view.
+ * @param PKDefaultCompletionHandler completion - Executed on the main thread after the animation is completed.
+ */
+- (void)setLeftViewController:(UIViewController *)leftViewController
+                     animated:(BOOL)animated
+                   completion:(PKDefaultCompletionHandler)completion;
+
+/**
+ * Exchanges the current right view controller for a new one.
+ *
+ * @param UIViewController rightViewController - Thew new right view controller.
+ */
 - (void)setRightViewController:(UIViewController *)rightViewController;
 
 /**
- * @return UIViewController - Returns the currently active controller, i.e. the one that's most prominent at any given point in time. 
+ * Exchanges the current right view controller for a new one.
+ *
+ * @param UIViewController rightViewController - Thew new right view controller.
+ * @param BOOL animated - Whether the addition/replacement should be animated. If YES is passed, the front view
+ *                        will first animate to its center position, thereby concealing the sudden replacement
+ *                        of the right view.
+ * @param PKDefaultCompletionHandler completion - Executed on the main thread after the animation is completed.
  */
-- (UIViewController *)currentlyActiveController;
+- (void)setRightViewController:(UIViewController *)rightViewController
+                      animated:(BOOL)animated
+                    completion:(PKDefaultCompletionHandler)completion;
 
 /**
- * @return PKRevealControllerType - Returns the controller type, i.e. whether it has a left or right side or even both.
+ * @return UIViewController - Returns the currently focused controller, i.e. the one that's most prominent at any given point in time. 
+ */
+- (UIViewController *)currentlyFocusedController;
+
+/**
+ * @return PKRevealControllerType - Returns the controller type, i.e. whether it has a left side, a right side, both or none.
  */
 - (PKRevealControllerType)type;
 

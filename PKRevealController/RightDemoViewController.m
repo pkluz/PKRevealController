@@ -19,6 +19,8 @@
 {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor purpleColor];
+    
     UIButton *toggleFrontViewButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     toggleFrontViewButton.frame = CGRectMake(0.0f, 0.0f, 200.0f, 30.0f);
     [toggleFrontViewButton setTitle:@"Toggle Front View" forState:UIControlStateNormal];
@@ -29,11 +31,11 @@
 
 - (void)toggleFrontViewVisibility:(id)sender
 {
-    if (self.revealController.state == PKRevealControllerShowsRightViewControllerInPresentationMode)
+    if ([self.revealController isPresentationModeActive])
     {
         [self.revealController resignPresentationModeEntirely:NO
                                                      animated:YES
-                                                   completion:^(BOOL finished)
+                                                   completion:^(void)
          {
              NSLog(@"Resigned Presentation Mode");
          }];
@@ -41,7 +43,7 @@
     else
     {
         [self.revealController enterPresentationModeAnimated:YES
-                                                  completion:^(BOOL finished)
+                                                  completion:^(void)
          {
              NSLog(@"Entered Presentation Mode");
          }];

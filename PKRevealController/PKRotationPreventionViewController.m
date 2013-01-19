@@ -21,6 +21,8 @@
 {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor whiteColor];
+    
     UIImage *revealImagePortrait = [UIImage imageNamed:@"PKRevealController.bundle/reveal_menu_icon_portrait"];
     UIImage *revealImageLandscape = [UIImage imageNamed:@"PKRevealController.bundle/reveal_menu_icon_landscape"];
     
@@ -32,7 +34,7 @@
 
 - (void)showLeftView:(id)sender
 {
-    if (self.navigationController.revealController.currentlyActiveController == self.navigationController.revealController.leftViewController)
+    if (self.navigationController.revealController.currentlyFocusedController == self.navigationController.revealController.leftViewController)
     {
         [self.navigationController.revealController showViewController:self.navigationController.revealController.frontViewController animated:YES completion:NULL];
     }
@@ -44,7 +46,7 @@
 
 - (void)showRightView:(id)sender
 {
-    if (self.navigationController.revealController.currentlyActiveController == self.navigationController.revealController.rightViewController)
+    if (self.navigationController.revealController.currentlyFocusedController == self.navigationController.revealController.rightViewController)
     {
         [self.navigationController.revealController showViewController:self.navigationController.revealController.frontViewController animated:YES completion:NULL];
     }

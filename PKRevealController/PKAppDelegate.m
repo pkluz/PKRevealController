@@ -19,9 +19,6 @@
 
 @interface PKAppDelegate()
 
-@property (nonatomic, strong, readwrite) UIViewController *frontViewController;
-@property (nonatomic, strong, readwrite) UIViewController *leftViewController;
-@property (nonatomic, strong, readwrite) UIViewController *rightViewController;
 @property (nonatomic, strong, readwrite) PKRevealController *revealController;
 
 @end
@@ -32,32 +29,46 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    self.frontViewController = [[UINavigationController alloc] initWithRootViewController:[[PKRotationPreventionViewController alloc] init]];
-    self.rightViewController = [[RightDemoViewController alloc] init];
-    self.leftViewController = [[LeftDemoViewController alloc] init];
+    UINavigationController *frontViewController = [[UINavigationController alloc] initWithRootViewController:[[PKRotationPreventionViewController alloc] init]];
+    UIViewController *rightViewController = [[RightDemoViewController alloc] init];
+    UIViewController *leftViewController = [[LeftDemoViewController alloc] init];
     
     NSDictionary *options = @{
         PKRevealControllerAnimationTypeKey : [NSNumber numberWithInteger:PKRevealControllerAnimationTypeStatic],
         PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES]
     };
     
-    self.revealController = [PKRevealController revealControllerWithFrontViewController:self.frontViewController
-                                                                     leftViewController:self.leftViewController
-                                                                    rightViewController:self.rightViewController
+    self.revealController = [PKRevealController revealControllerWithFrontViewController:frontViewController
+                                                                     leftViewController:leftViewController
+                                                                    rightViewController:rightViewController
                                                                                 options:options];
     
     self.revealController.view.backgroundColor = [UIColor blackColor];
     self.revealController.leftViewWidthRange = NSMakeRange(100.0f, 150.0f);
     
-    self.frontViewController.view.backgroundColor = [UIColor orangeColor];
-    self.leftViewController.view.backgroundColor = [UIColor redColor];
-    self.rightViewController.view.backgroundColor = [UIColor purpleColor];
-    
     self.window.rootViewController = self.revealController;
     
     [self.window makeKeyAndVisible];
     
+    [self.revealController showViewController:self.revealController.rightViewController];
+    
     return YES;
+}
+
+- (void)frontViewReplacement
+{
+    int64_t delayInSeconds = 3.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void)
+    {
+        UIViewController *viewController = [[LeftDemoViewController alloc] init];
+        UINavigationController *frontViewController = [[UINavigationController alloc] initWithRootViewController:viewController];
+        
+        [self.revealController setFrontViewController:frontViewController focusAfterChange:YES completion:^(void)
+        {
+            NSLog(@"Finished!");
+        }];
+    });
 }
 
 @end
