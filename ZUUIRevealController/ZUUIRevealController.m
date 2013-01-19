@@ -465,21 +465,15 @@
 - (CGFloat)_calculateOffsetForTranslationInView:(CGFloat)x
 {
 	CGFloat result;
-	
 	if (x <= self.rearViewRevealWidth)
 	{
 		// Translate linearly.
 		result = x;
 	}
-	else if (x <= self.rearViewRevealWidth+(M_PI*self.maxRearViewRevealOverdraw/2.0f))
-	{
-		// and eventually slow translation slowly.
-		result = self.maxRearViewRevealOverdraw*sin((x-self.rearViewRevealWidth)/self.maxRearViewRevealOverdraw)+self.rearViewRevealWidth;
-	}
 	else
-	{
-		// ...until we hit the limit.
-		result = self.rearViewRevealWidth+self.maxRearViewRevealOverdraw;
+    {
+		// and eventually slow translation slowly.
+		result = self.maxRearViewRevealOverdraw*sin((x-self.rearViewRevealWidth)/[[UIScreen mainScreen] bounds].size.width)+self.rearViewRevealWidth;
 	}
 	
 	return result;
