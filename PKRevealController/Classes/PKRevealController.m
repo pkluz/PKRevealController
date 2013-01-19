@@ -50,8 +50,6 @@
 @property (nonatomic, assign, readwrite) BOOL disablesFrontViewInteraction;
 @property (nonatomic, assign, readwrite) CGFloat quickSwipeVelocity;
 
-@property (nonatomic, assign, readwrite) CGFloat overdrawAccumulator;
-
 @end
 
 @implementation PKRevealController
@@ -405,7 +403,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
 
 - (void)addFrontViewController
 {
-    if (![self.childViewControllers containsObject:self.frontViewController])
+    if (self.frontViewController != nil && ![self.childViewControllers containsObject:self.frontViewController])
     {
         [self addChildViewController:self.frontViewController];
         [self.frontViewContainer prepareForReuseWithController:self.frontViewController];
@@ -439,7 +437,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
 
 - (void)addLeftViewController
 {
-    if (![self.childViewControllers containsObject:self.leftViewController])
+    if (self.leftViewController != nil && ![self.childViewControllers containsObject:self.leftViewController])
     {
         [self addChildViewController:self.leftViewController];
         [self.leftViewContainer prepareForReuseWithController:self.leftViewController];
@@ -467,7 +465,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
 
 - (void)addRightViewController
 {
-    if (![self.childViewControllers containsObject:self.rightViewController])
+    if (self.rightViewController != nil && ![self.childViewControllers containsObject:self.rightViewController])
     {
         [self addChildViewController:self.rightViewController];
         [self.rightViewContainer prepareForReuseWithController:self.rightViewController];
@@ -685,51 +683,19 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
 - (void)handleGestureEndedWithRecognizer:(UIPanGestureRecognizer *)recognizer
 {
     CGFloat velocity = [recognizer velocityInView:self.view].x;
-    BOOL velocityTriggeredViewChange = [self attemptInstantViewChangeViaVelocity:velocity];
     
-    if (!velocityTriggeredViewChange)
+    if ([self shouldMoveFrontViewRightwardsForVelocity:velocity])
     {
-        UIViewController *controllerToShow = nil;
-        
-        if ([self isLeftViewVisible])
-        {
-            BOOL showLeftView = CGRectGetWidth(CGRectIntersection(self.frontViewContainer.frame, self.leftViewContainer.frame)) <= CGRectGetMidX(self.leftViewContainer.bounds);
-            controllerToShow = showLeftView ? self.leftViewController : self.frontViewController;
-        }
-        else if ([self isRightViewVisible])
-        {
-            BOOL showRightView = CGRectGetWidth(CGRectIntersection(self.frontViewContainer.frame, self.rightViewContainer.frame)) <= CGRectGetMidX(self.rightViewContainer.bounds);
-            controllerToShow = showRightView ? self.rightViewController : self.frontViewController;
-        }
-        else
-        {
-            controllerToShow = self.frontViewController;
-        }
-        
-        [self showViewController:controllerToShow animated:YES completion:NULL];
+        [self moveFrontViewRightwardsIfPossible];
     }
-}
-
-- (BOOL)attemptInstantViewChangeViaVelocity:(CGFloat)velocity
-{
-    BOOL success = NO;
-    
-    if (fabsf(velocity) > self.quickSwipeVelocity)
+    else if ([self shouldMoveFrontViewLeftwardsForVelocity:velocity])
     {
-        if (isPositive(velocity))
-        {
-            [self moveFrontViewRightwardsIfPossible];
-        }
-        else
-        {
-            [self moveFrontViewLeftwardsIfPossible];
-            
-        }
-        
-        success = YES;
+        [self moveFrontViewLeftwardsIfPossible];
     }
-    
-    return success;
+    else
+    {
+        [self snapFrontViewToClosestEdge];
+    }
 }
 
 #pragma mark - Gesture Delegation
@@ -789,37 +755,49 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     
     if (overdraw && self.allowsOverdraw)
     {
-        frame.origin.x = frame.origin.x + (delta / 2.0f);
+        frame.origin.x = floorf(frame.origin.x + (delta / 2.0f));
     }
     else if (!overdraw)
     {
         frame.origin.x += delta;
     }
     
-    self.frontViewContainer.frame = CGRectIntegral(frame);
+    self.frontViewContainer.frame = frame;
 }
 
 - (void)moveFrontViewRightwardsIfPossible
 {
-    if (self.state == PKRevealControllerFocusesRightViewController || self.state == PKRevealControllerFocusesRightViewControllerInPresentationMode)
+    CGPoint origin = self.frontViewContainer.frame.origin;
+    
+    if (isNegative(origin.x))
     {
-        [self showViewController:self.frontViewController animated:YES completion:NULL];
+        [self showViewController:self.frontViewController];
+    }
+    else if (isZero(origin.x))
+    {
+        [self showViewController:self.leftViewController];
     }
     else
     {
-        [self showViewController:self.leftViewController animated:YES completion:NULL];
+        [self showViewController:self.leftViewController];
     }
 }
 
 - (void)moveFrontViewLeftwardsIfPossible
 {
-    if (self.state == PKRevealControllerFocusesLeftViewController || self.state == PKRevealControllerFocusesLeftViewControllerInPresentationMode)
+    CGPoint origin = self.frontViewContainer.frame.origin;
+    
+    if (isNegative(origin.x))
     {
-        [self showViewController:self.frontViewController animated:YES completion:NULL];
+        [self showViewController:self.rightViewController];
+    }
+    else if (isZero(origin.x))
+    {
+        [self showViewController:self.rightViewController];
     }
     else
     {
-        [self showViewController:self.rightViewController animated:YES completion:NULL];
+        [self showViewController:self.frontViewController];
     }
 }
 
@@ -1001,6 +979,40 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
      {
          safelyExecuteCompletionBlock(completion);
      }];
+}
+
+#pragma mark - Helpers (Gestures)
+
+- (BOOL)shouldMoveFrontViewRightwardsForVelocity:(CGFloat)velocity
+{
+    return (isPositive(velocity) && velocity > self.quickSwipeVelocity);
+}
+
+- (BOOL)shouldMoveFrontViewLeftwardsForVelocity:(CGFloat)velocity
+{
+    return (isNegative(velocity) && fabsf(velocity) > self.quickSwipeVelocity);
+}
+
+- (void)snapFrontViewToClosestEdge
+{
+    UIViewController *controllerToShow = nil;
+    
+    if ([self isLeftViewVisible])
+    {
+        BOOL showLeftView = CGRectGetWidth(CGRectIntersection(self.frontViewContainer.frame, self.leftViewContainer.frame)) <= CGRectGetMidX(self.leftViewContainer.bounds);
+        controllerToShow = showLeftView ? self.leftViewController : self.frontViewController;
+    }
+    else if ([self isRightViewVisible])
+    {
+        BOOL showRightView = CGRectGetWidth(CGRectIntersection(self.frontViewContainer.frame, self.rightViewContainer.frame)) <= CGRectGetMidX(self.rightViewContainer.bounds);
+        controllerToShow = showRightView ? self.rightViewController : self.frontViewController;
+    }
+    else
+    {
+        controllerToShow = self.frontViewController;
+    }
+    
+    [self showViewController:controllerToShow animated:YES completion:NULL];
 }
 
 #pragma mark - Helpers (States)
