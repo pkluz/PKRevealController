@@ -36,6 +36,9 @@
 @property (nonatomic, strong, readwrite) PKRevealControllerContainerView *leftViewContainer;
 @property (nonatomic, strong, readwrite) PKRevealControllerContainerView *rightViewContainer;
 
+@property (nonatomic, assign, readwrite) NSRange leftViewWidthRange;
+@property (nonatomic, assign, readwrite) NSRange rightViewWidthRange;
+
 @property (nonatomic, strong, readwrite) NSDictionary *options;
 @property (nonatomic, strong, readwrite) UIPanGestureRecognizer *revealPanGestureRecognizer;
 @property (nonatomic, strong, readwrite) UITapGestureRecognizer *revealResetTapGestureRecognizer;
@@ -358,6 +361,22 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     }
     
     return PKRevealControllerTypeNone;
+}
+
+- (void)setMinimumWidth:(CGFloat)minWidth
+           maximumWidth:(CGFloat)maxWidth
+      forViewController:(UIViewController *)controller
+{
+    NSRange widthRange = NSMakeRange(minWidth, maxWidth);
+    
+    if (controller == self.leftViewController)
+    {
+        self.leftViewWidthRange = widthRange;
+    }
+    else if (controller == self.rightViewController)
+    {
+        self.rightViewWidthRange = widthRange;
+    }
 }
 
 - (UIViewController *)focusedController

@@ -58,9 +58,6 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 
 @property (nonatomic, strong, readonly) NSDictionary *options;
 
-@property (nonatomic, assign, readwrite) NSRange leftViewWidthRange;
-@property (nonatomic, assign, readwrite) NSRange rightViewWidthRange;
-
 @property (nonatomic, assign, readonly) PKRevealControllerState state;
 @property (nonatomic, assign, readonly) BOOL isPresentationModeActive;
 
@@ -145,7 +142,7 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 /**
  * Exchanges the current front view controller for a new one.
  *
- * @param UIViewController frontViewController - Thew new front view controller.
+ * @param UIViewController frontViewController - The new front view controller.
  * @param BOOL focus - Whether the front view controller's view animates back to its center position after it was set.
  * @param PKDefaultCompletionHandler completion - Executed on the main thread after the show animation is completed.
  */
@@ -163,7 +160,7 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 /**
  * Exchanges the current left view controller for a new one.
  *
- * @param UIViewController leftViewController - Thew new left view controller.
+ * @param UIViewController leftViewController - The new left view controller.
  * @param BOOL animated - Whether the addition/replacement should be animated. If YES is passed, the front view
  *                        will first animate to its center position, thereby concealing the sudden replacement
  *                        of the left view.
@@ -183,7 +180,7 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 /**
  * Exchanges the current right view controller for a new one.
  *
- * @param UIViewController rightViewController - Thew new right view controller.
+ * @param UIViewController rightViewController - The new right view controller.
  * @param BOOL animated - Whether the addition/replacement should be animated. If YES is passed, the front view
  *                        will first animate to its center position, thereby concealing the sudden replacement
  *                        of the right view.
@@ -192,6 +189,18 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 - (void)setRightViewController:(UIViewController *)rightViewController
                       animated:(BOOL)animated
                     completion:(PKDefaultCompletionHandler)completion;
+
+/**
+ * Adjusts the minimum and maximum reveal width of any given view controller's view.
+ *
+ * @param CGFloat minWidth - The default (minimum) width of the view to be shown.
+ * @param CGFloat minWidth - The maximum width of the view to be shown when overdrawing (if applicable) or
+ *                           entering presentation mode.
+ * @param UIViewController controller - The view controller whose view reveal sizing is being adjusted.
+ */
+- (void)setMinimumWidth:(CGFloat)minWidth
+           maximumWidth:(CGFloat)maxWidth
+      forViewController:(UIViewController *)controller;
 
 /**
  * @return UIViewController - Returns the currently focused controller, i.e. the one that's most prominent at any given point in time. 
