@@ -48,4 +48,26 @@
     }
 }
 
+#pragma mark - Autorotation
+
+/*
+* Please get familiar with iOS 6 new rotation handling as if you were to nest this controller within a UINavigationController,
+* the UINavigationController would _NOT_ relay rotation requests to his children on its own!
+*/
+
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskAll;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+    return YES;
+}
+
 @end

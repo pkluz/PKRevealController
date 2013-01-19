@@ -37,10 +37,8 @@
     self.leftViewController = [[LeftDemoViewController alloc] init];
     
     NSDictionary *options = @{
-        PKRevealControllerAnimationDurationKey : [NSNumber numberWithFloat:0.22f],
-        PKRevealControllerAnimationTypeKey : [NSNumber numberWithInteger:PKRevealControllerAnimationTypeLinear],
-        PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES],
-        PKRevealControllerLeftViewWidthRangeKey : [NSValue valueWithRange:NSMakeRange(280.0f, 323.0f)]
+        PKRevealControllerAnimationTypeKey : [NSNumber numberWithInteger:PKRevealControllerAnimationTypeStatic],
+        PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES]
     };
     
     self.revealController = [PKRevealController revealControllerWithFrontViewController:self.frontViewController
@@ -49,9 +47,10 @@
                                                                                 options:options];
     
     self.revealController.view.backgroundColor = [UIColor blackColor];
+    self.revealController.leftViewWidthRange = NSMakeRange(100.0f, 150.0f);
     
     self.frontViewController.view.backgroundColor = [UIColor orangeColor];
-    self.leftViewController.view.backgroundColor = [UIColor greenColor];
+    self.leftViewController.view.backgroundColor = [UIColor redColor];
     self.rightViewController.view.backgroundColor = [UIColor purpleColor];
     
     self.window.rootViewController = self.revealController;

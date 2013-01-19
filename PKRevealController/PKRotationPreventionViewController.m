@@ -71,6 +71,11 @@
     return UIInterfaceOrientationMaskAll;
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+    return YES;
+}
+
 #pragma mark - View Lifecycle
 
 - (void)viewWillAppear:(BOOL)animated

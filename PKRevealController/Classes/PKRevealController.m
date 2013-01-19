@@ -13,12 +13,12 @@
 #import "PKRevealController.h"
 #import "PKRevealControllerContainerView.h"
 
-#define DEFAULT_ANIMATION_DURATION_VALUE 0.22f
-#define DEFAULT_ANIMATION_CURVE_VALUE UIViewAnimationCurveEaseInOut
+#define DEFAULT_ANIMATION_DURATION_VALUE 0.185f
+#define DEFAULT_ANIMATION_CURVE_VALUE UIViewAnimationCurveLinear
 #define DEFAULT_LEFT_VIEW_WIDTH_RANGE NSMakeRange(280, 310)
 #define DEFAULT_RIGHT_VIEW_WIDTH_RANGE DEFAULT_LEFT_VIEW_WIDTH_RANGE
 #define DEAULT_ALLOWS_OVERDRAW_VALUE NO
-#define DEFAULT_ANIMATION_TYPE_VALUE PKRevealControllerAnimationTypeLinear
+#define DEFAULT_ANIMATION_TYPE_VALUE PKRevealControllerAnimationTypeStatic
 #define DEFAULT_QUICK_SWIPE_TOGGLE_VELOCITY_VALUE 800.0f
 #define DEFAULT_DISABLES_FRONT_VIEW_INTERACTION_VALUE YES
 
@@ -26,6 +26,7 @@
 
 #pragma mark - Properties
 @property (nonatomic, assign, readwrite) PKRevealControllerState state;
+@property (nonatomic, assign, readwrite) BOOL isPresentationModeActive;
 
 @property (nonatomic, strong, readwrite) UIViewController *frontViewController;
 @property (nonatomic, strong, readwrite) UIViewController *leftViewController;
@@ -45,11 +46,11 @@
 @property (nonatomic, assign, readwrite) CGFloat animationDuration;
 @property (nonatomic, assign, readwrite) UIViewAnimationCurve animationCurve;
 @property (nonatomic, assign, readwrite) PKRevealControllerAnimationType animationType;
-@property (nonatomic, assign, readwrite) NSRange leftViewWidthRange;
-@property (nonatomic, assign, readwrite) NSRange rightViewWidthRange;
 @property (nonatomic, assign, readwrite) BOOL allowsOverdraw;
 @property (nonatomic, assign, readwrite) BOOL disablesFrontViewInteraction;
 @property (nonatomic, assign, readwrite) CGFloat quickSwipeVelocity;
+
+@property (nonatomic, assign, readwrite) CGFloat overdrawAccumulator;
 
 @end
 
@@ -57,8 +58,6 @@
 
 NSString * const PKRevealControllerAnimationDurationKey = @"PKRevealControllerAnimationDurationKey";
 NSString * const PKRevealControllerAnimationCurveKey = @"PKRevealControllerAnimationCurveKey";
-NSString * const PKRevealControllerLeftViewWidthRangeKey = @"PKRevealControllerLeftViewWidthRangeKey";
-NSString * const PKRevealControllerRightViewWidthRangeKey = @"PKRevealControllerRightViewWidthRangeKey";
 NSString * const PKRevealControllerAnimationTypeKey = @"PKRevealControllerAnimationTypeKey";
 NSString * const PKRevealControllerAllowsOverdrawKey = @"PKRevealControllerAllowsOverdrawKey";
 NSString * const PKRevealControllerQuickSwipeToggleVelocityKey = @"PKRevealControllerQuickSwipeToggleVelocityKey";
@@ -175,6 +174,8 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
 - (void)commonInitializer
 {
     self.state = PKRevealControllerShowsFrontViewController;
+    self.leftViewWidthRange = DEFAULT_LEFT_VIEW_WIDTH_RANGE;
+    self.rightViewWidthRange = DEFAULT_RIGHT_VIEW_WIDTH_RANGE;
 }
 
 #pragma mark - API
@@ -237,7 +238,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
 
 - (void)setFrontViewController:(UIViewController *)frontViewController
                       animated:(BOOL)animated
-               showAfterChange:(BOOL)show
+               showAfterChange:(BOOL)showAfterChange
                     completion:(PKDefaultCompletionHandler)completion
 {
     if (_frontViewController != frontViewController)
@@ -249,7 +250,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
         
         [self addFrontViewController];
         
-        if (show)
+        if (showAfterChange)
         {
             [self showViewController:self.frontViewController animated:animated completion:completion];
         }
@@ -342,6 +343,12 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
             return nil;
             break;
     }
+}
+
+- (BOOL)isPresentationModeActive
+{
+    return (self.state == PKRevealControllerShowsLeftViewControllerInPresentationMode
+            || self.state == PKRevealControllerShowsRightViewControllerInPresentationMode);
 }
 
 #pragma mark - View Lifecycle (System)
@@ -505,8 +512,6 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     self.animationDuration = [self extractAnimationDurationFromOptions];
     self.animationCurve = [self extractAnimationCurveFromOptions];
     self.animationType = [self extractAnimationTypeFromOptions];
-    self.leftViewWidthRange = [self extractLeftViewWidthRangeFromOptions];
-    self.rightViewWidthRange = [self extractRightViewWidthRangeFromOptions];
     self.allowsOverdraw = [self extractAllowsOverdrawFromOptions];
     self.quickSwipeVelocity = [self extractQuickSwipeToggleVelocityFromOptions];
     self.disablesFrontViewInteraction = [self extractDisablesFrontViewInteractionFromOptions];
@@ -536,30 +541,6 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     }
     
     return DEFAULT_ANIMATION_CURVE_VALUE;
-}
-
-- (NSRange)extractLeftViewWidthRangeFromOptions
-{
-    NSValue *range = [self.options objectForKey:PKRevealControllerLeftViewWidthRangeKey];
-    
-    if (range != nil)
-    {
-        return [range rangeValue];
-    }
-    
-    return DEFAULT_LEFT_VIEW_WIDTH_RANGE;
-}
-
-- (NSRange)extractRightViewWidthRangeFromOptions
-{
-    NSValue *range = [self.options objectForKey:PKRevealControllerRightViewWidthRangeKey];
-    
-    if (range != nil)
-    {
-        return [range rangeValue];
-    }
-    
-    return DEFAULT_RIGHT_VIEW_WIDTH_RANGE;
 }
 
 - (PKRevealControllerAnimationType)extractAnimationTypeFromOptions
@@ -656,7 +637,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     CGPoint currentTouchLocation = [recognizer locationInView:self.view];
     CGFloat delta = currentTouchLocation.x - self.previousTouchLocation.x;
     
-    [self moveViewsBy:delta animationType:[self animationType]];
+    [self translateViewsBy:delta animationType:[self animationType]];
     [self adjustLeftAndRightViewVisibilities];
     
     self.previousTouchLocation = currentTouchLocation;
@@ -664,6 +645,8 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
 
 - (void)handleGestureEndedWithRecognizer:(UIPanGestureRecognizer *)recognizer
 {
+    self.overdrawAccumulator = 0.0f;
+    
     CGFloat velocity = [recognizer velocityInView:self.view].x;
     
     UIViewController *controllerToShow = nil;
@@ -723,7 +706,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
 
 #pragma mark - Translation
 
-- (void)moveViewsBy:(CGFloat)delta animationType:(PKRevealControllerAnimationType)animationType
+- (void)translateViewsBy:(CGFloat)delta animationType:(PKRevealControllerAnimationType)animationType
 {
     CGRect frame = self.frontViewContainer.frame;
     CGRect frameForFrontViewCenter = [self frontViewFrameForCenter];
@@ -747,27 +730,27 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     {
         BOOL isOverdrawing = (!isLegalNormalTranslation && isLegalOverdrawTranslation);
         
-        if (animationType == PKRevealControllerAnimationTypeLinear)
+        if (animationType == PKRevealControllerAnimationTypeStatic)
         {
-            [self moveViewsLinearlyBy:delta isOverdrawing:isOverdrawing];
+            [self staticTranslationForViewsBy:delta isOverdrawing:isOverdrawing];
         }
     }
 }
 
-- (void)moveViewsLinearlyBy:(CGFloat)delta isOverdrawing:(BOOL)overdraw
+- (void)staticTranslationForViewsBy:(CGFloat)delta isOverdrawing:(BOOL)overdraw
 {
     CGRect frame = self.frontViewContainer.frame;
     
     if (overdraw && self.allowsOverdraw)
     {
-        frame.origin.x += delta / 2.0f;
+        frame.origin.x = frame.origin.x + (delta / 2.0f);
     }
     else if (!overdraw)
     {
         frame.origin.x += delta;
     }
     
-    self.frontViewContainer.frame = frame;
+    self.frontViewContainer.frame = CGRectIntegral(frame);
 }
 
 - (void)moveFrontViewRightwardsIfPossible
@@ -952,7 +935,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     CGFloat duration = [self animationDuration];
     UIViewAnimationOptions options = (UIViewAnimationOptionBeginFromCurrentState | [self animationCurve]);
     
-    if (self.animationType == PKRevealControllerAnimationTypeLinear)
+    if (self.animationType == PKRevealControllerAnimationTypeStatic)
     {
         [self setFrontViewFrameLinearly:frame animated:animated duration:duration options:options completion:completion];
     }
@@ -1107,7 +1090,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     CGRect frame = self.frontViewContainer.bounds;
     
     
-    if (self.animationType == PKRevealControllerAnimationTypeLinear)
+    if (self.animationType == PKRevealControllerAnimationTypeStatic)
     {
         frame.size = CGSizeMake([self rightViewMaxWidth], CGRectGetHeight(self.view.bounds));
         frame.origin.x = CGRectGetWidth(self.frontViewContainer.bounds)-CGRectGetWidth(frame);
@@ -1186,6 +1169,13 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     {
         return self.frontViewController.supportedInterfaceOrientations;
     }
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+    return [self.frontViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation]
+        && [self.leftViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation]
+        && [self.rightViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation];
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
