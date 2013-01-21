@@ -13,8 +13,11 @@ PKRevealController is a delightful view controller container for iOS, enabling y
 ##How-To
 You can either simply drag and drop the `PKRevealControllerClasses` folder into your existing project or you can add the library as a submodule and reference the project from within your own.
 
+###Setup
+--
 1. `#import "PKRevealController.h"` wherever you require access to it.
-2. Setup an options dictionary if you wish to have more granular control over the controller's behaviour:
+
+2. Instantiate an options dictionary if you wish to have more granular control over the controller's behaviour:
 
     ``` objective-c
     NSDictionary *options = @{
@@ -22,10 +25,44 @@ You can either simply drag and drop the `PKRevealControllerClasses` folder into 
         PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
     };
     ```
+    <small>__PKRevealController.h__ contains a list of all the specifiable options.</small>
             
-3. Instantiate the view controllers you wish to present within the reveal controller and pass them as parameters to the initializer of your choice:
+3. Instantiate the view controllers you wish to present within the reveal controller and pass them as parameters to the initializer of your choice along with the options dictionary (or `nil` for default behaviour):
 
-    `ds`
+    ``` objective-c
+    PKRevealController *revealController = [PKRevealController revealControllerWithFrontViewController:frontVC leftViewController:leftVC options:options];
+    ```
+    <small>__Convenience initializer__ for a one-sided reveal controller.</small>
+
+4. Assign the controller as your root view controller:
+	``` objective-c
+    self.window.rootViewController = revealController;
+	```
+	
+###Usage
+--
+By importing the `PKRevealController.h` file you automatically import an Objective-C category which extends all UIViewController's and its descendants with a `revealController` property just like the UINavigationController's `navigationController` property does.
+
+####Configuring the views
+Each of the side controllers that are managed by your reveal controller can specify their own reveal-widths. 
+For instance in their `viewDidLoad` method:	
+
+```
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self.revealController setMinimumWidth:220.0f maximumWidth:244.0f forViewController:self];
+}
+```
+
+###Sending messages between controllers
+It is really easy to send messages between controllers, as the `revealController` exposes each of those as properties. For instance, from you left view controller you can easily print a description of the front view controller like this:
+``` objective-c
+[self.revealController.frontViewController description];
+```
+
+###And more…
+Please have a look at the [PKRevealController.h](https://github.com/pkluz/ZUUIRevealController/blob/development/PKRevealController/Classes/PKRevealController.h) file to see a detailed documentation of the entire API the controller provides.
 
 ##License
 PKRevealController - Copyright (C) 2012 Philip Kluz (Philip.Kluz@zuui.org)
