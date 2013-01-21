@@ -161,13 +161,9 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
  * Exchanges the current left view controller for a new one.
  *
  * @param UIViewController leftViewController - The new left view controller.
- * @param BOOL animated - Whether the addition/replacement should be animated. If YES is passed, the front view
- *                        will first animate to its center position, thereby concealing the sudden replacement
- *                        of the left view.
  * @param PKDefaultCompletionHandler completion - Executed on the main thread after the animation is completed.
  */
 - (void)setLeftViewController:(UIViewController *)leftViewController
-                     animated:(BOOL)animated
                    completion:(PKDefaultCompletionHandler)completion;
 
 /**
@@ -181,13 +177,9 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
  * Exchanges the current right view controller for a new one.
  *
  * @param UIViewController rightViewController - The new right view controller.
- * @param BOOL animated - Whether the addition/replacement should be animated. If YES is passed, the front view
- *                        will first animate to its center position, thereby concealing the sudden replacement
- *                        of the right view.
  * @param PKDefaultCompletionHandler completion - Executed on the main thread after the animation is completed.
  */
 - (void)setRightViewController:(UIViewController *)rightViewController
-                      animated:(BOOL)animated
                     completion:(PKDefaultCompletionHandler)completion;
 
 /**

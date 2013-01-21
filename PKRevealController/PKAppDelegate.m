@@ -18,12 +18,6 @@
 
 #import <MapKit/MapKit.h>
 
-@interface PKAppDelegate()
-
-@property (nonatomic, strong, readwrite) PKRevealController *revealController;
-
-@end
-
 @implementation PKAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -37,8 +31,8 @@
     
     // Step 2: Configure an options dictionary for the PKRevealController. See PKRevealController.h for more option keys.
     NSDictionary *options = @{
-        PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES],
-        PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
+    PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES],
+    PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
     };
     
     // Step 3: Instantiate your PKRevealController.
@@ -50,11 +44,10 @@
     // Step 4: Set it as your root view controller.
     self.window.rootViewController = self.revealController;
     
-    // Step 5: Take a look at the Left/RightDemoViewController files. They're self-sufficient as to the configuration of their reveal widths for instance.
-    
     [self.window makeKeyAndVisible];
-    
     return YES;
+    
+    // Step 5: Take a look at the Left/RightDemoViewController files. They're self-sufficient as to the configuration of their reveal widths for instance.
 }
 
 @end

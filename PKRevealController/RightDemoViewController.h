@@ -10,4 +10,8 @@
 
 @interface RightDemoViewController : UIViewController
 
+#pragma mark - Methods
+- (IBAction)showOppositeView:(id)sender;
+- (IBAction)togglePresentationMode:(id)sender;
+
 @end

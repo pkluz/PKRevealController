@@ -15,37 +15,29 @@
 {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor purpleColor];
-    
-    [self.revealController setMinimumWidth:150.0f maximumWidth:180.0f forViewController:self];
-    
-    UIButton *toggleFrontViewButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    toggleFrontViewButton.frame = CGRectMake(0.0f, 0.0f, 180.0f, 30.0f);
-    toggleFrontViewButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin);
-    [toggleFrontViewButton setTitle:@"Toggle Presentation" forState:UIControlStateNormal];
-    [toggleFrontViewButton addTarget:self action:@selector(toggleFrontViewVisibility:) forControlEvents:UIControlEventTouchUpInside];
-    toggleFrontViewButton.center = self.view.center;
-    [self.view addSubview:toggleFrontViewButton];
+    // Each view can dynamically specify the min/max width that can be revealed.
+    [self.revealController setMinimumWidth:220.0f maximumWidth:244.0f forViewController:self];
 }
 
-- (void)toggleFrontViewVisibility:(id)sender
+#pragma mark - API
+
+- (IBAction)showOppositeView:(id)sender
 {
-    if ([self.revealController isPresentationModeActive])
+    [self.revealController showViewController:self.revealController.leftViewController];
+}
+
+- (IBAction)togglePresentationMode:(id)sender
+{
+    if (![self.revealController isPresentationModeActive])
     {
-        [self.revealController resignPresentationModeEntirely:NO
-                                                     animated:YES
-                                                   completion:^(void)
-        {
-            NSLog(@"Resigned Presentation Mode");
-        }];
+        [self.revealController enterPresentationModeAnimated:YES
+                                                  completion:NULL];
     }
     else
     {
-        [self.revealController enterPresentationModeAnimated:YES
-                                                  completion:^(void)
-        {
-            NSLog(@"Entered Presentation Mode");
-        }];
+        [self.revealController resignPresentationModeEntirely:NO
+                                                     animated:YES
+                                                   completion:NULL];
     }
 }
 

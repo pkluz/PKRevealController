@@ -9,9 +9,14 @@
 /* Begin PBXBuildFile section */
 		F9595E8716A9C045001E83AF /* LeftDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9595E8616A9C045001E83AF /* LeftDemoViewController.m */; };
 		F9595E8B16A9D4E2001E83AF /* RightDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9595E8A16A9D4E2001E83AF /* RightDemoViewController.m */; };
+		F9595ECD16AB31FA001E83AF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F9595ECC16AB31FA001E83AF /* README.md */; };
 		F96610D5168B317200A031E7 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F96610D4168B317200A031E7 /* MapKit.framework */; };
 		F9A90B3A168A76A50003D5E0 /* FrontViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A90B39168A76A40003D5E0 /* FrontViewController.m */; };
 		F9A90B43168A778A0003D5E0 /* PKRevealController+Categories.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A90B42168A778A0003D5E0 /* PKRevealController+Categories.m */; };
+		F9AD1E9316ACAAFD00283B1F /* LeftDemoViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9AD1E9216ACAAFD00283B1F /* LeftDemoViewController~iphone.xib */; };
+		F9AD1E9616ACAC5D00283B1F /* LeftDemoViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9AD1E9516ACAC5D00283B1F /* LeftDemoViewController~ipad.xib */; };
+		F9AD1E9916ACACE000283B1F /* RightDemoViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9AD1E9716ACACE000283B1F /* RightDemoViewController~ipad.xib */; };
+		F9AD1E9A16ACACE000283B1F /* RightDemoViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9AD1E9816ACACE000283B1F /* RightDemoViewController~iphone.xib */; };
 		F9DD513C16A9729700F392F1 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F9DD513916A9729700F392F1 /* Default-568h@2x.png */; };
 		F9DD513D16A9729700F392F1 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F9DD513A16A9729700F392F1 /* Default.png */; };
 		F9DD513E16A9729700F392F1 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F9DD513B16A9729700F392F1 /* Default@2x.png */; };
@@ -32,11 +37,16 @@
 		F9595E8616A9C045001E83AF /* LeftDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftDemoViewController.m; sourceTree = "<group>"; };
 		F9595E8916A9D4E1001E83AF /* RightDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightDemoViewController.h; sourceTree = "<group>"; };
 		F9595E8A16A9D4E2001E83AF /* RightDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightDemoViewController.m; sourceTree = "<group>"; };
+		F9595ECC16AB31FA001E83AF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
 		F96610D4168B317200A031E7 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		F9A90B38168A76A40003D5E0 /* FrontViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrontViewController.h; sourceTree = "<group>"; };
 		F9A90B39168A76A40003D5E0 /* FrontViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrontViewController.m; sourceTree = "<group>"; };
 		F9A90B41168A778A0003D5E0 /* PKRevealController+Categories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "PKRevealController+Categories.h"; path = "Classes/PKRevealController+Categories.h"; sourceTree = "<group>"; };
 		F9A90B42168A778A0003D5E0 /* PKRevealController+Categories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PKRevealController+Categories.m"; path = "Classes/PKRevealController+Categories.m"; sourceTree = "<group>"; };
+		F9AD1E9216ACAAFD00283B1F /* LeftDemoViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LeftDemoViewController~iphone.xib"; sourceTree = "<group>"; };
+		F9AD1E9516ACAC5D00283B1F /* LeftDemoViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LeftDemoViewController~ipad.xib"; sourceTree = "<group>"; };
+		F9AD1E9716ACACE000283B1F /* RightDemoViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "RightDemoViewController~ipad.xib"; sourceTree = "<group>"; };
+		F9AD1E9816ACACE000283B1F /* RightDemoViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "RightDemoViewController~iphone.xib"; sourceTree = "<group>"; };
 		F9DD513916A9729700F392F1 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/Default-568h@2x.png"; sourceTree = "<group>"; };
 		F9DD513A16A9729700F392F1 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Default.png; sourceTree = "<group>"; };
 		F9DD513B16A9729700F392F1 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Default@2x.png"; sourceTree = "<group>"; };
@@ -81,8 +91,12 @@
 				F9A90B39168A76A40003D5E0 /* FrontViewController.m */,
 				F9595E8516A9C045001E83AF /* LeftDemoViewController.h */,
 				F9595E8616A9C045001E83AF /* LeftDemoViewController.m */,
+				F9AD1E9216ACAAFD00283B1F /* LeftDemoViewController~iphone.xib */,
+				F9AD1E9516ACAC5D00283B1F /* LeftDemoViewController~ipad.xib */,
 				F9595E8916A9D4E1001E83AF /* RightDemoViewController.h */,
 				F9595E8A16A9D4E2001E83AF /* RightDemoViewController.m */,
+				F9AD1E9716ACACE000283B1F /* RightDemoViewController~ipad.xib */,
+				F9AD1E9816ACACE000283B1F /* RightDemoViewController~iphone.xib */,
 			);
 			name = "Demo View Controllers";
 			sourceTree = "<group>";
@@ -169,6 +183,7 @@
 			children = (
 				F9E6F1AC1688B76F00C7CF25 /* PKAppDelegate.h */,
 				F9E6F1AD1688B76F00C7CF25 /* PKAppDelegate.m */,
+				F9595ECC16AB31FA001E83AF /* README.md */,
 				F9DD514216A972BA00F392F1 /* PKRevealController */,
 				F9A90B3F168A76B70003D5E0 /* Demo View Controllers */,
 				F9E6F1A41688B76F00C7CF25 /* Supporting Files */,
@@ -246,6 +261,11 @@
 				F9DD513D16A9729700F392F1 /* Default.png in Resources */,
 				F9DD513E16A9729700F392F1 /* Default@2x.png in Resources */,
 				F9DD514516A9735600F392F1 /* PKRevealController.bundle in Resources */,
+				F9595ECD16AB31FA001E83AF /* README.md in Resources */,
+				F9AD1E9316ACAAFD00283B1F /* LeftDemoViewController~iphone.xib in Resources */,
+				F9AD1E9616ACAC5D00283B1F /* LeftDemoViewController~ipad.xib in Resources */,
+				F9AD1E9916ACACE000283B1F /* RightDemoViewController~ipad.xib in Resources */,
+				F9AD1E9A16ACACE000283B1F /* RightDemoViewController~iphone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

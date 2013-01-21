@@ -31,19 +31,33 @@
     
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     tableView.autoresizingMask = ( UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth );
-    [self.view addSubview:tableView];
+    // [self.view addSubview:tableView];
 }
 
 #pragma mark - Actions
 
 - (void)showLeftView:(id)sender
 {
-    [self.navigationController.revealController showViewController:self.navigationController.revealController.leftViewController];
+    if (self.navigationController.revealController.focusedController == self.navigationController.revealController.leftViewController)
+    {
+        [self.navigationController.revealController showViewController:self.navigationController.revealController.frontViewController];
+    }
+    else
+    {
+        [self.navigationController.revealController showViewController:self.navigationController.revealController.leftViewController];
+    }
 }
 
 - (void)showRightView:(id)sender
 {
-    [self.navigationController.revealController showViewController:self.navigationController.revealController.rightViewController];
+    if (self.navigationController.revealController.focusedController == self.navigationController.revealController.rightViewController)
+    {
+        [self.navigationController.revealController showViewController:self.navigationController.revealController.frontViewController];
+    }
+    else
+    {
+        [self.navigationController.revealController showViewController:self.navigationController.revealController.rightViewController];
+    }
 }
 
 #pragma mark - Autorotation
