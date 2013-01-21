@@ -18,8 +18,8 @@ You can either simply drag and drop the `PKRevealControllerClasses` folder into 
 
     ``` objective-c
     NSDictionary *options = @{
-    PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES],
-    PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
+        PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES],
+        PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
     };
     ```
             
