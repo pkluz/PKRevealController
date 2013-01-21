@@ -1,4 +1,5 @@
-# PKRevealController <span style="font-weight:normal">(ZUUIRevealController)</span>
+<center>![PKRevealController](https://raw.github.com/pkluz/ZUUIRevealController/development/README/PKRevealController.png)</center>
+
 PKRevealController is a delightful view controller container for iOS, enabling you to present multiple controllers on top of one another. It is easy to set-up and highly flexible.
 
 >The PKRevealController is the evolution of the ZUUIRevealController but **not API compatible** with any previous versions. The entire controller was rewritten from the ground up and major changes were inevitable. If you wish to access the older versions, please download one of the [tags](https://github.com/pkluz/ZUUIRevealController/tags) or checkout the [deprecated](https://github.com/pkluz/ZUUIRevealController/tree/deprecated) branch.
