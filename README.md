@@ -1,15 +1,30 @@
 # PKRevealController <span style="font-weight:normal">(ZUUIRevealController)</span>
 PKRevealController is a delightful view controller container for iOS, enabling you to present multiple controllers on top of one another. It is easy to set-up and highly flexible.
 
->The PKRevealController is the evolution of the ZUUIRevealController but **not API compatible** with any previous versions! The entire controller was rewritten from the ground up and major changes were inevitable. If you wish to access the older versions, please download one of the [tags](https://github.com/pkluz/ZUUIRevealController/tags) or checkout the [deprecated](https://github.com/pkluz/ZUUIRevealController/tree/deprecated) branch.
+>The PKRevealController is the evolution of the ZUUIRevealController but **not API compatible** with any previous versions. The entire controller was rewritten from the ground up and major changes were inevitable. If you wish to access the older versions, please download one of the [tags](https://github.com/pkluz/ZUUIRevealController/tags) or checkout the [deprecated](https://github.com/pkluz/ZUUIRevealController/tree/deprecated) branch.
 
 ##Features
-- Proper view controller containment usage.
-- Elegant block API.
-- Supports both left and right sided view presentation.
-- Works on both iPhones & iPads.
-- Supports landscape & portrait orientations.
- 
+- Proper view controller containment usage
+- Elegant block API
+- Supports both left and right sided view presentation
+- Works on both iPhones & iPads
+- Supports landscape & portrait orientations
+
+##How-To
+You can either simply drag and drop the `PKRevealControllerClasses` folder into your existing project or you can add the library as a submodule and reference the project from within your own.
+
+1. `#import "PKRevealController.h"` wherever you require access to it.
+2. Setup an options dictionary if you wish to have more granular control over the controller's behaviour:
+
+	``` objective-cNSDictionary *options = @{
+        PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES],
+        PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
+            };```
+            
+3. Instantiate the view controllers you wish to present within the reveal controller and pass them as parameters to the initializer of your choice:
+
+    `ds`
+
 ##License
 PKRevealController - Copyright (C) 2012 Philip Kluz (Philip.Kluz@zuui.org)
  
