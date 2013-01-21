@@ -16,10 +16,12 @@ You can either simply drag and drop the `PKRevealControllerClasses` folder into 
 1. `#import "PKRevealController.h"` wherever you require access to it.
 2. Setup an options dictionary if you wish to have more granular control over the controller's behaviour:
 
-	``` objective-cNSDictionary *options = @{
-        PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES],
-        PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
-            };```
+	``` objective-c
+	NSDictionary *options = @{
+	PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES],
+	PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
+    };
+    ```
             
 3. Instantiate the view controllers you wish to present within the reveal controller and pass them as parameters to the initializer of your choice:
 
