@@ -20,20 +20,18 @@ You can either simply drag and drop the `PKRevealControllerClasses` folder into 
 2. Instantiate an options dictionary if you wish to have more granular control over the controller's behaviour:
 
     ``` objective-c
+    // PKRevealController.h contains a list of all the specifiable options
     NSDictionary *options = @{
         PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES],
         PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
     };
     ```
-    __PKRevealController.h contains a list of all the specifiable options_
-            
 3. Instantiate the view controllers you wish to present within the reveal controller and pass them as parameters to the initializer of your choice along with the options dictionary (or `nil` for default behaviour):
 
     ``` objective-c
+    // Convenience initializer for a one-sided reveal controller.
     PKRevealController *revealController = [PKRevealController revealControllerWithFrontViewController:frontVC leftViewController:leftVC options:options];
     ```
-    <small>__Convenience initializer__ for a one-sided reveal controller.</small>
-
 4. Assign the controller as your root view controller:
 	``` objective-c
     self.window.rootViewController = revealController;
@@ -41,7 +39,7 @@ You can either simply drag and drop the `PKRevealControllerClasses` folder into 
 	
 ###Usage
 --
-By importing the `PKRevealController.h` file you automatically import an Objective-C category which extends all UIViewController's and its descendants with a `revealController` property just like the UINavigationController's `navigationController` property does.
+By importing the `PKRevealController.h` file you automatically import an Objective-C category which extends all UIViewControllers and its descendants with a `revealController` property. The result is a behaviour similar to the familiar `navigationController` property.
 
 ####Configuring the views
 Each of the side controllers that are managed by your reveal controller can specify their own reveal-widths. 
