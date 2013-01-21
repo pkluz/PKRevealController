@@ -25,7 +25,7 @@ You can either simply drag and drop the `PKRevealControllerClasses` folder into 
         PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
     };
     ```
-    <small>__PKRevealController.h__ contains a list of all the specifiable options.</small>
+    __PKRevealController.h contains a list of all the specifiable options_
             
 3. Instantiate the view controllers you wish to present within the reveal controller and pass them as parameters to the initializer of your choice along with the options dictionary (or `nil` for default behaviour):
 
