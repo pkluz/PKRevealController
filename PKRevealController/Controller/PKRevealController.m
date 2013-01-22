@@ -425,7 +425,6 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
         [self.view addSubview:self.frontViewContainer];
         [self.frontViewController didMoveToParentViewController:self];
         
-        [self addTapGestureRecognizer];
         [self addPanGestureRecognizer];
     }
 }
@@ -437,7 +436,6 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
         [self.frontViewContainer removeFromSuperview];
         [self.frontViewController removeFromParentViewController];
         
-        [self removeTapGestureRecognizer];
         [self removePanGestureRecognizer];
     }
 }
@@ -825,6 +823,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
              weakSelf.disablesFrontViewInteraction ? [weakSelf.frontViewContainer disableUserInteractionForContainedView] : nil;
              weakSelf.state = PKRevealControllerFocusesLeftViewController;
              [weakSelf removeRightViewControllerFromHierarchy];
+             [weakSelf addTapGestureRecognizer];
              safelyExecuteCompletionBlock(completion);
          }];
     };
@@ -860,6 +859,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
          {
              weakSelf.disablesFrontViewInteraction ? [weakSelf.frontViewContainer disableUserInteractionForContainedView] : nil;
              weakSelf.state = PKRevealControllerFocusesRightViewController;
+             [weakSelf addTapGestureRecognizer];
              safelyExecuteCompletionBlock(completion);
          }];
     };
@@ -892,6 +892,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
          weakSelf.state = PKRevealControllerFocusesFrontViewController;
          [weakSelf removeRightViewControllerFromHierarchy];
          [weakSelf removeLeftViewControllerFromHierarchy];
+         [weakSelf removeTapGestureRecognizer];
          safelyExecuteCompletionBlock(completion);
      }];
 }
