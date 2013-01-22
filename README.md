@@ -12,7 +12,7 @@ PKRevealController is a delightful view controller container for iOS, enabling y
 - Supports landscape & portrait orientations
 
 ##How-To
-You can either simply drag and drop the `PKRevealControllerClasses` folder into your existing project or you can add the library as a submodule and reference the project from within your own.
+You can either simply drag and drop the `PKRevealController/Controller` folder into your existing project or add the library as a submodule and reference `PKRevealController.xcodeproj` from within your own project.
 
 ###Setup
 --
