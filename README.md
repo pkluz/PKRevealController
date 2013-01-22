@@ -61,7 +61,7 @@ It is really easy to send messages between controllers, as the `revealController
 ```
 
 ###And more…
-Please have a look at the [PKRevealController.h](https://github.com/pkluz/ZUUIRevealController/blob/development/PKRevealController/Classes/PKRevealController.h) file to see a detailed documentation of the entire API the controller provides.
+Please have a look at the [PKRevealController.h](https://github.com/pkluz/ZUUIRevealController/blob/development/PKRevealController/Controller/PKRevealController.h) file to see a detailed documentation of the entire API the controller provides.
 
 ##License
 PKRevealController - Copyright (C) 2012 Philip Kluz (Philip.Kluz@zuui.org)
