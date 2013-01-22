@@ -26,12 +26,19 @@
     UIImage *revealImagePortrait = [UIImage imageNamed:@"PKRevealController.bundle/reveal_menu_icon_portrait"];
     UIImage *revealImageLandscape = [UIImage imageNamed:@"PKRevealController.bundle/reveal_menu_icon_landscape"];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:revealImagePortrait landscapeImagePhone:revealImageLandscape style:UIBarButtonItemStylePlain target:self action:@selector(showLeftView:)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:revealImagePortrait landscapeImagePhone:revealImageLandscape style:UIBarButtonItemStylePlain target:self action:@selector(showRightView:)];
+    if (self.navigationController.revealController.type & PKRevealControllerTypeLeft)
+    {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:revealImagePortrait landscapeImagePhone:revealImageLandscape style:UIBarButtonItemStylePlain target:self action:@selector(showLeftView:)];
+    }
+    
+    if (self.navigationController.revealController.type & PKRevealControllerTypeRight)
+    {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:revealImagePortrait landscapeImagePhone:revealImageLandscape style:UIBarButtonItemStylePlain target:self action:@selector(showRightView:)];
+    }
     
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     tableView.autoresizingMask = ( UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth );
-    // [self.view addSubview:tableView];
+    [self.view addSubview:tableView];
 }
 
 #pragma mark - Actions

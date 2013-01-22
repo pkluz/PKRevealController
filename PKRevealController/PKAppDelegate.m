@@ -29,17 +29,19 @@
     UIViewController *rightViewController = [[RightDemoViewController alloc] init];
     UIViewController *leftViewController = [[LeftDemoViewController alloc] init];
     
-    // Step 2: Configure an options dictionary for the PKRevealController. See PKRevealController.h for more option keys.
+    // Step 2: Configure an options dictionary for the PKRevealController if necessary - in most cases the default behaviour should suffice. See PKRevealController.h for more option keys.
+    /*
     NSDictionary *options = @{
-    PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES],
-    PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
+        PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES],
+        PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
     };
+    */
     
     // Step 3: Instantiate your PKRevealController.
     self.revealController = [PKRevealController revealControllerWithFrontViewController:frontViewController
                                                                      leftViewController:leftViewController
                                                                     rightViewController:rightViewController
-                                                                                options:options];
+                                                                                options:nil];
     
     // Step 4: Set it as your root view controller.
     self.window.rootViewController = self.revealController;

@@ -17,7 +17,7 @@
 #define DEFAULT_ANIMATION_CURVE_VALUE UIViewAnimationCurveLinear
 #define DEFAULT_LEFT_VIEW_WIDTH_RANGE NSMakeRange(280, 310)
 #define DEFAULT_RIGHT_VIEW_WIDTH_RANGE DEFAULT_LEFT_VIEW_WIDTH_RANGE
-#define DEAULT_ALLOWS_OVERDRAW_VALUE NO
+#define DEAULT_ALLOWS_OVERDRAW_VALUE YES
 #define DEFAULT_ANIMATION_TYPE_VALUE PKRevealControllerAnimationTypeStatic
 #define DEFAULT_QUICK_SWIPE_TOGGLE_VELOCITY_VALUE 800.0f
 #define DEFAULT_DISABLES_FRONT_VIEW_INTERACTION_VALUE YES
@@ -730,11 +730,11 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     
     BOOL isPositiveTranslation = (translation > CGRectGetMinX(frameForFrontViewCenter));
     BOOL positiveTranslationDoesNotExceedMinWidth = (translation < CGRectGetMinX(frameForFrontViewCenter)+[self leftViewMinWidth]);
-    BOOL positiveTranslationDoesNotExceedMaxWidth = (translation < CGRectGetMinX(frameForFrontViewCenter)+[self leftViewMaxWidth]);
+    BOOL positiveTranslationDoesNotExceedMaxWidth = (translation < CGRectGetMinX(frameForFrontViewCenter)+[self leftViewMaxWidthRespectingOverdraw:YES]);
     
     BOOL isNegativeTranslation = (translation < CGRectGetMinX(frameForFrontViewCenter));
     BOOL negativeTranslationDoesNotExceedMinWidth = (translation > CGRectGetMinX(frameForFrontViewCenter)-[self rightViewMinWidth]);
-    BOOL negativeTranslationDoesNotExceedMaxWidth = (translation > CGRectGetMinX(frameForFrontViewCenter)-[self rightViewMaxWidth]);
+    BOOL negativeTranslationDoesNotExceedMaxWidth = (translation > CGRectGetMinX(frameForFrontViewCenter)-[self rightViewMaxWidthRespectingOverdraw:YES]);
     
     BOOL isLegalNormalTranslation = ([self hasLeftViewController] && isPositiveTranslation && positiveTranslationDoesNotExceedMinWidth)
     || ([self hasRightViewController] && isNegativeTranslation && negativeTranslationDoesNotExceedMinWidth);
@@ -1104,14 +1104,28 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
 
 #pragma mark - Helper (Sizing)
 
-- (CGFloat)leftViewMaxWidth
+- (CGFloat)leftViewMaxWidthRespectingOverdraw:(BOOL)respectOverdraw
 {
-    return self.allowsOverdraw ? self.leftViewWidthRange.length : [self leftViewMinWidth];
+    if (respectOverdraw)
+    {
+        return self.allowsOverdraw ? self.leftViewWidthRange.length : [self leftViewMinWidth];
+    }
+    else
+    {
+        return self.leftViewWidthRange.length;
+    }
 }
 
-- (CGFloat)rightViewMaxWidth
+- (CGFloat)rightViewMaxWidthRespectingOverdraw:(BOOL)respectOverdraw
 {
-    return self.allowsOverdraw ? self.rightViewWidthRange.length : [self rightViewMinWidth];
+    if (respectOverdraw)
+    {
+        return self.allowsOverdraw ? self.rightViewWidthRange.length : [self rightViewMinWidth];
+    }
+    else
+    {
+        return self.rightViewWidthRange.length;
+    }
 }
 
 - (CGFloat)leftViewMinWidth
@@ -1166,21 +1180,21 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
 - (CGRect)frontViewFrameForLeftViewPresentationMode
 {
     CGRect frame = [self frontViewFrameForCenter];
-    frame.origin.x = [self leftViewMaxWidth];
+    frame.origin.x = [self leftViewMaxWidthRespectingOverdraw:NO];
     return frame;
 }
 
 - (CGRect)frontViewFrameForRightViewPresentationMode
 {
     CGRect frame = [self frontViewFrameForCenter];
-    frame.origin.x = -[self rightViewMaxWidth];
+    frame.origin.x = -[self rightViewMaxWidthRespectingOverdraw:NO];
     return frame;
 }
 
 - (CGRect)leftViewFrame
 {
     CGRect frame = CGRectZero;
-    frame.size = CGSizeMake([self leftViewMaxWidth], CGRectGetHeight(self.view.bounds));
+    frame.size = CGSizeMake([self leftViewMaxWidthRespectingOverdraw:NO], CGRectGetHeight(self.view.bounds));
     frame.origin = CGPointZero;
     return frame;
 }
@@ -1191,7 +1205,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     
     if (self.animationType == PKRevealControllerAnimationTypeStatic)
     {
-        frame.size = CGSizeMake([self rightViewMaxWidth], CGRectGetHeight(self.view.bounds));
+        frame.size = CGSizeMake([self rightViewMaxWidthRespectingOverdraw:NO], CGRectGetHeight(self.view.bounds));
         frame.origin.x = CGRectGetWidth(self.frontViewContainer.bounds)-CGRectGetWidth(frame);
         frame.origin.y = 0.0f;
     }
@@ -1277,7 +1291,8 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
         && [self.rightViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation];
 }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+                                         duration:(NSTimeInterval)duration
 {
     [self.frontViewContainer refreshShadowWithAnimationDuration:duration];
 }

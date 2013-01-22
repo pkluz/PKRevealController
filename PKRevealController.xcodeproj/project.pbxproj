@@ -7,64 +7,63 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F9595E8716A9C045001E83AF /* LeftDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9595E8616A9C045001E83AF /* LeftDemoViewController.m */; };
-		F9595E8B16A9D4E2001E83AF /* RightDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9595E8A16A9D4E2001E83AF /* RightDemoViewController.m */; };
-		F9595ECD16AB31FA001E83AF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F9595ECC16AB31FA001E83AF /* README.md */; };
+		F94D66EE16AE1C1200F0DAE3 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F94D66E516AE1C1200F0DAE3 /* Default-568h@2x.png */; };
+		F94D66EF16AE1C1200F0DAE3 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F94D66E616AE1C1200F0DAE3 /* Default.png */; };
+		F94D66F016AE1C1200F0DAE3 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F94D66E716AE1C1200F0DAE3 /* Default@2x.png */; };
+		F94D66F116AE1C1200F0DAE3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F94D66E916AE1C1200F0DAE3 /* InfoPlist.strings */; };
+		F94D66F216AE1C1200F0DAE3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F94D66EB16AE1C1200F0DAE3 /* main.m */; };
+		F94D66F616AE1C5800F0DAE3 /* PKRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94D66F516AE1C5800F0DAE3 /* PKRevealController.m */; };
+		F94D66F916AE1C6200F0DAE3 /* PKRevealControllerContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F94D66F816AE1C6200F0DAE3 /* PKRevealControllerContainerView.m */; };
+		F94D66FC16AE1C6E00F0DAE3 /* UIViewController+PKRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94D66FB16AE1C6E00F0DAE3 /* UIViewController+PKRevealController.m */; };
+		F94D66FE16AE1C7700F0DAE3 /* PKRevealController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F94D66FD16AE1C7700F0DAE3 /* PKRevealController.bundle */; };
+		F94D670916AE1E5F00F0DAE3 /* FrontViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94D670016AE1E5F00F0DAE3 /* FrontViewController.m */; };
+		F94D670A16AE1E5F00F0DAE3 /* LeftDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94D670216AE1E5F00F0DAE3 /* LeftDemoViewController.m */; };
+		F94D670B16AE1E5F00F0DAE3 /* LeftDemoViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F94D670316AE1E5F00F0DAE3 /* LeftDemoViewController~ipad.xib */; };
+		F94D670C16AE1E5F00F0DAE3 /* LeftDemoViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F94D670416AE1E5F00F0DAE3 /* LeftDemoViewController~iphone.xib */; };
+		F94D670D16AE1E5F00F0DAE3 /* RightDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94D670616AE1E5F00F0DAE3 /* RightDemoViewController.m */; };
+		F94D670E16AE1E5F00F0DAE3 /* RightDemoViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F94D670716AE1E5F00F0DAE3 /* RightDemoViewController~ipad.xib */; };
+		F94D670F16AE1E5F00F0DAE3 /* RightDemoViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F94D670816AE1E5F00F0DAE3 /* RightDemoViewController~iphone.xib */; };
 		F96610D5168B317200A031E7 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F96610D4168B317200A031E7 /* MapKit.framework */; };
-		F9A90B3A168A76A50003D5E0 /* FrontViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A90B39168A76A40003D5E0 /* FrontViewController.m */; };
-		F9A90B43168A778A0003D5E0 /* PKRevealController+Categories.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A90B42168A778A0003D5E0 /* PKRevealController+Categories.m */; };
-		F9AD1E9316ACAAFD00283B1F /* LeftDemoViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9AD1E9216ACAAFD00283B1F /* LeftDemoViewController~iphone.xib */; };
-		F9AD1E9616ACAC5D00283B1F /* LeftDemoViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9AD1E9516ACAC5D00283B1F /* LeftDemoViewController~ipad.xib */; };
-		F9AD1E9916ACACE000283B1F /* RightDemoViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9AD1E9716ACACE000283B1F /* RightDemoViewController~ipad.xib */; };
-		F9AD1E9A16ACACE000283B1F /* RightDemoViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9AD1E9816ACACE000283B1F /* RightDemoViewController~iphone.xib */; };
-		F9DD513C16A9729700F392F1 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F9DD513916A9729700F392F1 /* Default-568h@2x.png */; };
-		F9DD513D16A9729700F392F1 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F9DD513A16A9729700F392F1 /* Default.png */; };
-		F9DD513E16A9729700F392F1 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F9DD513B16A9729700F392F1 /* Default@2x.png */; };
-		F9DD514116A972B600F392F1 /* PKRevealControllerContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9DD514016A972B600F392F1 /* PKRevealControllerContainerView.m */; };
-		F9DD514516A9735600F392F1 /* PKRevealController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F9DD514416A9735600F392F1 /* PKRevealController.bundle */; };
 		F9E6F19E1688B76F00C7CF25 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E6F19D1688B76F00C7CF25 /* UIKit.framework */; };
 		F9E6F1A01688B76F00C7CF25 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E6F19F1688B76F00C7CF25 /* Foundation.framework */; };
 		F9E6F1A21688B76F00C7CF25 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E6F1A11688B76F00C7CF25 /* CoreGraphics.framework */; };
-		F9E6F1A81688B76F00C7CF25 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F9E6F1A61688B76F00C7CF25 /* InfoPlist.strings */; };
-		F9E6F1AA1688B76F00C7CF25 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E6F1A91688B76F00C7CF25 /* main.m */; };
 		F9E6F1AE1688B76F00C7CF25 /* PKAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E6F1AD1688B76F00C7CF25 /* PKAppDelegate.m */; };
-		F9E6F1BC1688B7AE00C7CF25 /* PKRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E6F1BB1688B7AE00C7CF25 /* PKRevealController.m */; };
 		F9E6F1BE1688B85900C7CF25 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E6F1BD1688B85900C7CF25 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F9595E8516A9C045001E83AF /* LeftDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftDemoViewController.h; sourceTree = "<group>"; };
-		F9595E8616A9C045001E83AF /* LeftDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftDemoViewController.m; sourceTree = "<group>"; };
-		F9595E8916A9D4E1001E83AF /* RightDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightDemoViewController.h; sourceTree = "<group>"; };
-		F9595E8A16A9D4E2001E83AF /* RightDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightDemoViewController.m; sourceTree = "<group>"; };
+		F94D66E516AE1C1200F0DAE3 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Supporting Files/Default-568h@2x.png"; sourceTree = "<group>"; };
+		F94D66E616AE1C1200F0DAE3 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = "Supporting Files/Default.png"; sourceTree = "<group>"; };
+		F94D66E716AE1C1200F0DAE3 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Supporting Files/Default@2x.png"; sourceTree = "<group>"; };
+		F94D66EA16AE1C1200F0DAE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
+		F94D66EB16AE1C1200F0DAE3 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "Supporting Files/main.m"; sourceTree = "<group>"; };
+		F94D66EC16AE1C1200F0DAE3 /* PKRevealController-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "PKRevealController-Info.plist"; path = "Supporting Files/PKRevealController-Info.plist"; sourceTree = "<group>"; };
+		F94D66ED16AE1C1200F0DAE3 /* PKRevealController-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "PKRevealController-Prefix.pch"; path = "Supporting Files/PKRevealController-Prefix.pch"; sourceTree = "<group>"; };
+		F94D66F416AE1C5800F0DAE3 /* PKRevealController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PKRevealController.h; path = Controller/PKRevealController.h; sourceTree = "<group>"; };
+		F94D66F516AE1C5800F0DAE3 /* PKRevealController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PKRevealController.m; path = Controller/PKRevealController.m; sourceTree = "<group>"; };
+		F94D66F716AE1C6200F0DAE3 /* PKRevealControllerContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PKRevealControllerContainerView.h; path = Controller/PKRevealControllerContainerView.h; sourceTree = "<group>"; };
+		F94D66F816AE1C6200F0DAE3 /* PKRevealControllerContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PKRevealControllerContainerView.m; path = Controller/PKRevealControllerContainerView.m; sourceTree = "<group>"; };
+		F94D66FA16AE1C6E00F0DAE3 /* UIViewController+PKRevealController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+PKRevealController.h"; path = "Controller/UIViewController+PKRevealController.h"; sourceTree = "<group>"; };
+		F94D66FB16AE1C6E00F0DAE3 /* UIViewController+PKRevealController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+PKRevealController.m"; path = "Controller/UIViewController+PKRevealController.m"; sourceTree = "<group>"; };
+		F94D66FD16AE1C7700F0DAE3 /* PKRevealController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = PKRevealController.bundle; path = Controller/PKRevealController.bundle; sourceTree = "<group>"; };
+		F94D66FF16AE1E5F00F0DAE3 /* FrontViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FrontViewController.h; path = "Demo Classes/FrontViewController.h"; sourceTree = "<group>"; };
+		F94D670016AE1E5F00F0DAE3 /* FrontViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FrontViewController.m; path = "Demo Classes/FrontViewController.m"; sourceTree = "<group>"; };
+		F94D670116AE1E5F00F0DAE3 /* LeftDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftDemoViewController.h; path = "Demo Classes/LeftDemoViewController.h"; sourceTree = "<group>"; };
+		F94D670216AE1E5F00F0DAE3 /* LeftDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftDemoViewController.m; path = "Demo Classes/LeftDemoViewController.m"; sourceTree = "<group>"; };
+		F94D670316AE1E5F00F0DAE3 /* LeftDemoViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "LeftDemoViewController~ipad.xib"; path = "Demo Classes/LeftDemoViewController~ipad.xib"; sourceTree = "<group>"; };
+		F94D670416AE1E5F00F0DAE3 /* LeftDemoViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "LeftDemoViewController~iphone.xib"; path = "Demo Classes/LeftDemoViewController~iphone.xib"; sourceTree = "<group>"; };
+		F94D670516AE1E5F00F0DAE3 /* RightDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RightDemoViewController.h; path = "Demo Classes/RightDemoViewController.h"; sourceTree = "<group>"; };
+		F94D670616AE1E5F00F0DAE3 /* RightDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RightDemoViewController.m; path = "Demo Classes/RightDemoViewController.m"; sourceTree = "<group>"; };
+		F94D670716AE1E5F00F0DAE3 /* RightDemoViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "RightDemoViewController~ipad.xib"; path = "Demo Classes/RightDemoViewController~ipad.xib"; sourceTree = "<group>"; };
+		F94D670816AE1E5F00F0DAE3 /* RightDemoViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "RightDemoViewController~iphone.xib"; path = "Demo Classes/RightDemoViewController~iphone.xib"; sourceTree = "<group>"; };
 		F9595ECC16AB31FA001E83AF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
 		F96610D4168B317200A031E7 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		F9A90B38168A76A40003D5E0 /* FrontViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrontViewController.h; sourceTree = "<group>"; };
-		F9A90B39168A76A40003D5E0 /* FrontViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrontViewController.m; sourceTree = "<group>"; };
-		F9A90B41168A778A0003D5E0 /* PKRevealController+Categories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "PKRevealController+Categories.h"; path = "Classes/PKRevealController+Categories.h"; sourceTree = "<group>"; };
-		F9A90B42168A778A0003D5E0 /* PKRevealController+Categories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PKRevealController+Categories.m"; path = "Classes/PKRevealController+Categories.m"; sourceTree = "<group>"; };
-		F9AD1E9216ACAAFD00283B1F /* LeftDemoViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LeftDemoViewController~iphone.xib"; sourceTree = "<group>"; };
-		F9AD1E9516ACAC5D00283B1F /* LeftDemoViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LeftDemoViewController~ipad.xib"; sourceTree = "<group>"; };
-		F9AD1E9716ACACE000283B1F /* RightDemoViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "RightDemoViewController~ipad.xib"; sourceTree = "<group>"; };
-		F9AD1E9816ACACE000283B1F /* RightDemoViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "RightDemoViewController~iphone.xib"; sourceTree = "<group>"; };
-		F9DD513916A9729700F392F1 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/Default-568h@2x.png"; sourceTree = "<group>"; };
-		F9DD513A16A9729700F392F1 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Default.png; sourceTree = "<group>"; };
-		F9DD513B16A9729700F392F1 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Default@2x.png"; sourceTree = "<group>"; };
-		F9DD513F16A972B600F392F1 /* PKRevealControllerContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PKRevealControllerContainerView.h; path = Classes/PKRevealControllerContainerView.h; sourceTree = "<group>"; };
-		F9DD514016A972B600F392F1 /* PKRevealControllerContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PKRevealControllerContainerView.m; path = Classes/PKRevealControllerContainerView.m; sourceTree = "<group>"; };
-		F9DD514416A9735600F392F1 /* PKRevealController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = PKRevealController.bundle; path = Classes/PKRevealController.bundle; sourceTree = "<group>"; };
 		F9E6F1991688B76F00C7CF25 /* PKRevealController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PKRevealController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9E6F19D1688B76F00C7CF25 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F9E6F19F1688B76F00C7CF25 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F9E6F1A11688B76F00C7CF25 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		F9E6F1A51688B76F00C7CF25 /* PKRevealController-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PKRevealController-Info.plist"; sourceTree = "<group>"; };
-		F9E6F1A71688B76F00C7CF25 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		F9E6F1A91688B76F00C7CF25 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		F9E6F1AB1688B76F00C7CF25 /* PKRevealController-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PKRevealController-Prefix.pch"; sourceTree = "<group>"; };
 		F9E6F1AC1688B76F00C7CF25 /* PKAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PKAppDelegate.h; sourceTree = "<group>"; };
 		F9E6F1AD1688B76F00C7CF25 /* PKAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PKAppDelegate.m; sourceTree = "<group>"; };
-		F9E6F1BA1688B7AE00C7CF25 /* PKRevealController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PKRevealController.h; path = Classes/PKRevealController.h; sourceTree = "<group>"; };
-		F9E6F1BB1688B7AE00C7CF25 /* PKRevealController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PKRevealController.m; path = Classes/PKRevealController.m; sourceTree = "<group>"; };
 		F9E6F1BD1688B85900C7CF25 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -84,67 +83,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F9A90B3F168A76B70003D5E0 /* Demo View Controllers */ = {
+		F9A90B3F168A76B70003D5E0 /* Demo Classes */ = {
 			isa = PBXGroup;
 			children = (
-				F9A90B38168A76A40003D5E0 /* FrontViewController.h */,
-				F9A90B39168A76A40003D5E0 /* FrontViewController.m */,
-				F9595E8516A9C045001E83AF /* LeftDemoViewController.h */,
-				F9595E8616A9C045001E83AF /* LeftDemoViewController.m */,
-				F9AD1E9216ACAAFD00283B1F /* LeftDemoViewController~iphone.xib */,
-				F9AD1E9516ACAC5D00283B1F /* LeftDemoViewController~ipad.xib */,
-				F9595E8916A9D4E1001E83AF /* RightDemoViewController.h */,
-				F9595E8A16A9D4E2001E83AF /* RightDemoViewController.m */,
-				F9AD1E9716ACACE000283B1F /* RightDemoViewController~ipad.xib */,
-				F9AD1E9816ACACE000283B1F /* RightDemoViewController~iphone.xib */,
+				F94D66FF16AE1E5F00F0DAE3 /* FrontViewController.h */,
+				F94D670016AE1E5F00F0DAE3 /* FrontViewController.m */,
+				F94D670116AE1E5F00F0DAE3 /* LeftDemoViewController.h */,
+				F94D670216AE1E5F00F0DAE3 /* LeftDemoViewController.m */,
+				F94D670316AE1E5F00F0DAE3 /* LeftDemoViewController~ipad.xib */,
+				F94D670416AE1E5F00F0DAE3 /* LeftDemoViewController~iphone.xib */,
+				F94D670516AE1E5F00F0DAE3 /* RightDemoViewController.h */,
+				F94D670616AE1E5F00F0DAE3 /* RightDemoViewController.m */,
+				F94D670716AE1E5F00F0DAE3 /* RightDemoViewController~ipad.xib */,
+				F94D670816AE1E5F00F0DAE3 /* RightDemoViewController~iphone.xib */,
 			);
-			name = "Demo View Controllers";
+			name = "Demo Classes";
 			sourceTree = "<group>";
 		};
-		F9DD514216A972BA00F392F1 /* PKRevealController */ = {
+		F9DD514216A972BA00F392F1 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F9E6F1BA1688B7AE00C7CF25 /* PKRevealController.h */,
-				F9E6F1BB1688B7AE00C7CF25 /* PKRevealController.m */,
-				F9DD514716A973C700F392F1 /* Helper */,
-				F9DD514616A973BB00F392F1 /* Categories */,
-				F9DD514316A9734F00F392F1 /* Resources */,
+				F94D66F416AE1C5800F0DAE3 /* PKRevealController.h */,
+				F94D66F516AE1C5800F0DAE3 /* PKRevealController.m */,
+				F94D66F716AE1C6200F0DAE3 /* PKRevealControllerContainerView.h */,
+				F94D66F816AE1C6200F0DAE3 /* PKRevealControllerContainerView.m */,
+				F94D66FA16AE1C6E00F0DAE3 /* UIViewController+PKRevealController.h */,
+				F94D66FB16AE1C6E00F0DAE3 /* UIViewController+PKRevealController.m */,
+				F94D66FD16AE1C7700F0DAE3 /* PKRevealController.bundle */,
 			);
-			name = PKRevealController;
-			sourceTree = "<group>";
-		};
-		F9DD514316A9734F00F392F1 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				F9DD514416A9735600F392F1 /* PKRevealController.bundle */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		F9DD514616A973BB00F392F1 /* Categories */ = {
-			isa = PBXGroup;
-			children = (
-				F9A90B41168A778A0003D5E0 /* PKRevealController+Categories.h */,
-				F9A90B42168A778A0003D5E0 /* PKRevealController+Categories.m */,
-			);
-			name = Categories;
-			sourceTree = "<group>";
-		};
-		F9DD514716A973C700F392F1 /* Helper */ = {
-			isa = PBXGroup;
-			children = (
-				F9DD513F16A972B600F392F1 /* PKRevealControllerContainerView.h */,
-				F9DD514016A972B600F392F1 /* PKRevealControllerContainerView.m */,
-			);
-			name = Helper;
+			name = Controller;
 			sourceTree = "<group>";
 		};
 		F9DD514816A973DC00F392F1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				F9DD513916A9729700F392F1 /* Default-568h@2x.png */,
-				F9DD513A16A9729700F392F1 /* Default.png */,
-				F9DD513B16A9729700F392F1 /* Default@2x.png */,
+				F94D66E516AE1C1200F0DAE3 /* Default-568h@2x.png */,
+				F94D66E616AE1C1200F0DAE3 /* Default.png */,
+				F94D66E716AE1C1200F0DAE3 /* Default@2x.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -184,8 +159,8 @@
 				F9E6F1AC1688B76F00C7CF25 /* PKAppDelegate.h */,
 				F9E6F1AD1688B76F00C7CF25 /* PKAppDelegate.m */,
 				F9595ECC16AB31FA001E83AF /* README.md */,
-				F9DD514216A972BA00F392F1 /* PKRevealController */,
-				F9A90B3F168A76B70003D5E0 /* Demo View Controllers */,
+				F9DD514216A972BA00F392F1 /* Controller */,
+				F9A90B3F168A76B70003D5E0 /* Demo Classes */,
 				F9E6F1A41688B76F00C7CF25 /* Supporting Files */,
 			);
 			name = Source;
@@ -195,11 +170,11 @@
 		F9E6F1A41688B76F00C7CF25 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F94D66EB16AE1C1200F0DAE3 /* main.m */,
+				F94D66ED16AE1C1200F0DAE3 /* PKRevealController-Prefix.pch */,
 				F9DD514816A973DC00F392F1 /* Resources */,
-				F9E6F1A51688B76F00C7CF25 /* PKRevealController-Info.plist */,
-				F9E6F1A61688B76F00C7CF25 /* InfoPlist.strings */,
-				F9E6F1A91688B76F00C7CF25 /* main.m */,
-				F9E6F1AB1688B76F00C7CF25 /* PKRevealController-Prefix.pch */,
+				F94D66E916AE1C1200F0DAE3 /* InfoPlist.strings */,
+				F94D66EC16AE1C1200F0DAE3 /* PKRevealController-Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -256,16 +231,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9E6F1A81688B76F00C7CF25 /* InfoPlist.strings in Resources */,
-				F9DD513C16A9729700F392F1 /* Default-568h@2x.png in Resources */,
-				F9DD513D16A9729700F392F1 /* Default.png in Resources */,
-				F9DD513E16A9729700F392F1 /* Default@2x.png in Resources */,
-				F9DD514516A9735600F392F1 /* PKRevealController.bundle in Resources */,
-				F9595ECD16AB31FA001E83AF /* README.md in Resources */,
-				F9AD1E9316ACAAFD00283B1F /* LeftDemoViewController~iphone.xib in Resources */,
-				F9AD1E9616ACAC5D00283B1F /* LeftDemoViewController~ipad.xib in Resources */,
-				F9AD1E9916ACACE000283B1F /* RightDemoViewController~ipad.xib in Resources */,
-				F9AD1E9A16ACACE000283B1F /* RightDemoViewController~iphone.xib in Resources */,
+				F94D66EE16AE1C1200F0DAE3 /* Default-568h@2x.png in Resources */,
+				F94D66EF16AE1C1200F0DAE3 /* Default.png in Resources */,
+				F94D66F016AE1C1200F0DAE3 /* Default@2x.png in Resources */,
+				F94D66F116AE1C1200F0DAE3 /* InfoPlist.strings in Resources */,
+				F94D66FE16AE1C7700F0DAE3 /* PKRevealController.bundle in Resources */,
+				F94D670B16AE1E5F00F0DAE3 /* LeftDemoViewController~ipad.xib in Resources */,
+				F94D670C16AE1E5F00F0DAE3 /* LeftDemoViewController~iphone.xib in Resources */,
+				F94D670E16AE1E5F00F0DAE3 /* RightDemoViewController~ipad.xib in Resources */,
+				F94D670F16AE1E5F00F0DAE3 /* RightDemoViewController~iphone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,26 +250,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9E6F1AA1688B76F00C7CF25 /* main.m in Sources */,
 				F9E6F1AE1688B76F00C7CF25 /* PKAppDelegate.m in Sources */,
-				F9E6F1BC1688B7AE00C7CF25 /* PKRevealController.m in Sources */,
-				F9A90B3A168A76A50003D5E0 /* FrontViewController.m in Sources */,
-				F9A90B43168A778A0003D5E0 /* PKRevealController+Categories.m in Sources */,
-				F9DD514116A972B600F392F1 /* PKRevealControllerContainerView.m in Sources */,
-				F9595E8716A9C045001E83AF /* LeftDemoViewController.m in Sources */,
-				F9595E8B16A9D4E2001E83AF /* RightDemoViewController.m in Sources */,
+				F94D66F216AE1C1200F0DAE3 /* main.m in Sources */,
+				F94D66F616AE1C5800F0DAE3 /* PKRevealController.m in Sources */,
+				F94D66F916AE1C6200F0DAE3 /* PKRevealControllerContainerView.m in Sources */,
+				F94D66FC16AE1C6E00F0DAE3 /* UIViewController+PKRevealController.m in Sources */,
+				F94D670916AE1E5F00F0DAE3 /* FrontViewController.m in Sources */,
+				F94D670A16AE1E5F00F0DAE3 /* LeftDemoViewController.m in Sources */,
+				F94D670D16AE1E5F00F0DAE3 /* RightDemoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		F9E6F1A61688B76F00C7CF25 /* InfoPlist.strings */ = {
+		F94D66E916AE1C1200F0DAE3 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				F9E6F1A71688B76F00C7CF25 /* en */,
+				F94D66EA16AE1C1200F0DAE3 /* en */,
 			);
 			name = InfoPlist.strings;
+			path = "Supporting Files/en.lproj";
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -357,8 +332,8 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer: Philip Kluz (D8YR7K42RY)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "PKRevealController/PKRevealController-Prefix.pch";
-				INFOPLIST_FILE = "PKRevealController/PKRevealController-Info.plist";
+				GCC_PREFIX_HEADER = "PKRevealController/Supporting Files/PKRevealController-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/PKRevealController/Supporting Files/PKRevealController-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "D2B6A088-7C15-485B-98E0-04822B216DDF";
@@ -371,8 +346,8 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer: Philip Kluz (D8YR7K42RY)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "PKRevealController/PKRevealController-Prefix.pch";
-				INFOPLIST_FILE = "PKRevealController/PKRevealController-Info.plist";
+				GCC_PREFIX_HEADER = "PKRevealController/Supporting Files/PKRevealController-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/PKRevealController/Supporting Files/PKRevealController-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "D2B6A088-7C15-485B-98E0-04822B216DDF";

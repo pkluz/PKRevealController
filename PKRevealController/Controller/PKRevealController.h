@@ -11,7 +11,7 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "PKRevealController+Categories.h"
+#import "UIViewController+PKRevealController.h"
 
 typedef NS_ENUM(NSUInteger, PKRevealControllerState)
 {
