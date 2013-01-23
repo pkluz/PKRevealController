@@ -209,4 +209,14 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
  */
 - (PKRevealControllerType)type;
 
+/**
+ * @return BOOL - Returns YES if the reveal controller has a right side, NO otherwise.
+ */
+- (BOOL)hasRightViewController;
+
+/**
+ * @return BOOL - Returns YES if the reveal controller has a left side, NO otherwise.
+ */
+- (BOOL)hasLeftViewController;
+
 @end

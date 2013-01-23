@@ -357,6 +357,16 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     return PKRevealControllerTypeNone;
 }
 
+- (BOOL)hasRightViewController
+{
+    return PKRevealControllerTypeRight == (self.type & PKRevealControllerTypeRight);
+}
+
+- (BOOL)hasLeftViewController
+{
+    return PKRevealControllerTypeLeft == (self.type & PKRevealControllerTypeLeft);
+}
+
 - (void)setMinimumWidth:(CGFloat)minWidth
            maximumWidth:(CGFloat)maxWidth
       forViewController:(UIViewController *)controller
