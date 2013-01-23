@@ -42,8 +42,6 @@ You can either simply drag and drop the `PKRevealController/Controller` folder i
     self.window.rootViewController = revealController;
 	```
 
-<br />
-
 ###Usage
 --
 By importing the `PKRevealController.h` file you automatically import an Objective-C category which extends all UIViewControllers and its descendants with a `revealController` property. The result is a behaviour similar to the familiar `navigationController` property.
