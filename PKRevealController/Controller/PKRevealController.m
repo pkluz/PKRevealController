@@ -1118,6 +1118,40 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     [self showViewController:controllerToShow];
 }
 
+- (void)setRecognizesPanningOnFrontView:(BOOL)recognizesPanningOnFrontView
+{
+    if (_recognizesPanningOnFrontView != recognizesPanningOnFrontView)
+    {
+        _recognizesPanningOnFrontView = recognizesPanningOnFrontView;
+        
+        if (_recognizesPanningOnFrontView)
+        {
+            [self addPanGestureRecognizer];
+        }
+        else
+        {
+            [self removePanGestureRecognizer];
+        }
+    }
+}
+
+- (void)setRecognizesResetTapOnFrontView:(BOOL)recognizesResetTapOnFrontView
+{
+    if (_recognizesResetTapOnFrontView != recognizesResetTapOnFrontView)
+    {
+        _recognizesResetTapOnFrontView = recognizesResetTapOnFrontView;
+        
+        if (_recognizesResetTapOnFrontView)
+        {
+            [self addTapGestureRecognizer];
+        }
+        else
+        {
+            [self removeTapGestureRecognizer];
+        }
+    }
+}
+
 #pragma mark - Helpers (States)
 
 - (BOOL)isLeftViewVisible
