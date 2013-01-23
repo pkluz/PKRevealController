@@ -22,7 +22,6 @@
 		F94D670D16AE1E5F00F0DAE3 /* RightDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94D670616AE1E5F00F0DAE3 /* RightDemoViewController.m */; };
 		F94D670E16AE1E5F00F0DAE3 /* RightDemoViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F94D670716AE1E5F00F0DAE3 /* RightDemoViewController~ipad.xib */; };
 		F94D670F16AE1E5F00F0DAE3 /* RightDemoViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F94D670816AE1E5F00F0DAE3 /* RightDemoViewController~iphone.xib */; };
-		F96610D5168B317200A031E7 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F96610D4168B317200A031E7 /* MapKit.framework */; };
 		F9E6F19E1688B76F00C7CF25 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E6F19D1688B76F00C7CF25 /* UIKit.framework */; };
 		F9E6F1A01688B76F00C7CF25 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E6F19F1688B76F00C7CF25 /* Foundation.framework */; };
 		F9E6F1A21688B76F00C7CF25 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E6F1A11688B76F00C7CF25 /* CoreGraphics.framework */; };
@@ -78,7 +77,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F96610D5168B317200A031E7 /* MapKit.framework in Frameworks */,
 				F9E6F1BE1688B85900C7CF25 /* QuartzCore.framework in Frameworks */,
 				F9E6F19E1688B76F00C7CF25 /* UIKit.framework in Frameworks */,
 				F9E6F1A01688B76F00C7CF25 /* Foundation.framework in Frameworks */,
