@@ -13,6 +13,13 @@
 #import "FrontViewController.h"
 #import "PKRevealController.h"
 
+@interface FrontViewController()
+
+#pragma mark - Properties
+@property (nonatomic, strong, readwrite) UITableView *tableView;
+
+@end
+
 @implementation FrontViewController
 
 #pragma mark - View Lifecycle
@@ -23,8 +30,8 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    UIImage *revealImagePortrait = [UIImage imageNamed:@"PKRevealController.bundle/reveal_menu_icon_portrait"];
-    UIImage *revealImageLandscape = [UIImage imageNamed:@"PKRevealController.bundle/reveal_menu_icon_landscape"];
+    UIImage *revealImagePortrait = [UIImage imageNamed:@"reveal_menu_icon_portrait"];
+    UIImage *revealImageLandscape = [UIImage imageNamed:@"reveal_menu_icon_landscape"];
     
     if (self.navigationController.revealController.type & PKRevealControllerTypeLeft)
     {
@@ -36,9 +43,11 @@
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:revealImagePortrait landscapeImagePhone:revealImageLandscape style:UIBarButtonItemStylePlain target:self action:@selector(showRightView:)];
     }
     
-    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
-    tableView.autoresizingMask = ( UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth );
-    [self.view addSubview:tableView];
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    self.tableView.autoresizingMask = ( UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth );
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    [self.view addSubview:self.tableView];
 }
 
 #pragma mark - Actions
@@ -87,6 +96,50 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
     return YES;
+}
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 5;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString * cellReuseIdentifier = @"cellReuseIdentifier";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellReuseIdentifier];
+    
+    if (cell == nil)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellReuseIdentifier];
+    }
+    
+    cell.textLabel.text = [NSString stringWithFormat:@"Cell %d", indexPath.row];
+    
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

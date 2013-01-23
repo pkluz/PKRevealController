@@ -12,6 +12,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FrontViewController : UIViewController
+@interface FrontViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 @end

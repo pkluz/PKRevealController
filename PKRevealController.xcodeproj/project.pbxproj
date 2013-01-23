@@ -15,7 +15,6 @@
 		F94D66F616AE1C5800F0DAE3 /* PKRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94D66F516AE1C5800F0DAE3 /* PKRevealController.m */; };
 		F94D66F916AE1C6200F0DAE3 /* PKRevealControllerContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F94D66F816AE1C6200F0DAE3 /* PKRevealControllerContainerView.m */; };
 		F94D66FC16AE1C6E00F0DAE3 /* UIViewController+PKRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94D66FB16AE1C6E00F0DAE3 /* UIViewController+PKRevealController.m */; };
-		F94D66FE16AE1C7700F0DAE3 /* PKRevealController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F94D66FD16AE1C7700F0DAE3 /* PKRevealController.bundle */; };
 		F94D670916AE1E5F00F0DAE3 /* FrontViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94D670016AE1E5F00F0DAE3 /* FrontViewController.m */; };
 		F94D670A16AE1E5F00F0DAE3 /* LeftDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94D670216AE1E5F00F0DAE3 /* LeftDemoViewController.m */; };
 		F94D670B16AE1E5F00F0DAE3 /* LeftDemoViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F94D670316AE1E5F00F0DAE3 /* LeftDemoViewController~ipad.xib */; };
@@ -29,6 +28,10 @@
 		F9E6F1A21688B76F00C7CF25 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E6F1A11688B76F00C7CF25 /* CoreGraphics.framework */; };
 		F9E6F1AE1688B76F00C7CF25 /* PKAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E6F1AD1688B76F00C7CF25 /* PKAppDelegate.m */; };
 		F9E6F1BE1688B85900C7CF25 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E6F1BD1688B85900C7CF25 /* QuartzCore.framework */; };
+		F9FCBE8C16AF46B000DB38FA /* reveal_menu_icon_landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = F9FCBE8816AF46B000DB38FA /* reveal_menu_icon_landscape.png */; };
+		F9FCBE8D16AF46B000DB38FA /* reveal_menu_icon_landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F9FCBE8916AF46B000DB38FA /* reveal_menu_icon_landscape@2x.png */; };
+		F9FCBE8E16AF46B000DB38FA /* reveal_menu_icon_portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = F9FCBE8A16AF46B000DB38FA /* reveal_menu_icon_portrait.png */; };
+		F9FCBE8F16AF46B000DB38FA /* reveal_menu_icon_portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F9FCBE8B16AF46B000DB38FA /* reveal_menu_icon_portrait@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,7 +48,6 @@
 		F94D66F816AE1C6200F0DAE3 /* PKRevealControllerContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PKRevealControllerContainerView.m; path = Controller/PKRevealControllerContainerView.m; sourceTree = "<group>"; };
 		F94D66FA16AE1C6E00F0DAE3 /* UIViewController+PKRevealController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+PKRevealController.h"; path = "Controller/UIViewController+PKRevealController.h"; sourceTree = "<group>"; };
 		F94D66FB16AE1C6E00F0DAE3 /* UIViewController+PKRevealController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+PKRevealController.m"; path = "Controller/UIViewController+PKRevealController.m"; sourceTree = "<group>"; };
-		F94D66FD16AE1C7700F0DAE3 /* PKRevealController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = PKRevealController.bundle; path = Controller/PKRevealController.bundle; sourceTree = "<group>"; };
 		F94D66FF16AE1E5F00F0DAE3 /* FrontViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FrontViewController.h; path = "Demo Classes/FrontViewController.h"; sourceTree = "<group>"; };
 		F94D670016AE1E5F00F0DAE3 /* FrontViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FrontViewController.m; path = "Demo Classes/FrontViewController.m"; sourceTree = "<group>"; };
 		F94D670116AE1E5F00F0DAE3 /* LeftDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftDemoViewController.h; path = "Demo Classes/LeftDemoViewController.h"; sourceTree = "<group>"; };
@@ -65,6 +67,10 @@
 		F9E6F1AC1688B76F00C7CF25 /* PKAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PKAppDelegate.h; sourceTree = "<group>"; };
 		F9E6F1AD1688B76F00C7CF25 /* PKAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PKAppDelegate.m; sourceTree = "<group>"; };
 		F9E6F1BD1688B85900C7CF25 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		F9FCBE8816AF46B000DB38FA /* reveal_menu_icon_landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = reveal_menu_icon_landscape.png; path = "Supporting Files/reveal_menu_icon_landscape.png"; sourceTree = "<group>"; };
+		F9FCBE8916AF46B000DB38FA /* reveal_menu_icon_landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reveal_menu_icon_landscape@2x.png"; path = "Supporting Files/reveal_menu_icon_landscape@2x.png"; sourceTree = "<group>"; };
+		F9FCBE8A16AF46B000DB38FA /* reveal_menu_icon_portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = reveal_menu_icon_portrait.png; path = "Supporting Files/reveal_menu_icon_portrait.png"; sourceTree = "<group>"; };
+		F9FCBE8B16AF46B000DB38FA /* reveal_menu_icon_portrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reveal_menu_icon_portrait@2x.png"; path = "Supporting Files/reveal_menu_icon_portrait@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,7 +115,6 @@
 				F94D66F816AE1C6200F0DAE3 /* PKRevealControllerContainerView.m */,
 				F94D66FA16AE1C6E00F0DAE3 /* UIViewController+PKRevealController.h */,
 				F94D66FB16AE1C6E00F0DAE3 /* UIViewController+PKRevealController.m */,
-				F94D66FD16AE1C7700F0DAE3 /* PKRevealController.bundle */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -117,6 +122,10 @@
 		F9DD514816A973DC00F392F1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F9FCBE8816AF46B000DB38FA /* reveal_menu_icon_landscape.png */,
+				F9FCBE8916AF46B000DB38FA /* reveal_menu_icon_landscape@2x.png */,
+				F9FCBE8A16AF46B000DB38FA /* reveal_menu_icon_portrait.png */,
+				F9FCBE8B16AF46B000DB38FA /* reveal_menu_icon_portrait@2x.png */,
 				F94D66E516AE1C1200F0DAE3 /* Default-568h@2x.png */,
 				F94D66E616AE1C1200F0DAE3 /* Default.png */,
 				F94D66E716AE1C1200F0DAE3 /* Default@2x.png */,
@@ -235,11 +244,14 @@
 				F94D66EF16AE1C1200F0DAE3 /* Default.png in Resources */,
 				F94D66F016AE1C1200F0DAE3 /* Default@2x.png in Resources */,
 				F94D66F116AE1C1200F0DAE3 /* InfoPlist.strings in Resources */,
-				F94D66FE16AE1C7700F0DAE3 /* PKRevealController.bundle in Resources */,
 				F94D670B16AE1E5F00F0DAE3 /* LeftDemoViewController~ipad.xib in Resources */,
 				F94D670C16AE1E5F00F0DAE3 /* LeftDemoViewController~iphone.xib in Resources */,
 				F94D670E16AE1E5F00F0DAE3 /* RightDemoViewController~ipad.xib in Resources */,
 				F94D670F16AE1E5F00F0DAE3 /* RightDemoViewController~iphone.xib in Resources */,
+				F9FCBE8C16AF46B000DB38FA /* reveal_menu_icon_landscape.png in Resources */,
+				F9FCBE8D16AF46B000DB38FA /* reveal_menu_icon_landscape@2x.png in Resources */,
+				F9FCBE8E16AF46B000DB38FA /* reveal_menu_icon_portrait.png in Resources */,
+				F9FCBE8F16AF46B000DB38FA /* reveal_menu_icon_portrait@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

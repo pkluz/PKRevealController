@@ -21,6 +21,8 @@
 #define DEFAULT_ANIMATION_TYPE_VALUE PKRevealControllerAnimationTypeStatic
 #define DEFAULT_QUICK_SWIPE_TOGGLE_VELOCITY_VALUE 800.0f
 #define DEFAULT_DISABLES_FRONT_VIEW_INTERACTION_VALUE YES
+#define DEFAULT_RECOGNIZES_PAN_ON_FRONT_VIEW_VALUE YES
+#define DEFAULT_RECOGNIZES_RESET_TAP_ON_FRONT_VIEW_VALUE YES
 
 @interface PKRevealController ()
 
@@ -52,6 +54,8 @@
 @property (nonatomic, assign, readwrite) BOOL allowsOverdraw;
 @property (nonatomic, assign, readwrite) BOOL disablesFrontViewInteraction;
 @property (nonatomic, assign, readwrite) CGFloat quickSwipeVelocity;
+@property (nonatomic, assign, readwrite) BOOL recognizesPanningOnFrontView;
+@property (nonatomic, assign, readwrite) BOOL recognizesResetTapOnFrontView;
 
 @end
 
@@ -63,6 +67,8 @@ NSString * const PKRevealControllerAnimationTypeKey = @"PKRevealControllerAnimat
 NSString * const PKRevealControllerAllowsOverdrawKey = @"PKRevealControllerAllowsOverdrawKey";
 NSString * const PKRevealControllerQuickSwipeToggleVelocityKey = @"PKRevealControllerQuickSwipeToggleVelocityKey";
 NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealControllerDisablesFrontViewInteractionKey";
+NSString * const PKRevealControllerRecognizesPanningOnFrontViewKey = @"PKRevealControllerRecognizesPanningOnFrontViewKey";
+NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKRevealControllerRecognizesResetTapOnFrontViewKey";
 
 #pragma mark - Initialization
 
@@ -498,22 +504,34 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
 
 - (void)addPanGestureRecognizer
 {
-    [self.frontViewContainer addGestureRecognizer:self.revealPanGestureRecognizer];
+    if (self.recognizesPanningOnFrontView)
+    {
+        [self.frontViewContainer addGestureRecognizer:self.revealPanGestureRecognizer];
+    }
 }
 
 - (void)removePanGestureRecognizer
 {
-    [self.frontViewContainer removeGestureRecognizer:self.revealPanGestureRecognizer];
+    if ([[self.frontViewContainer gestureRecognizers] containsObject:self.revealPanGestureRecognizer])
+    {
+        [self.frontViewContainer removeGestureRecognizer:self.revealPanGestureRecognizer];
+    }
 }
 
 - (void)addTapGestureRecognizer
 {
-    [self.frontViewContainer addGestureRecognizer:self.revealResetTapGestureRecognizer];
+    if (self.recognizesResetTapOnFrontView)
+    {
+        [self.frontViewContainer addGestureRecognizer:self.revealResetTapGestureRecognizer];
+    }
 }
 
 - (void)removeTapGestureRecognizer
 {
-    [self.frontViewContainer removeGestureRecognizer:self.revealResetTapGestureRecognizer];
+    if ([[self.frontViewContainer gestureRecognizers] containsObject:self.revealResetTapGestureRecognizer])
+    {
+        [self.frontViewContainer removeGestureRecognizer:self.revealResetTapGestureRecognizer];
+    }
 }
 
 #pragma mark - Setup
@@ -528,6 +546,7 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     SEL panRecognitionCallback = @selector(didRecognizePanWithGestureRecognizer:);
     self.revealPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                                         action:panRecognitionCallback];
+    self.revealPanGestureRecognizer.delaysTouchesBegan = YES;
     self.revealPanGestureRecognizer.delegate = self;
 }
 
@@ -559,6 +578,8 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     self.allowsOverdraw = [self extractAllowsOverdrawFromOptions];
     self.quickSwipeVelocity = [self extractQuickSwipeToggleVelocityFromOptions];
     self.disablesFrontViewInteraction = [self extractDisablesFrontViewInteractionFromOptions];
+    self.recognizesPanningOnFrontView = [self extractRecognizesPanningOnFrontViewFromOptions];
+    self.recognizesResetTapOnFrontView = [self extractRecognizesResetTapOnFrontViewFromOptions];
 }
 
 #pragma mark -
@@ -635,6 +656,30 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     return DEFAULT_DISABLES_FRONT_VIEW_INTERACTION_VALUE;
 }
 
+- (CGFloat)extractRecognizesPanningOnFrontViewFromOptions
+{
+    NSNumber *allowsPanning = [self.options objectForKey:PKRevealControllerRecognizesPanningOnFrontViewKey];
+    
+    if (allowsPanning != nil)
+    {
+        return [allowsPanning boolValue];
+    }
+    
+    return DEFAULT_RECOGNIZES_PAN_ON_FRONT_VIEW_VALUE;
+}
+
+- (CGFloat)extractRecognizesResetTapOnFrontViewFromOptions
+{
+    NSNumber *allowsPanning = [self.options objectForKey:PKRevealControllerRecognizesResetTapOnFrontViewKey];
+    
+    if (allowsPanning != nil)
+    {
+        return [allowsPanning boolValue];
+    }
+    
+    return DEFAULT_RECOGNIZES_RESET_TAP_ON_FRONT_VIEW_VALUE;
+}
+
 #pragma mark - Gesture Recognition
 
 - (void)didRecognizeTapWithGestureRecognizer:(UITapGestureRecognizer *)recognizer
@@ -654,13 +699,14 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
             [self handleGestureChangedWithRecognizer:recognizer];
             break;
             
-        case UIGestureRecognizerStateFailed:
-        case UIGestureRecognizerStateCancelled:
         case UIGestureRecognizerStateEnded:
             [self handleGestureEndedWithRecognizer:recognizer];
             break;
                         
         default:
+        {
+            self.revealPanGestureRecognizer.enabled = YES;
+        }
             break;
     }
 }
@@ -699,6 +745,8 @@ NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealC
     {
         [self snapFrontViewToClosestEdge];
     }
+    
+    self.revealPanGestureRecognizer.enabled = YES;
 }
 
 #pragma mark - Gesture Delegation

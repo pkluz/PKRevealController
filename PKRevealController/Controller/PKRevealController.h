@@ -39,12 +39,14 @@ typedef NS_OPTIONS(NSUInteger, PKRevealControllerType)
  * List of option keys that can be passed in the options dictionary.
  * See the key's descriptions for what their respective values are.
  */
-extern NSString * const PKRevealControllerAnimationDurationKey;             // NSNumber containing CGFloat
-extern NSString * const PKRevealControllerAnimationCurveKey;                // NSNumber containing NSInteger
-extern NSString * const PKRevealControllerAnimationTypeKey;                 // NSNumber containing NSInteger
-extern NSString * const PKRevealControllerAllowsOverdrawKey;                // NSNumber containing BOOL
-extern NSString * const PKRevealControllerQuickSwipeToggleVelocityKey;      // NSNumber containing CGFloat
-extern NSString * const PKRevealControllerDisablesFrontViewInteractionKey;  // NSNumber containing BOOL
+extern NSString * const PKRevealControllerAnimationDurationKey;                 // NSNumber containing CGFloat
+extern NSString * const PKRevealControllerAnimationCurveKey;                    // NSNumber containing NSInteger
+extern NSString * const PKRevealControllerAnimationTypeKey;                     // NSNumber containing NSInteger
+extern NSString * const PKRevealControllerAllowsOverdrawKey;                    // NSNumber containing BOOL
+extern NSString * const PKRevealControllerQuickSwipeToggleVelocityKey;          // NSNumber containing CGFloat
+extern NSString * const PKRevealControllerDisablesFrontViewInteractionKey;      // NSNumber containing BOOL
+extern NSString * const PKRevealControllerRecognizesPanningOnFrontViewKey;      // NSNumber containing BOOL
+extern NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey;     // NSNumber containing BOOL
 
 typedef void(^PKDefaultCompletionHandler)(void);
 typedef void(^PKDefaultErrorHandler)(NSError *error);
@@ -57,6 +59,9 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 @property (nonatomic, strong, readonly) UIViewController *rightViewController;
 
 @property (nonatomic, strong, readonly) NSDictionary *options;
+
+@property (nonatomic, strong, readonly) UIPanGestureRecognizer *revealPanGestureRecognizer;
+@property (nonatomic, strong, readonly) UITapGestureRecognizer *revealResetTapGestureRecognizer;
 
 @property (nonatomic, assign, readonly) PKRevealControllerState state;
 @property (nonatomic, assign, readonly) BOOL isPresentationModeActive;
