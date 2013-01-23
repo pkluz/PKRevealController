@@ -1120,16 +1120,6 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 #pragma mark - Helpers (States)
 
-- (BOOL)hasLeftViewController
-{
-    return (self.type & PKRevealControllerTypeLeft);
-}
-
-- (BOOL)hasRightViewController
-{
-    return (self.type & PKRevealControllerTypeRight);
-}
-
 - (BOOL)isLeftViewVisible
 {
     return isPositive(CGRectGetMinX(self.frontViewContainer.frame));
