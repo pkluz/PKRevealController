@@ -1,4 +1,4 @@
-<center>![PKRevealController](https://raw.github.com/pkluz/ZUUIRevealController/hero.png)</center>
+<center>![PKRevealController](https://raw.github.com/pkluz/PKRevealController/hero.png)</center>
 
 PKRevealController is a delightful view controller container for iOS, enabling you to present multiple controllers on top of one another. It is easy to set-up and highly flexible.
 
