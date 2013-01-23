@@ -13,7 +13,7 @@
 #import "PKRevealController.h"
 #import "PKRevealControllerContainerView.h"
 
-#define DEFAULT_ANIMATION_DURATION_VALUE 0.185f
+#define DEFAULT_ANIMATION_DURATION_VALUE 0.185
 #define DEFAULT_ANIMATION_CURVE_VALUE UIViewAnimationCurveLinear
 #define DEFAULT_LEFT_VIEW_WIDTH_RANGE NSMakeRange(280, 310)
 #define DEFAULT_RIGHT_VIEW_WIDTH_RANGE DEFAULT_LEFT_VIEW_WIDTH_RANGE
@@ -600,7 +600,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     
     if (animationDurationNumber != nil)
     {
-        return [animationDurationNumber floatValue];
+        return [animationDurationNumber doubleValue];
     }
     
     return DEFAULT_ANIMATION_DURATION_VALUE;

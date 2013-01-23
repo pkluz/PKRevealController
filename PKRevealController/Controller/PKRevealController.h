@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, PKRevealControllerState)
 
 typedef NS_ENUM(NSUInteger, PKRevealControllerAnimationType)
 {
-    PKRevealControllerAnimationTypeStatic
+    PKRevealControllerAnimationTypeStatic // Rear view's do not move at all.
 };
 
 typedef NS_OPTIONS(NSUInteger, PKRevealControllerType)
@@ -37,16 +37,72 @@ typedef NS_OPTIONS(NSUInteger, PKRevealControllerType)
 
 /*
  * List of option keys that can be passed in the options dictionary.
- * See the key's descriptions for what their respective values are.
  */
-extern NSString * const PKRevealControllerAnimationDurationKey;                 // NSNumber containing CGFloat
-extern NSString * const PKRevealControllerAnimationCurveKey;                    // NSNumber containing NSInteger
-extern NSString * const PKRevealControllerAnimationTypeKey;                     // NSNumber containing NSInteger
-extern NSString * const PKRevealControllerAllowsOverdrawKey;                    // NSNumber containing BOOL
-extern NSString * const PKRevealControllerQuickSwipeToggleVelocityKey;          // NSNumber containing CGFloat
-extern NSString * const PKRevealControllerDisablesFrontViewInteractionKey;      // NSNumber containing BOOL
-extern NSString * const PKRevealControllerRecognizesPanningOnFrontViewKey;      // NSNumber containing BOOL
-extern NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey;     // NSNumber containing BOOL
+
+/*
+ * Animation duration for automatic front view movement.
+ *
+ * @default 0.185sec
+ * @value NSNumber containing an NSTimeInterval (double)
+ */
+extern NSString * const PKRevealControllerAnimationDurationKey;
+
+/*
+ * Animation curve for automatic front view movement.
+ *
+ * @default UIViewAnimationCurveLinear
+ * @value NSNumber containing a UIViewAnimationCurve (NSUInteger)
+ */
+extern NSString * const PKRevealControllerAnimationCurveKey;
+
+/*
+ * The controller's animation type.
+ *
+ * @default PKRevealControllerAnimationTypeStatic
+ * @value NSNumber containing a PKRevealControllerAnimationType (NSUInteger)
+ */
+extern NSString * const PKRevealControllerAnimationTypeKey;
+
+/*
+ * Determines whether an overdraw can take place. I.e. panning further than the views min-width.
+ *
+ * @default YES
+ * @value NSNumber containing BOOL
+ */
+extern NSString * const PKRevealControllerAllowsOverdrawKey;
+
+/*
+ * The minimum swipe velocity to trigger front view movement even if the actual min-threshold wasn't reached.
+ *
+ * @default 800.0f
+ * @value NSNumber containing CGFloat
+ */
+extern NSString * const PKRevealControllerQuickSwipeToggleVelocityKey;
+
+/*
+ * Determines whether front view interaction is disabled while presenting a side view.
+ *
+ * @default YES
+ * @value NSNumber containing BOOL
+ */
+extern NSString * const PKRevealControllerDisablesFrontViewInteractionKey;
+
+/*
+ * Determines whether there's a UIPanGestureRecognizer placed over the entire front view, enabling pan-based reveal.
+ *
+ * @default YES
+ * @value NSNumber containing BOOL
+ */
+extern NSString * const PKRevealControllerRecognizesPanningOnFrontViewKey;
+
+/*
+ * Determines whether there's a UITapGestureRecognizer placed over the entire front view, when presenting
+ * one of the side views to enable snap-back-on-tap functionality.
+ *
+ * @default YES
+ * @value NSNumber containing BOOL
+ */
+extern NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey;
 
 typedef void(^PKDefaultCompletionHandler)(void);
 typedef void(^PKDefaultErrorHandler)(NSError *error);
