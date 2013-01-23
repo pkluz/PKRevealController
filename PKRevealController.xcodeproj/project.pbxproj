@@ -58,7 +58,6 @@
 		F94D670716AE1E5F00F0DAE3 /* RightDemoViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "RightDemoViewController~ipad.xib"; path = "Demo Classes/RightDemoViewController~ipad.xib"; sourceTree = "<group>"; };
 		F94D670816AE1E5F00F0DAE3 /* RightDemoViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "RightDemoViewController~iphone.xib"; path = "Demo Classes/RightDemoViewController~iphone.xib"; sourceTree = "<group>"; };
 		F9595ECC16AB31FA001E83AF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
-		F96610D4168B317200A031E7 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		F9E6F1991688B76F00C7CF25 /* PKRevealController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PKRevealController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9E6F19D1688B76F00C7CF25 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F9E6F19F1688B76F00C7CF25 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -151,7 +150,6 @@
 		F9E6F19C1688B76F00C7CF25 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F96610D4168B317200A031E7 /* MapKit.framework */,
 				F9E6F1BD1688B85900C7CF25 /* QuartzCore.framework */,
 				F9E6F19D1688B76F00C7CF25 /* UIKit.framework */,
 				F9E6F19F1688B76F00C7CF25 /* Foundation.framework */,
