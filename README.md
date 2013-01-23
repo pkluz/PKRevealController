@@ -63,6 +63,12 @@ It is really easy to send messages between controllers, as the `revealController
 ###And more…
 Please have a look at the [PKRevealController.h](https://github.com/pkluz/ZUUIRevealController/blob/development/PKRevealController/Controller/PKRevealController.h) file to see a detailed documentation of the entire API the controller provides.
 
+##Requirements
+- Requires iOS 5.0 or above
+- Requires Automatic Reference Counting (ARC)
+
+> If you require non-ARC compatibility, you will need to set the `-fobjc-arc` compiler flag on all of the PKRevealController source files.
+
 ##License
 PKRevealController - Copyright (C) 2012 Philip Kluz (Philip.Kluz@zuui.org)
  
