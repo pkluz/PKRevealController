@@ -4,12 +4,16 @@ PKRevealController is a delightful view controller container for iOS, enabling y
 
 >The PKRevealController is the evolution of the ZUUIRevealController but **not API compatible** with any previous versions. The entire controller was rewritten from the ground up and major changes were inevitable. If you wish to access the older versions, please download one of the [tags](https://github.com/pkluz/ZUUIRevealController/tags) or checkout the [deprecated](https://github.com/pkluz/ZUUIRevealController/tree/deprecated) branch.
 
+<br />
+
 ##Features
 - Proper view controller containment usage
 - Elegant block API
 - Supports both left and right sided view presentation
 - Works on both iPhones & iPads
 - Supports landscape & portrait orientations
+
+<br />
 
 ##How-To
 You can either simply drag and drop the `PKRevealController/Controller` folder into your existing project or add the library as a submodule and reference `PKRevealController.xcodeproj` from within your own project.
@@ -37,12 +41,14 @@ You can either simply drag and drop the `PKRevealController/Controller` folder i
 	``` objective-c
     self.window.rootViewController = revealController;
 	```
-	
+
+<br />
+
 ###Usage
 --
 By importing the `PKRevealController.h` file you automatically import an Objective-C category which extends all UIViewControllers and its descendants with a `revealController` property. The result is a behaviour similar to the familiar `navigationController` property.
 
-####Configuring the views
+###Configuring the views
 Each of the side controllers that are managed by your reveal controller can specify their own reveal-widths. 
 For instance in their `viewDidLoad` method:	
 
@@ -61,13 +67,17 @@ It is really easy to send messages between controllers, as the `revealController
 ```
 
 ###And more…
-Please have a look at the [PKRevealController.h](https://github.com/pkluz/ZUUIRevealController/blob/development/PKRevealController/Controller/PKRevealController.h) file to see a detailed documentation of the entire API the controller provides.
+Please have a look at the [PKRevealController.h](https://github.com/pkluz/ZUUIRevealController/blob/development/PKRevealController/Controller/PKRevealController.h) file to see a detailed documentation of the entire API the controller provides. For more detailed tutorials please take a look at the [wiki](https://github.com/pkluz/ZUUIRevealController/wiki). Chances are, your issue is already covered.
+
+<br />
 
 ##Requirements
 - Requires iOS 5.0 or above
 - Requires Automatic Reference Counting (ARC)
 
 > If you require non-ARC compatibility, you will need to set the `-fobjc-arc` compiler flag on all of the PKRevealController source files.
+
+<br />
 
 ##License
 PKRevealController - Copyright (C) 2012 Philip Kluz (Philip.Kluz@zuui.org)
