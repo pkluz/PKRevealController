@@ -2,7 +2,7 @@
 
 PKRevealController is a delightful view controller container for iOS, enabling you to present multiple controllers on top of one another. It is easy to set-up and highly flexible.
 
->The PKRevealController is the evolution of the ZUUIRevealController but **not API compatible** with any previous versions. The entire controller was rewritten from the ground up and major changes were inevitable. If you wish to access the older versions, please download one of the [tags](https://github.com/pkluz/ZUUIRevealController/tags) or checkout the [deprecated](https://github.com/pkluz/ZUUIRevealController/tree/deprecated) branch.
+>The PKRevealController is the evolution of the ZUUIRevealController but **not API compatible** with any previous versions. The entire controller was rewritten from the ground up and major changes were inevitable. If you wish to access the older versions, please download one of the [tags](https://github.com/pkluz/PKRevealController/tags) or checkout the [deprecated](https://github.com/pkluz/PKRevealController/tree/deprecated) branch.
 
 <br />
 
@@ -65,7 +65,7 @@ It is really easy to send messages between controllers, as the `revealController
 ```
 
 ###And more…
-Please have a look at the [PKRevealController.h](https://github.com/pkluz/ZUUIRevealController/blob/development/PKRevealController/Controller/PKRevealController.h) file to see a detailed documentation of the entire API the controller provides. For more detailed tutorials please take a look at the [wiki](https://github.com/pkluz/ZUUIRevealController/wiki). Chances are, your issue is already covered.
+Please have a look at the [PKRevealController.h](https://github.com/pkluz/PKRevealController/blob/master/PKRevealController/Controller/PKRevealController.h) file to see a detailed documentation of the entire API the controller provides. For more detailed tutorials please take a look at the [wiki](https://github.com/pkluz/PKRevealController/wiki). Chances are, your issue is already covered.
 
 <br />
 
