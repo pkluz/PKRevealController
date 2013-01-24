@@ -20,7 +20,7 @@ static char revealControllerKey;
 
 - (void)setRevealController:(PKRevealController *)revealController
 {
-    objc_setAssociatedObject(self, &revealControllerKey, revealController, OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, &revealControllerKey, revealController, OBJC_ASSOCIATION_ASSIGN);
 }
 
 - (PKRevealController *)revealController
