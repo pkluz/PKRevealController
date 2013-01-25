@@ -122,6 +122,9 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 @property (nonatomic, assign, readonly) PKRevealControllerState state;
 @property (nonatomic, assign, readonly) BOOL isPresentationModeActive;
 
+@property (nonatomic, assign, readwrite) BOOL enablePanGestureRecognizer;
+@property (nonatomic, assign, readwrite) BOOL enableRevealTapGestureRecognizer;
+
 #pragma mark - Methods
 
 /**

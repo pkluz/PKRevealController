@@ -184,6 +184,9 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     self.leftViewWidthRange = DEFAULT_LEFT_VIEW_WIDTH_RANGE;
     self.rightViewWidthRange = DEFAULT_RIGHT_VIEW_WIDTH_RANGE;
     
+    _enablePanGestureRecognizer = YES;
+    _enableRevealTapGestureRecognizer = YES;
+    
     _frontViewController.revealController = self;
     _leftViewController.revealController = self;
     _rightViewController.revealController = self;
@@ -558,6 +561,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
                                                                         action:panRecognitionCallback];
     self.revealPanGestureRecognizer.delaysTouchesBegan = YES;
     self.revealPanGestureRecognizer.delegate = self;
+    self.enablePanGestureRecognizer = self.enablePanGestureRecognizer;
 }
 
 - (void)setupTapGestureRecognizer
@@ -566,6 +570,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     self.revealResetTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                         action:tapRecognitionCallback];
     self.revealResetTapGestureRecognizer.delegate = self;
+    self.enableRevealTapGestureRecognizer = self.enableRevealTapGestureRecognizer;
 }
 
 #pragma mark - Options
@@ -690,15 +695,33 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     return DEFAULT_RECOGNIZES_RESET_TAP_ON_FRONT_VIEW_VALUE;
 }
 
+#pragma mark - Gesture Enable/Disable
+
+- (void)setEnableRevealTapGestureRecognizer:(BOOL)enableRevealTapGestureRecognizer
+{
+    _enableRevealTapGestureRecognizer = enableRevealTapGestureRecognizer;
+    self.revealResetTapGestureRecognizer.enabled = enableRevealTapGestureRecognizer;
+}
+
+- (void)setEnablePanGestureRecognizer:(BOOL)enablePanGestureRecognizer
+{
+    _enablePanGestureRecognizer = enablePanGestureRecognizer;
+    self.revealPanGestureRecognizer.enabled = enablePanGestureRecognizer;
+}
+
 #pragma mark - Gesture Recognition
 
 - (void)didRecognizeTapWithGestureRecognizer:(UITapGestureRecognizer *)recognizer
 {
+    if (!self.revealResetTapGestureRecognizer) return;
+    
     [self showViewController:self.frontViewController];
 }
 
 - (void)didRecognizePanWithGestureRecognizer:(UIPanGestureRecognizer *)recognizer
 {
+    if (!self.enablePanGestureRecognizer) return;
+    
     switch (recognizer.state)
     {
         case UIGestureRecognizerStateBegan:
