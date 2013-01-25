@@ -28,4 +28,12 @@ static char revealControllerKey;
     return (PKRevealController *)objc_getAssociatedObject(self, &revealControllerKey);
 }
 
+- (PKRevealController *)navigationRevealController
+{
+    PKRevealController *controller = self.revealController;
+    if (controller == nil) controller = self.navigationController.revealController;
+    if (controller == nil) controller = self.tabBarController.revealController;
+    return controller;
+}
+
 @end
