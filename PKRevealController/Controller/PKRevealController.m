@@ -713,6 +713,8 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
             break;
             
         case UIGestureRecognizerStateEnded:
+        case UIGestureRecognizerStateCancelled:
+        case UIGestureRecognizerStateFailed:
             [self handleGestureEndedWithRecognizer:recognizer];
             break;
                         
