@@ -180,15 +180,9 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 - (void)commonInitializer
 {
-    self.state = PKRevealControllerFocusesFrontViewController;
-    self.leftViewWidthRange = DEFAULT_LEFT_VIEW_WIDTH_RANGE;
-    self.rightViewWidthRange = DEFAULT_RIGHT_VIEW_WIDTH_RANGE;
-    
     _frontViewController.revealController = self;
     _leftViewController.revealController = self;
     _rightViewController.revealController = self;
-    
-    [self addFrontViewControllerToHierarchy];
 }
 
 #pragma mark - API
@@ -420,6 +414,8 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     [self setup];
     [self setupPanGestureRecognizer];
     [self setupTapGestureRecognizer];
+    
+    [self addFrontViewControllerToHierarchy];
 }
 
 #pragma mark - View Lifecycle (Controller)
@@ -441,7 +437,10 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         [self.view addSubview:self.frontViewContainer];
         [self.frontViewController didMoveToParentViewController:self];
         
-        [self addPanGestureRecognizer];
+        if (self.recognizesPanningOnFrontView)
+        {
+            [self addPanGestureRecognizerToFrontView];
+        }
     }
 }
 
@@ -449,10 +448,9 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 {
     if ([self.childViewControllers containsObject:self.frontViewController])
     {
+        [self removePanGestureRecognierFromFrontView];
         [self.frontViewContainer removeFromSuperview];
         [self.frontViewController removeFromParentViewController];
-        
-        [self removePanGestureRecognizer];
     }
 }
 
@@ -512,15 +510,12 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     }
 }
 
-- (void)addPanGestureRecognizer
+- (void)addPanGestureRecognizerToFrontView
 {
-    if (self.recognizesPanningOnFrontView)
-    {
-        [self.frontViewContainer addGestureRecognizer:self.revealPanGestureRecognizer];
-    }
+    [self.frontViewContainer addGestureRecognizer:self.revealPanGestureRecognizer];
 }
 
-- (void)removePanGestureRecognizer
+- (void)removePanGestureRecognierFromFrontView
 {
     if ([[self.frontViewContainer gestureRecognizers] containsObject:self.revealPanGestureRecognizer])
     {
@@ -528,15 +523,15 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     }
 }
 
-- (void)addTapGestureRecognizer
+- (void)addTapGestureRecognizerToFrontView
 {
-    if (self.recognizesResetTapOnFrontView)
+    if (self.state != PKRevealControllerFocusesFrontViewController)
     {
         [self.frontViewContainer addGestureRecognizer:self.revealResetTapGestureRecognizer];
     }
 }
 
-- (void)removeTapGestureRecognizer
+- (void)removeTapGestureRecognizerFromFrontView
 {
     if ([[self.frontViewContainer gestureRecognizers] containsObject:self.revealResetTapGestureRecognizer])
     {
@@ -548,15 +543,23 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 - (void)setup
 {
+    self.state = PKRevealControllerFocusesFrontViewController;
+    self.leftViewWidthRange = DEFAULT_LEFT_VIEW_WIDTH_RANGE;
+    self.rightViewWidthRange = DEFAULT_RIGHT_VIEW_WIDTH_RANGE;
+    
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
+}
+
+- (void)setupViewControllers
+{
+    [self addFrontViewControllerToHierarchy];
 }
 
 - (void)setupPanGestureRecognizer
 {
     SEL panRecognitionCallback = @selector(didRecognizePanWithGestureRecognizer:);
     self.revealPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                        action:panRecognitionCallback];
-    self.revealPanGestureRecognizer.delaysTouchesBegan = YES;
+                                                                              action:panRecognitionCallback];
     self.revealPanGestureRecognizer.delegate = self;
 }
 
@@ -564,7 +567,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 {
     SEL tapRecognitionCallback = @selector(didRecognizeTapWithGestureRecognizer:);
     self.revealResetTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                        action:tapRecognitionCallback];
+                                                                                   action:tapRecognitionCallback];
     self.revealResetTapGestureRecognizer.delegate = self;
 }
 
@@ -881,7 +884,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
              weakSelf.disablesFrontViewInteraction ? [weakSelf.frontViewContainer disableUserInteractionForContainedView] : nil;
              weakSelf.state = PKRevealControllerFocusesLeftViewController;
              [weakSelf removeRightViewControllerFromHierarchy];
-             [weakSelf addTapGestureRecognizer];
+             [weakSelf addTapGestureRecognizerToFrontView];
              safelyExecuteCompletionBlock(completion);
          }];
     };
@@ -917,7 +920,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
          {
              weakSelf.disablesFrontViewInteraction ? [weakSelf.frontViewContainer disableUserInteractionForContainedView] : nil;
              weakSelf.state = PKRevealControllerFocusesRightViewController;
-             [weakSelf addTapGestureRecognizer];
+             [weakSelf addTapGestureRecognizerToFrontView];
              safelyExecuteCompletionBlock(completion);
          }];
     };
@@ -950,7 +953,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
          weakSelf.state = PKRevealControllerFocusesFrontViewController;
          [weakSelf removeRightViewControllerFromHierarchy];
          [weakSelf removeLeftViewControllerFromHierarchy];
-         [weakSelf removeTapGestureRecognizer];
+         [weakSelf removeTapGestureRecognizerFromFrontView];
          safelyExecuteCompletionBlock(completion);
      }];
 }
@@ -1126,11 +1129,11 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         
         if (_recognizesPanningOnFrontView)
         {
-            [self addPanGestureRecognizer];
+            [self addPanGestureRecognizerToFrontView];
         }
         else
         {
-            [self removePanGestureRecognizer];
+            [self removePanGestureRecognierFromFrontView];
         }
     }
 }
@@ -1143,11 +1146,11 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         
         if (_recognizesResetTapOnFrontView)
         {
-            [self addTapGestureRecognizer];
+            [self addTapGestureRecognizerToFrontView];
         }
         else
         {
-            [self removeTapGestureRecognizer];
+            [self removeTapGestureRecognizerFromFrontView];
         }
     }
 }
