@@ -15,8 +15,7 @@
 @interface PKRevealControllerContainerView()
 
 #pragma mark - Properties
-@property (nonatomic, weak, readwrite) UIViewController *controller;
-@property (nonatomic, assign, readwrite) BOOL hasShadow;
+@property (nonatomic, assign, readwrite, getter = hasShadow) BOOL shadow;
 
 @end
 
@@ -26,24 +25,21 @@
 
 - (id)initForController:(UIViewController *)controller
 {
-    self = [super initWithFrame:controller.view.bounds];
-    
-    if (self != nil)
-    {
-        self.controller = controller;
-    }
-    
-    return self;
+    return [self initForController:controller shadow:NO];
 }
 
-- (id)initForController:(UIViewController *)controller withShadow:(BOOL)hasShadow
+- (id)initForController:(UIViewController *)controller shadow:(BOOL)hasShadow
 {
     self = [super initWithFrame:controller.view.bounds];
     
     if (self != nil)
     {
-        self.controller = controller;
-        self.hasShadow = hasShadow;
+        self.viewController = controller;
+        if (hasShadow)
+        {
+            [self setupShadow];
+        }
+        self.shadow = hasShadow;
     }
     
     return self;
@@ -62,32 +58,13 @@
     self.layer.shadowPath = shadowPath.CGPath;
 }
 
-#pragma mark - Accessors
-
-- (void)setHasShadow:(BOOL)hasShadow
-{
-    if (_hasShadow != hasShadow)
-    {
-        _hasShadow = hasShadow;
-        
-        if (_hasShadow)
-        {
-            [self setupShadow];
-        }
-    }
-}
-
 #pragma mark - Layouting
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    [self layoutControllerView];
-}
-
-- (void)layoutControllerView
-{
-    self.controller.view.frame = self.controller.view.bounds;
+    // layout controller view
+    self.viewController.view.frame = self.viewController.view.bounds;
 }
 
 - (void)refreshShadowWithAnimationDuration:(NSTimeInterval)duration
@@ -109,14 +86,14 @@
 
 #pragma mark - Accessors
 
-- (void)setController:(UIViewController *)controller
+- (void)setViewController:(UIViewController *)controller
 {
-    if (_controller != controller)
+    if (_viewController != controller)
     {
-        [_controller.view removeFromSuperview];
-        _controller = controller;
-        _controller.view.frame = _controller.view.bounds;
-        [self addSubview:_controller.view];
+        [_viewController.view removeFromSuperview];
+        _viewController = controller;
+        _viewController.view.frame = _viewController.view.bounds;
+        [self addSubview:_viewController.view];
     }
 }
 
@@ -124,17 +101,12 @@
 
 - (void)enableUserInteractionForContainedView
 {
-    [self.controller.view setUserInteractionEnabled:YES];
+    [self.viewController.view setUserInteractionEnabled:YES];
 }
 
 - (void)disableUserInteractionForContainedView
 {
-    [self.controller.view setUserInteractionEnabled:NO];
-}
-
-- (void)prepareForReuseWithController:(UIViewController *)controller
-{
-    self.controller = controller;
+    [self.viewController.view setUserInteractionEnabled:NO];
 }
 
 @end
