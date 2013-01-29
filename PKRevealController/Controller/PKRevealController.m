@@ -917,24 +917,24 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         [weakSelf setFrontViewFrame:[weakSelf frontViewFrameForVisibleRightView]
                            animated:animated
                          completion:^(BOOL finished)
-         {
-             if (weakSelf.disablesFrontViewInteraction)
-             {
-                 [weakSelf.frontViewContainer disableUserInteractionForContainedView];
-             }
-             weakSelf.state = PKRevealControllerFocusesRightViewController;
-             [weakSelf addTapGestureRecognizerToFrontView];
-             safelyExecuteCompletionBlockOnMainThread(completion, finished);
-         }];
+        {
+            if (weakSelf.disablesFrontViewInteraction)
+            {
+                [weakSelf.frontViewContainer disableUserInteractionForContainedView];
+            }
+            weakSelf.state = PKRevealControllerFocusesRightViewController;
+            [weakSelf addTapGestureRecognizerToFrontView];
+            safelyExecuteCompletionBlockOnMainThread(completion, finished);
+        }];
     };
     
     if ([self isLeftViewVisible])
     {
         [self showFrontViewControllerAnimated:animated
                                    completion:^(BOOL finished)
-         {
-             showRightViewBlock(finished);
-         }];
+        {
+            showRightViewBlock(finished);
+        }];
     }
     else
     {
@@ -1429,12 +1429,14 @@ NS_INLINE BOOL isZero(CGFloat value)
 
 NS_INLINE void safelyExecuteCompletionBlockOnMainThread(PKDefaultCompletionHandler block, BOOL finished)
 {
-    void(^executeBlock)() = ^() {
+    void(^executeBlock)() = ^()
+    {
         if (block != NULL)
         {
             block(finished);
         }
     };
+    
     if ([NSThread isMainThread])
     {
         executeBlock();
@@ -1444,6 +1446,5 @@ NS_INLINE void safelyExecuteCompletionBlockOnMainThread(PKDefaultCompletionHandl
         dispatch_async(dispatch_get_main_queue(), executeBlock);
     }
 }
-
 
 @end
