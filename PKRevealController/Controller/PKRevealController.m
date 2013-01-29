@@ -424,7 +424,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     if (self.frontViewController != nil && ![self.childViewControllers containsObject:self.frontViewController])
     {
         [self addChildViewController:self.frontViewController];
-        [self.frontViewContainer prepareForReuseWithController:self.frontViewController];
+        self.frontViewContainer.viewController = self.frontViewController;
         
         if (self.frontViewContainer == nil)
         {
@@ -456,7 +456,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     if (self.leftViewController != nil && ![self.childViewControllers containsObject:self.leftViewController])
     {
         [self addChildViewController:self.leftViewController];
-        [self.leftViewContainer prepareForReuseWithController:self.leftViewController];
+        self.leftViewContainer.viewController = self.leftViewController;
         
         if (self.leftViewContainer == nil)
         {
@@ -484,7 +484,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     if (self.rightViewController != nil && ![self.childViewControllers containsObject:self.rightViewController])
     {
         [self addChildViewController:self.rightViewController];
-        [self.rightViewContainer prepareForReuseWithController:self.rightViewController];
+        self.rightViewContainer.viewController = self.rightViewController;
         
         if (self.rightViewContainer == nil)
         {

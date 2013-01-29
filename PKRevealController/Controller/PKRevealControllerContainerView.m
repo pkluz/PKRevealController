@@ -109,14 +109,14 @@
 
 #pragma mark - Accessors
 
-- (void)setController:(UIViewController *)controller
+- (void)setViewController:(UIViewController *)controller
 {
-    if (_controller != controller)
+    if (_viewController != controller)
     {
-        [_controller.view removeFromSuperview];
-        _controller = controller;
-        _controller.view.frame = _controller.view.bounds;
-        [self addSubview:_controller.view];
+        [_viewController.view removeFromSuperview];
+        _viewController = controller;
+        _viewController.view.frame = _viewController.view.bounds;
+        [self addSubview:_viewController.view];
     }
 }
 
@@ -124,17 +124,12 @@
 
 - (void)enableUserInteractionForContainedView
 {
-    [self.controller.view setUserInteractionEnabled:YES];
+    [self.viewController.view setUserInteractionEnabled:YES];
 }
 
 - (void)disableUserInteractionForContainedView
 {
-    [self.controller.view setUserInteractionEnabled:NO];
-}
-
-- (void)prepareForReuseWithController:(UIViewController *)controller
-{
-    self.controller = controller;
+    [self.viewController.view setUserInteractionEnabled:NO];
 }
 
 @end

@@ -15,13 +15,15 @@
 
 @interface PKRevealControllerContainerView : UIView
 
+#pragma mark - Properties
+@property (nonatomic, weak, readwrite) UIViewController *viewController;
+
 #pragma mark - Methods
 - (id)initForController:(UIViewController *)controller;
 - (id)initForController:(UIViewController *)controller shadow:(BOOL)hasShadow;
 
 - (void)enableUserInteractionForContainedView;
 - (void)disableUserInteractionForContainedView;
-- (void)prepareForReuseWithController:(UIViewController *)controller;
 
 - (void)refreshShadowWithAnimationDuration:(NSTimeInterval)duration;
 
