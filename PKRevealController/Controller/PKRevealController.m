@@ -1424,18 +1424,21 @@ NS_INLINE BOOL isZero(CGFloat value)
 
 NS_INLINE void safelyExecuteCompletionBlockOnMainThread(PKDefaultCompletionHandler block, BOOL finished)
 {
-    dispatch_async(dispatch_get_main_queue(), ^
+    void(^executeBlock)() = ^() {
+        if (block != NULL)
+        {
+            block(finished);
+        }
+    };
+    if ([NSThread isMainThread])
     {
-        (block != NULL) ? block() : nil;
-    });
+        executeBlock();
+    }
+    else
+    {
+        dispatch_async(dispatch_get_main_queue(), executeBlock);
+    }
 }
 
-NS_INLINE void safelyExecuteErrorBlock(PKDefaultErrorHandler block, NSError *error)
-{
-    dispatch_async(dispatch_get_main_queue(), ^
-    {
-        (block != NULL) ? block(error) : nil;
-    });
-}
 
 @end
