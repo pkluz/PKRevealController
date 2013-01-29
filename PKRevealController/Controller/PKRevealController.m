@@ -310,13 +310,6 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     }
 }
 
-- (void)setLeftViewController:(UIViewController *)leftViewController
-                   completion:(PKDefaultCompletionHandler)completion
-{
-    [self setLeftViewController:leftViewController];
-    safelyExecuteCompletionBlock(completion);
-}
-
 - (void)setRightViewController:(UIViewController *)rightViewController
 {
     BOOL isRightViewVisible = (self.state == PKRevealControllerFocusesRightViewController);
@@ -337,13 +330,6 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
             [self addRightViewControllerToHierarchy];
         }
     }
-}
-
-- (void)setRightViewController:(UIViewController *)rightViewController
-                    completion:(PKDefaultCompletionHandler)completion
-{
-    [self setRightViewController:rightViewController];
-    safelyExecuteCompletionBlock(completion);
 }
 
 - (PKRevealControllerType)type

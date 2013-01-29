@@ -219,29 +219,11 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 - (void)setLeftViewController:(UIViewController *)leftViewController;
 
 /**
- * Exchanges the current left view controller for a new one.
- *
- * @param UIViewController leftViewController - The new left view controller.
- * @param PKDefaultCompletionHandler completion - Executed on the main thread after the animation is completed.
- */
-- (void)setLeftViewController:(UIViewController *)leftViewController
-                   completion:(PKDefaultCompletionHandler)completion;
-
-/**
  * Exchanges the current right view controller for a new one.
  *
  * @param UIViewController rightViewController - Thew new right view controller.
  */
 - (void)setRightViewController:(UIViewController *)rightViewController;
-
-/**
- * Exchanges the current right view controller for a new one.
- *
- * @param UIViewController rightViewController - The new right view controller.
- * @param PKDefaultCompletionHandler completion - Executed on the main thread after the animation is completed.
- */
-- (void)setRightViewController:(UIViewController *)rightViewController
-                    completion:(PKDefaultCompletionHandler)completion;
 
 /**
  * Adjusts the minimum and maximum reveal width of any given view controller's view.
