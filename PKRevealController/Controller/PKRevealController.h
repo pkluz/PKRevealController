@@ -29,9 +29,9 @@ typedef NS_ENUM(NSUInteger, PKRevealControllerAnimationType)
 
 typedef NS_OPTIONS(NSUInteger, PKRevealControllerType)
 {
-    PKRevealControllerTypeNone,
-    PKRevealControllerTypeLeft,
-    PKRevealControllerTypeRight,
+    PKRevealControllerTypeNone  = 0,
+    PKRevealControllerTypeLeft  = 1 << 0,
+    PKRevealControllerTypeRight = 1 << 1,
     PKRevealControllerTypeBoth = (PKRevealControllerTypeLeft | PKRevealControllerTypeRight)
 };
 
