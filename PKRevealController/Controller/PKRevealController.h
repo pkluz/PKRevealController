@@ -104,7 +104,7 @@ extern NSString * const PKRevealControllerRecognizesPanningOnFrontViewKey;
  */
 extern NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey;
 
-typedef void(^PKDefaultCompletionHandler)(void);
+typedef void(^PKDefaultCompletionHandler)(BOOL finished);
 typedef void(^PKDefaultErrorHandler)(NSError *error);
 
 @interface PKRevealController : UIViewController <UIGestureRecognizerDelegate>
