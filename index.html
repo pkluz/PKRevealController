@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Zuuirevealcontroller by pkluz</title>
+    <title>PKRevealController by pkluz</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
@@ -15,45 +15,127 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1>Zuuirevealcontroller</h1>
-        <p>Facebook (iOS App) inspired custom ViewControllerContainer that enables to have a ViewController on top of another.</p>
+        <h1>PKRevealController</h1>
+        <p>PKRevealController (ex. ZUUIRevealController) is a delightful view controller container for iOS, enabling you to present multiple controllers on top of one another.</p>
 
-        <p class="view"><a href="https://github.com/pkluz/ZUUIRevealController">View the Project on GitHub <small>pkluz/ZUUIRevealController</small></a></p>
+        <p class="view"><a href="https://github.com/pkluz/PKRevealController">View the Project on GitHub <small>pkluz/PKRevealController</small></a></p>
 
 
         <ul>
-          <li><a href="https://github.com/pkluz/ZUUIRevealController/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/pkluz/ZUUIRevealController/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/pkluz/ZUUIRevealController">View On <strong>GitHub</strong></a></li>
+          <li><a href="https://github.com/pkluz/PKRevealController/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/pkluz/PKRevealController/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/pkluz/PKRevealController">View On <strong>GitHub</strong></a></li>
         </ul>
       </header>
       <section>
-        <h3>Welcome to GitHub Pages.</h3>
+        <p></p><img src="https://raw.github.com/pkluz/PKRevealController/master/hero.png" alt="PKRevealController">
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>PKRevealController is a delightful view controller container for iOS, enabling you to present multiple controllers on top of one another. It is easy to set-up and highly flexible.</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<blockquote>
+<p>The PKRevealController is the evolution of the ZUUIRevealController but <strong>not API compatible</strong> with any previous versions. The entire controller was rewritten from the ground up and major changes were inevitable. If you wish to access the older versions, please download one of the <a href="https://github.com/pkluz/PKRevealController/tags">tags</a> or checkout the <a href="https://github.com/pkluz/PKRevealController/tree/deprecated">deprecated</a> branch.</p>
+</blockquote>
+
+<p><br></p>
+
+<h2>Features</h2>
+
+<ul>
+<li>Proper view controller containment usage</li>
+<li>Elegant block API</li>
+<li>Supports both left and right sided view presentation</li>
+<li>Works on both iPhones &amp; iPads</li>
+<li>Supports landscape &amp; portrait orientations</li>
+</ul><p><br></p>
+
+<h2>How-To</h2>
+
+<p>You can either simply drag and drop the <code>PKRevealController/Controller</code> folder into your existing project or add the library as a submodule and reference <code>PKRevealController.xcodeproj</code> from within your own project.</p>
+
+<h3>Setup</h3>
+
+<h2></h2>
+
+<ol>
+<li><p><code>#import "PKRevealController.h"</code> wherever you require access to it.</p></li>
+<li>
+<p>Instantiate an options dictionary if you wish to have more granular control over the controller's behaviour:</p>
+
+<div class="highlight"><pre><span class="c1">// PKRevealController.h contains a list of all the specifiable options</span>
+<span class="n">NSDictionary</span> <span class="o">*</span><span class="n">options</span> <span class="o">=</span> <span class="err">@</span><span class="p">{</span>
+    <span class="n">PKRevealControllerAllowsOverdrawKey</span> <span class="o">:</span> <span class="p">[</span><span class="n">NSNumber</span> <span class="nl">numberWithBool:</span><span class="n">YES</span><span class="p">],</span>
+    <span class="n">PKRevealControllerDisablesFrontViewInteractionKey</span> <span class="o">:</span> <span class="p">[</span><span class="n">NSNumber</span> <span class="nl">numberWithBool:</span><span class="n">YES</span><span class="p">]</span>
+<span class="p">};</span>
+</pre></div>
+</li>
+<li>
+<p>Instantiate the view controllers you wish to present within the reveal controller and pass them as parameters to the initializer of your choice along with the options dictionary (or <code>nil</code> for default behaviour):</p>
+
+<div class="highlight"><pre><span class="c1">// Convenience initializer for a one-sided reveal controller.</span>
+<span class="n">PKRevealController</span> <span class="o">*</span><span class="n">revealController</span> <span class="o">=</span> <span class="p">[</span><span class="n">PKRevealController</span> <span class="nl">revealControllerWithFrontViewController:</span><span class="n">frontVC</span> <span class="nl">leftViewController:</span><span class="n">leftVC</span> <span class="nl">options:</span><span class="n">options</span><span class="p">];</span>
+</pre></div>
+</li>
+<li>
+<p>Assign the controller as your root view controller:</p>
+
+<div class="highlight"><pre><span class="n">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">rootViewController</span> <span class="o">=</span> <span class="n">revealController</span><span class="p">;</span>
+</pre></div>
+</li>
+</ol><h3>Usage</h3>
+
+<h2></h2>
+
+<p>By importing the <code>PKRevealController.h</code> file you automatically import an Objective-C category which extends all UIViewControllers and its descendants with a <code>revealController</code> property. The result is a behaviour similar to the familiar <code>navigationController</code> property.</p>
+
+<h3>Configuring the views</h3>
+
+<p>Each of the side controllers that are managed by your reveal controller can specify their own reveal-widths. 
+For instance in their <code>viewDidLoad</code> method: </p>
+
+<pre><code>- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self.revealController setMinimumWidth:220.0f maximumWidth:244.0f forViewController:self];
+}
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<h3>Sending messages between controllers</h3>
 
-<h3>Designer Templates</h3>
+<p>It is really easy to send messages between controllers, as the <code>revealController</code> exposes each of those as properties. For instance, from you left view controller you can easily print a description of the front view controller like this:</p>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<div class="highlight"><pre><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">revealController</span><span class="p">.</span><span class="n">frontViewController</span> <span class="n">description</span><span class="p">];</span>
+</pre></div>
 
-<h3>Rather Drive Stick?</h3>
+<h3>And more…</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p>Please have a look at the <a href="https://github.com/pkluz/PKRevealController/blob/master/PKRevealController/Controller/PKRevealController.h">PKRevealController.h</a> file to see a detailed documentation of the entire API the controller provides. For more detailed tutorials please take a look at the <a href="https://github.com/pkluz/PKRevealController/wiki">wiki</a>. Chances are, your issue is already covered.</p>
 
-<h3>Authors and Contributors</h3>
+<p><br></p>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<h2>Requirements</h2>
 
-<h3>Support or Contact</h3>
+<ul>
+<li>Requires iOS 5.0 or above</li>
+<li>Requires Automatic Reference Counting (ARC)</li>
+</ul><blockquote>
+<p>If you require non-ARC compatibility, you will need to set the <code>-fobjc-arc</code> compiler flag on all of the PKRevealController source files.</p>
+</blockquote>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p><br></p>
+
+<h2>License</h2>
+
+<p>Starting with v1.0b the controller is released under the <em>MIT license</em>, though upgraders from the ZUUIRevealController are free to keep using the <em>BSD clause-3</em>.</p>
+
+<blockquote>
+<p>PKRevealController - Copyright (C) 2012 Philip Kluz (<a href="mailto:Philip.Kluz@zuui.org">Philip.Kluz@zuui.org</a>)</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+</blockquote>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/pkluz">pkluz</a></p>
