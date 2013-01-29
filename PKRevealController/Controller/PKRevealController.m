@@ -227,7 +227,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 
 - (void)enterPresentationModeAnimated:(BOOL)animated
-                           completion:(PKDefaultCompletionHandler)completion;
+                           completion:(PKDefaultCompletionHandler)completion
 {
     if ([self isLeftViewVisible])
     {
