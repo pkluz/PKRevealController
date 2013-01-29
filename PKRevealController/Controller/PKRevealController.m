@@ -41,7 +41,7 @@
 @property (nonatomic, assign, readwrite) NSRange leftViewWidthRange;
 @property (nonatomic, assign, readwrite) NSRange rightViewWidthRange;
 
-@property (nonatomic, strong, readwrite) NSDictionary *options;
+@property (nonatomic, strong, readwrite) NSMutableDictionary *controllerOptions;
 @property (nonatomic, strong, readwrite) UIPanGestureRecognizer *revealPanGestureRecognizer;
 @property (nonatomic, strong, readwrite) UITapGestureRecognizer *revealResetTapGestureRecognizer;
 
@@ -136,7 +136,12 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         
         [self commonInitializer];
         
-        self.options = options;
+        self.controllerOptions = [options mutableCopy];
+        
+        if (self.controllerOptions == nil)
+        {
+            self.controllerOptions = [NSMutableDictionary dictionaryWithCapacity:10];
+        }
     }
     
     return self;
@@ -568,124 +573,211 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 #pragma mark - Options
 
-- (void)setOptions:(NSDictionary *)options
+- (NSDictionary *)options
 {
-    if (_options != options)
-    {
-        _options = options;
-    }
-    
-    [self updateConfigurationWithNewOptions];
-}
-
-- (void)updateConfigurationWithNewOptions
-{
-    self.animationDuration = [self extractAnimationDurationFromOptions];
-    self.animationCurve = [self extractAnimationCurveFromOptions];
-    self.animationType = [self extractAnimationTypeFromOptions];
-    self.allowsOverdraw = [self extractAllowsOverdrawFromOptions];
-    self.quickSwipeVelocity = [self extractQuickSwipeToggleVelocityFromOptions];
-    self.disablesFrontViewInteraction = [self extractDisablesFrontViewInteractionFromOptions];
-    self.recognizesPanningOnFrontView = [self extractRecognizesPanningOnFrontViewFromOptions];
-    self.recognizesResetTapOnFrontView = [self extractRecognizesResetTapOnFrontViewFromOptions];
+    return (NSDictionary *)self.controllerOptions;
 }
 
 #pragma mark -
 
-- (CGFloat)extractAnimationDurationFromOptions
+- (CGFloat)animationDuration
 {
-    NSNumber *animationDurationNumber = [self.options objectForKey:PKRevealControllerAnimationDurationKey];
+    NSNumber *number = [self.controllerOptions objectForKey:PKRevealControllerAnimationDurationKey];
     
-    if (animationDurationNumber != nil)
+    if (number == nil)
     {
-        return [animationDurationNumber doubleValue];
+        [self setAnimationDuration:DEFAULT_ANIMATION_DURATION_VALUE];
+        return [self animationDuration];
     }
-    
-    return DEFAULT_ANIMATION_DURATION_VALUE;
+    else
+    {
+        return [number floatValue];
+    }
 }
 
-- (UIViewAnimationCurve)extractAnimationCurveFromOptions
+- (void)setAnimationDuration:(CGFloat)animationDuration
 {
-    NSNumber *animationCurveNumber = [self.options objectForKey:PKRevealControllerAnimationCurveKey];
-    
-    if (animationCurveNumber != nil)
-    {
-        return (UIViewAnimationCurve)[animationCurveNumber integerValue];
-    }
-    
-    return DEFAULT_ANIMATION_CURVE_VALUE;
+    [self.controllerOptions setObject:[NSNumber numberWithFloat:animationDuration]
+                               forKey:PKRevealControllerAnimationDurationKey];
 }
 
-- (PKRevealControllerAnimationType)extractAnimationTypeFromOptions
+#pragma mark -
+
+- (UIViewAnimationCurve)animationCurve
 {
-    NSNumber *animationType = [self.options objectForKey:PKRevealControllerAnimationTypeKey];
+    NSNumber *number = [self.controllerOptions objectForKey:PKRevealControllerAnimationCurveKey];
     
-    if (animationType != nil)
+    if (number == nil)
     {
-        return (PKRevealControllerAnimationType)[animationType integerValue];
+        [self setAnimationCurve:DEFAULT_ANIMATION_CURVE_VALUE];
+        return [self animationCurve];
     }
-    
-    return DEFAULT_ANIMATION_TYPE_VALUE;
+    else
+    {
+        return (UIViewAnimationCurve)[number integerValue];
+    }
 }
 
-- (BOOL)extractAllowsOverdrawFromOptions
+- (void)setAnimationCurve:(UIViewAnimationCurve)animationCurve
 {
-    NSNumber *allowsOverdraw = [self.options objectForKey:PKRevealControllerAllowsOverdrawKey];
-    
-    if (allowsOverdraw != nil)
-    {
-        return [allowsOverdraw boolValue];
-    }
-    
-    return DEFAULT_ALLOWS_OVERDRAW_VALUE;
+    [self.controllerOptions setObject:[NSNumber numberWithInteger:animationCurve]
+                               forKey:PKRevealControllerAnimationCurveKey];
 }
 
-- (CGFloat)extractQuickSwipeToggleVelocityFromOptions
+#pragma mark -
+
+- (PKRevealControllerAnimationType)animationType
 {
-    NSNumber *quickSwipeVelocity = [self.options objectForKey:PKRevealControllerQuickSwipeToggleVelocityKey];
+    NSNumber *number = [self.controllerOptions objectForKey:PKRevealControllerAnimationTypeKey];
     
-    if (quickSwipeVelocity != nil)
+    if (number == nil)
     {
-        return [quickSwipeVelocity floatValue];
+        [self setAnimationType:DEFAULT_ANIMATION_TYPE_VALUE];
+        return [self animationType];
     }
-    
-    return DEFAULT_QUICK_SWIPE_TOGGLE_VELOCITY_VALUE;
+    else
+    {
+        return (PKRevealControllerAnimationType)[number integerValue];
+    }
 }
 
-- (CGFloat)extractDisablesFrontViewInteractionFromOptions
+- (void)setAnimationType:(PKRevealControllerAnimationType)animationType
 {
-    NSNumber *interactionDisabled = [self.options objectForKey:PKRevealControllerDisablesFrontViewInteractionKey];
-    
-    if (interactionDisabled != nil)
-    {
-        return [interactionDisabled boolValue];
-    }
-    
-    return DEFAULT_DISABLES_FRONT_VIEW_INTERACTION_VALUE;
+    [self.controllerOptions setObject:[NSNumber numberWithInteger:animationType]
+                               forKey:PKRevealControllerAnimationTypeKey];
 }
 
-- (CGFloat)extractRecognizesPanningOnFrontViewFromOptions
+#pragma mark -
+
+- (BOOL)allowsOverdraw
 {
-    NSNumber *allowsPanning = [self.options objectForKey:PKRevealControllerRecognizesPanningOnFrontViewKey];
+    NSNumber *number = [self.controllerOptions objectForKey:PKRevealControllerAllowsOverdrawKey];
     
-    if (allowsPanning != nil)
+    if (number == nil)
     {
-        return [allowsPanning boolValue];
+        [self setAllowsOverdraw:DEFAULT_ALLOWS_OVERDRAW_VALUE];
+        return [self allowsOverdraw];
     }
-    
-    return DEFAULT_RECOGNIZES_PAN_ON_FRONT_VIEW_VALUE;
+    else
+    {
+        return [number boolValue];
+    }
 }
 
-- (CGFloat)extractRecognizesResetTapOnFrontViewFromOptions
+- (void)setAllowsOverdraw:(BOOL)allowsOverdraw
 {
-    NSNumber *allowsPanning = [self.options objectForKey:PKRevealControllerRecognizesResetTapOnFrontViewKey];
+    [self.controllerOptions setObject:[NSNumber numberWithBool:allowsOverdraw]
+                               forKey:PKRevealControllerAllowsOverdrawKey];
+}
+
+#pragma mark -
+
+- (void)setQuickSwipeVelocity:(CGFloat)quickSwipeVelocity
+{
+    [self.controllerOptions setObject:[NSNumber numberWithFloat:quickSwipeVelocity]
+                               forKey:PKRevealControllerQuickSwipeToggleVelocityKey];
+}
+
+- (CGFloat)quickSwipeVelocity
+{
+    NSNumber *number = [self.controllerOptions objectForKey:PKRevealControllerQuickSwipeToggleVelocityKey];
     
-    if (allowsPanning != nil)
+    if (number == nil)
     {
-        return [allowsPanning boolValue];
+        [self setQuickSwipeVelocity:DEFAULT_QUICK_SWIPE_TOGGLE_VELOCITY_VALUE];
+        return [self quickSwipeVelocity];
+    }
+    else
+    {
+        return [number floatValue];
+    }
+}
+
+#pragma mark -
+
+- (BOOL)disablesFrontViewInteraction
+{
+    NSNumber *number = [self.controllerOptions objectForKey:PKRevealControllerDisablesFrontViewInteractionKey];
+    
+    if (number == nil)
+    {
+        [self setDisablesFrontViewInteraction:DEFAULT_DISABLES_FRONT_VIEW_INTERACTION_VALUE];
+        return [self disablesFrontViewInteraction];
+    }
+    else
+    {
+        return [number boolValue];
+    }
+}
+
+- (void)setDisablesFrontViewInteraction:(BOOL)disablesFrontViewInteraction
+{
+    [self.controllerOptions setObject:[NSNumber numberWithBool:disablesFrontViewInteraction]
+                               forKey:PKRevealControllerDisablesFrontViewInteractionKey];
+}
+
+#pragma mark -
+
+- (void)setRecognizesPanningOnFrontView:(BOOL)recognizesPanningOnFrontView
+{
+    if (recognizesPanningOnFrontView)
+    {
+        [self addTapGestureRecognizerToFrontView];
+    }
+    else
+    {
+        [self removeTapGestureRecognizerFromFrontView];
     }
     
-    return DEFAULT_RECOGNIZES_RESET_TAP_ON_FRONT_VIEW_VALUE;
+    [self.controllerOptions setObject:[NSNumber numberWithBool:recognizesPanningOnFrontView]
+                               forKey:PKRevealControllerRecognizesPanningOnFrontViewKey];
+}
+
+- (BOOL)recognizesPanningOnFrontView
+{
+    NSNumber *number = [self.controllerOptions objectForKey:PKRevealControllerRecognizesPanningOnFrontViewKey];
+    
+    if (number == nil)
+    {
+        [self setRecognizesPanningOnFrontView:DEFAULT_RECOGNIZES_PAN_ON_FRONT_VIEW_VALUE];
+        return [self recognizesPanningOnFrontView];
+    }
+    else
+    {
+        return [number boolValue];
+    }
+}
+
+#pragma mark -
+
+- (void)setRecognizesResetTapOnFrontView:(BOOL)recognizesResetTapOnFrontView
+{
+    if (recognizesResetTapOnFrontView)
+    {
+        [self addPanGestureRecognizerToFrontView];
+    }
+    else
+    {
+        [self removePanGestureRecognizerFromFrontView];
+    }
+    
+    [self.controllerOptions setObject:[NSNumber numberWithBool:recognizesResetTapOnFrontView]
+                               forKey:PKRevealControllerRecognizesResetTapOnFrontViewKey];
+}
+
+- (BOOL)recognizesResetTapOnFrontView
+{
+    NSNumber *number = [self.controllerOptions objectForKey:PKRevealControllerRecognizesResetTapOnFrontViewKey];
+    
+    if (number == nil)
+    {
+        [self setRecognizesResetTapOnFrontView:DEFAULT_RECOGNIZES_RESET_TAP_ON_FRONT_VIEW_VALUE];
+        return [self recognizesResetTapOnFrontView];
+    }
+    else
+    {
+        return [number boolValue];
+    }
 }
 
 #pragma mark - Gesture Recognition
@@ -1122,40 +1214,6 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     }
     
     [self showViewController:controllerToShow];
-}
-
-- (void)setRecognizesPanningOnFrontView:(BOOL)recognizesPanningOnFrontView
-{
-    if (_recognizesPanningOnFrontView != recognizesPanningOnFrontView)
-    {
-        _recognizesPanningOnFrontView = recognizesPanningOnFrontView;
-        
-        if (_recognizesPanningOnFrontView)
-        {
-            [self addPanGestureRecognizerToFrontView];
-        }
-        else
-        {
-            [self removePanGestureRecognizerFromFrontView];
-        }
-    }
-}
-
-- (void)setRecognizesResetTapOnFrontView:(BOOL)recognizesResetTapOnFrontView
-{
-    if (_recognizesResetTapOnFrontView != recognizesResetTapOnFrontView)
-    {
-        _recognizesResetTapOnFrontView = recognizesResetTapOnFrontView;
-        
-        if (_recognizesResetTapOnFrontView)
-        {
-            [self addTapGestureRecognizerToFrontView];
-        }
-        else
-        {
-            [self removeTapGestureRecognizerFromFrontView];
-        }
-    }
 }
 
 #pragma mark - Helpers (States)
