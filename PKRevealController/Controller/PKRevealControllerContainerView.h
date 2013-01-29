@@ -27,4 +27,6 @@
 
 - (void)refreshShadowWithAnimationDuration:(NSTimeInterval)duration;
 
+- (BOOL)hasShadow;
+
 @end
