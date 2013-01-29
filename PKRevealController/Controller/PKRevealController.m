@@ -378,24 +378,26 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 - (UIViewController *)focusedController
 {
+    UIViewController *returnViewController = nil;
     switch (self.state)
     {
         case PKRevealControllerFocusesFrontViewController:
-            return self.frontViewController;
+            returnViewController = self.frontViewController;
             break;
             
         case PKRevealControllerFocusesLeftViewController:
-            return self.leftViewController;
+            returnViewController =  self.leftViewController;
             break;
             
         case PKRevealControllerFocusesRightViewController:
-            return self.rightViewController;
+            returnViewController = self.rightViewController;
             break;
             
-        default:
-            return nil;
+        case PKRevealControllerFocusesLeftViewControllerInPresentationMode:
+        case PKRevealControllerFocusesRightViewControllerInPresentationMode:
             break;
     }
+    return returnViewController;
 }
 
 - (BOOL)isPresentationModeActive
