@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F94D66EE16AE1C1200F0DAE3 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F94D66E516AE1C1200F0DAE3 /* Default-568h@2x.png */; };
-		F94D66EF16AE1C1200F0DAE3 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F94D66E616AE1C1200F0DAE3 /* Default.png */; };
-		F94D66F016AE1C1200F0DAE3 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F94D66E716AE1C1200F0DAE3 /* Default@2x.png */; };
+		F932019016B85E56001C2B3E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F932018F16B85E56001C2B3E /* Default-568h@2x.png */; };
 		F94D66F116AE1C1200F0DAE3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F94D66E916AE1C1200F0DAE3 /* InfoPlist.strings */; };
 		F94D66F216AE1C1200F0DAE3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F94D66EB16AE1C1200F0DAE3 /* main.m */; };
 		F94D66F616AE1C5800F0DAE3 /* PKRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = F94D66F516AE1C5800F0DAE3 /* PKRevealController.m */; };
@@ -34,9 +32,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F94D66E516AE1C1200F0DAE3 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Supporting Files/Default-568h@2x.png"; sourceTree = "<group>"; };
-		F94D66E616AE1C1200F0DAE3 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = "Supporting Files/Default.png"; sourceTree = "<group>"; };
-		F94D66E716AE1C1200F0DAE3 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Supporting Files/Default@2x.png"; sourceTree = "<group>"; };
+		F932018F16B85E56001C2B3E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		F94D66EA16AE1C1200F0DAE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
 		F94D66EB16AE1C1200F0DAE3 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "Supporting Files/main.m"; sourceTree = "<group>"; };
 		F94D66EC16AE1C1200F0DAE3 /* PKRevealController-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "PKRevealController-Info.plist"; path = "Supporting Files/PKRevealController-Info.plist"; sourceTree = "<group>"; };
@@ -119,13 +115,11 @@
 		F9DD514816A973DC00F392F1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F932018F16B85E56001C2B3E /* Default-568h@2x.png */,
 				F9FCBE8816AF46B000DB38FA /* reveal_menu_icon_landscape.png */,
 				F9FCBE8916AF46B000DB38FA /* reveal_menu_icon_landscape@2x.png */,
 				F9FCBE8A16AF46B000DB38FA /* reveal_menu_icon_portrait.png */,
 				F9FCBE8B16AF46B000DB38FA /* reveal_menu_icon_portrait@2x.png */,
-				F94D66E516AE1C1200F0DAE3 /* Default-568h@2x.png */,
-				F94D66E616AE1C1200F0DAE3 /* Default.png */,
-				F94D66E716AE1C1200F0DAE3 /* Default@2x.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -236,9 +230,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F94D66EE16AE1C1200F0DAE3 /* Default-568h@2x.png in Resources */,
-				F94D66EF16AE1C1200F0DAE3 /* Default.png in Resources */,
-				F94D66F016AE1C1200F0DAE3 /* Default@2x.png in Resources */,
 				F94D66F116AE1C1200F0DAE3 /* InfoPlist.strings in Resources */,
 				F94D670B16AE1E5F00F0DAE3 /* LeftDemoViewController~ipad.xib in Resources */,
 				F94D670C16AE1E5F00F0DAE3 /* LeftDemoViewController~iphone.xib in Resources */,
@@ -248,6 +239,7 @@
 				F9FCBE8D16AF46B000DB38FA /* reveal_menu_icon_landscape@2x.png in Resources */,
 				F9FCBE8E16AF46B000DB38FA /* reveal_menu_icon_portrait.png in Resources */,
 				F9FCBE8F16AF46B000DB38FA /* reveal_menu_icon_portrait@2x.png in Resources */,
+				F932019016B85E56001C2B3E /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
