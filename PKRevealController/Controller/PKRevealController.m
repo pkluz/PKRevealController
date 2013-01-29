@@ -17,7 +17,7 @@
 #define DEFAULT_ANIMATION_CURVE_VALUE UIViewAnimationCurveLinear
 #define DEFAULT_LEFT_VIEW_WIDTH_RANGE NSMakeRange(280, 310)
 #define DEFAULT_RIGHT_VIEW_WIDTH_RANGE DEFAULT_LEFT_VIEW_WIDTH_RANGE
-#define DEAULT_ALLOWS_OVERDRAW_VALUE YES
+#define DEFAULT_ALLOWS_OVERDRAW_VALUE YES
 #define DEFAULT_ANIMATION_TYPE_VALUE PKRevealControllerAnimationTypeStatic
 #define DEFAULT_QUICK_SWIPE_TOGGLE_VELOCITY_VALUE 800.0f
 #define DEFAULT_DISABLES_FRONT_VIEW_INTERACTION_VALUE YES
@@ -639,7 +639,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         return [allowsOverdraw boolValue];
     }
     
-    return DEAULT_ALLOWS_OVERDRAW_VALUE;
+    return DEFAULT_ALLOWS_OVERDRAW_VALUE;
 }
 
 - (CGFloat)extractQuickSwipeToggleVelocityFromOptions
