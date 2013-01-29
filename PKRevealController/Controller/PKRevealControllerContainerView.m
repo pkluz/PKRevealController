@@ -15,8 +15,7 @@
 @interface PKRevealControllerContainerView()
 
 #pragma mark - Properties
-@property (nonatomic, weak, readwrite) UIViewController *controller;
-@property (nonatomic, assign, readwrite) BOOL hasShadow;
+@property (nonatomic, assign, readwrite, getter = hasShadow) BOOL shadow;
 
 @end
 
@@ -26,14 +25,7 @@
 
 - (id)initForController:(UIViewController *)controller
 {
-    self = [super initWithFrame:controller.view.bounds];
-    
-    if (self != nil)
-    {
-        self.controller = controller;
-    }
-    
-    return self;
+    return [self initForController:controller shadow:NO];
 }
 
 - (id)initForController:(UIViewController *)controller shadow:(BOOL)hasShadow
@@ -42,8 +34,12 @@
     
     if (self != nil)
     {
-        self.controller = controller;
-        self.hasShadow = hasShadow;
+        self.viewController = controller;
+        if (hasShadow)
+        {
+            [self setupShadow];
+        }
+        self.shadow = hasShadow;
     }
     
     return self;
@@ -60,21 +56,6 @@
     self.layer.shadowOpacity = 0.5f;
     self.layer.shadowRadius = 2.5f;
     self.layer.shadowPath = shadowPath.CGPath;
-}
-
-#pragma mark - Accessors
-
-- (void)setHasShadow:(BOOL)hasShadow
-{
-    if (_hasShadow != hasShadow)
-    {
-        _hasShadow = hasShadow;
-        
-        if (_hasShadow)
-        {
-            [self setupShadow];
-        }
-    }
 }
 
 #pragma mark - Layouting
