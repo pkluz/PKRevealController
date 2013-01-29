@@ -36,7 +36,7 @@
     return self;
 }
 
-- (id)initForController:(UIViewController *)controller withShadow:(BOOL)hasShadow
+- (id)initForController:(UIViewController *)controller shadow:(BOOL)hasShadow
 {
     self = [super initWithFrame:controller.view.bounds];
     

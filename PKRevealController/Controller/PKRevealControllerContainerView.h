@@ -17,7 +17,7 @@
 
 #pragma mark - Methods
 - (id)initForController:(UIViewController *)controller;
-- (id)initForController:(UIViewController *)controller withShadow:(BOOL)hasShadow;
+- (id)initForController:(UIViewController *)controller shadow:(BOOL)hasShadow;
 
 - (void)enableUserInteractionForContainedView;
 - (void)disableUserInteractionForContainedView;

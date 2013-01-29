@@ -433,7 +433,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         
         if (self.frontViewContainer == nil)
         {
-            self.frontViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.frontViewController withShadow:YES];
+            self.frontViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.frontViewController shadow:YES];
             self.frontViewContainer.autoresizingMask = [self autoresizingMaskForFrontViewContainer];
         }
         
@@ -465,7 +465,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         
         if (self.leftViewContainer == nil)
         {
-            self.leftViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.leftViewController withShadow:NO];
+            self.leftViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.leftViewController shadow:NO];
             self.leftViewContainer.autoresizingMask = [self autoresizingMaskForLeftViewContainer];
         }
         
