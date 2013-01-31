@@ -59,7 +59,7 @@ For instance in their `viewDidLoad` method:
 ```
 
 ###Sending messages between controllers
-It is really easy to send messages between controllers, as the `revealController` exposes each of those as properties. For instance, from you left view controller you can easily print a description of the front view controller like this:
+It is really easy to send messages between controllers, as the `revealController` exposes each of those as properties. For instance, from your left view controller you can easily print a description of the front view controller like this:
 ``` objective-c
 [self.revealController.frontViewController description];
 ```
