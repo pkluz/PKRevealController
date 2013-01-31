@@ -59,13 +59,13 @@ For instance in their `viewDidLoad` method:
 ```
 
 ###Sending messages between controllers
-It is really easy to send messages between controllers, as the `revealController` exposes each of those as properties. For instance, from you left view controller you can easily print a description of the front view controller like this:
+It is really easy to send messages between controllers, as the `revealController` exposes each of those as properties. For instance, from your left view controller you can easily print a description of the front view controller like this:
 ``` objective-c
 [self.revealController.frontViewController description];
 ```
 
 ###And more…
-Please have a look at the [PKRevealController.h](https://github.com/pkluz/PKRevealController/blob/master/PKRevealController/Controller/PKRevealController.h) file to see a detailed documentation of the entire API the controller provides. For more detailed tutorials please take a look at the [wiki](https://github.com/pkluz/PKRevealController/wiki). Chances are, your issue is already covered.
+Please have a look at the [PKRevealController.h](https://github.com/pkluz/PKRevealController/blob/master/PKRevealController/Controller/PKRevealController.h) file for detailed documentation of the entire API the controller provides. For more detailed tutorials please take a look at the [wiki](https://github.com/pkluz/PKRevealController/wiki). Chances are, your issue is already covered.
 
 <br />
 
