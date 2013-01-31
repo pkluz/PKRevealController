@@ -65,7 +65,7 @@ It is really easy to send messages between controllers, as the `revealController
 ```
 
 ###And more…
-Please have a look at the [PKRevealController.h](https://github.com/pkluz/PKRevealController/blob/master/PKRevealController/Controller/PKRevealController.h) file to see a detailed documentation of the entire API the controller provides. For more detailed tutorials please take a look at the [wiki](https://github.com/pkluz/PKRevealController/wiki). Chances are, your issue is already covered.
+Please have a look at the [PKRevealController.h](https://github.com/pkluz/PKRevealController/blob/master/PKRevealController/Controller/PKRevealController.h) file for detailed documentation of the entire API the controller provides. For more detailed tutorials please take a look at the [wiki](https://github.com/pkluz/PKRevealController/wiki). Chances are, your issue is already covered.
 
 <br />
 
