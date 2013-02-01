@@ -129,7 +129,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         
         if (options)
         {
-            self.controllerOptions = [options mutableCopy];
+            _controllerOptions = [options mutableCopy];
         }
     }
     
@@ -174,7 +174,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 - (void)commonInitializer
 {
-    self.controllerOptions = [NSMutableDictionary dictionaryWithCapacity:10];
+    _controllerOptions = [NSMutableDictionary dictionaryWithCapacity:10];
     _frontViewController.revealController = self;
     _leftViewController.revealController = self;
     _rightViewController.revealController = self;
