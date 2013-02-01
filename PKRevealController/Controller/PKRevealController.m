@@ -48,15 +48,6 @@
 @property (nonatomic, assign, readwrite) CGPoint initialTouchLocation;
 @property (nonatomic, assign, readwrite) CGPoint previousTouchLocation;
 
-@property (nonatomic, assign, readwrite) CGFloat animationDuration;
-@property (nonatomic, assign, readwrite) UIViewAnimationCurve animationCurve;
-@property (nonatomic, assign, readwrite) PKRevealControllerAnimationType animationType;
-@property (nonatomic, assign, readwrite) BOOL allowsOverdraw;
-@property (nonatomic, assign, readwrite) BOOL disablesFrontViewInteraction;
-@property (nonatomic, assign, readwrite) CGFloat quickSwipeVelocity;
-@property (nonatomic, assign, readwrite) BOOL recognizesPanningOnFrontView;
-@property (nonatomic, assign, readwrite) BOOL recognizesResetTapOnFrontView;
-
 @end
 
 @implementation PKRevealController
@@ -135,12 +126,11 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         _leftViewController = leftViewController;
         
         [self commonInitializer];
-        if (options) {
+        
+        if (options)
+        {
             self.controllerOptions = [options mutableCopy];
         }
-
-        
-
     }
     
     return self;
