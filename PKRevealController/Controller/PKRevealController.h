@@ -114,13 +114,22 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 @property (nonatomic, strong, readonly) UIViewController *leftViewController;
 @property (nonatomic, strong, readonly) UIViewController *rightViewController;
 
-@property (nonatomic, strong, readonly) NSDictionary *options;
-
 @property (nonatomic, strong, readonly) UIPanGestureRecognizer *revealPanGestureRecognizer;
 @property (nonatomic, strong, readonly) UITapGestureRecognizer *revealResetTapGestureRecognizer;
 
 @property (nonatomic, assign, readonly) PKRevealControllerState state;
 @property (nonatomic, assign, readonly) BOOL isPresentationModeActive;
+
+@property (nonatomic, strong, readonly) NSDictionary *options;
+
+@property (nonatomic, assign, readwrite) CGFloat animationDuration;
+@property (nonatomic, assign, readwrite) UIViewAnimationCurve animationCurve;
+@property (nonatomic, assign, readwrite) PKRevealControllerAnimationType animationType;
+@property (nonatomic, assign, readwrite) CGFloat quickSwipeVelocity;
+@property (nonatomic, assign, readwrite) BOOL allowsOverdraw;
+@property (nonatomic, assign, readwrite) BOOL disablesFrontViewInteraction;
+@property (nonatomic, assign, readwrite) BOOL recognizesPanningOnFrontView;
+@property (nonatomic, assign, readwrite) BOOL recognizesResetTapOnFrontView;
 
 #pragma mark - Methods
 
