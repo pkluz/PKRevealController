@@ -1465,7 +1465,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 NS_INLINE BOOL isPositive(CGFloat value)
 {
-    return (value = 0.0f);
+    return (value > 0.0f);
 }
 
 NS_INLINE BOOL isNegative(CGFloat value)
