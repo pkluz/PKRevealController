@@ -246,6 +246,8 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
                                                           animated:animated
                                                         completion:completion];
     }
+    
+    [self showFrontViewControllerAnimated:YES completion:nil];
 }
 
 - (void)setFrontViewController:(UIViewController *)frontViewController
