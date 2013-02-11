@@ -17,6 +17,6 @@
 @interface PKAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (nonatomic, strong, readwrite) PKRevealController *revealController;
-@property (strong, nonatomic) UIWindow *window;
+@property (nonatomic, strong) UIWindow *window;
 
 @end

@@ -29,9 +29,9 @@ typedef NS_ENUM(NSUInteger, PKRevealControllerAnimationType)
 
 typedef NS_OPTIONS(NSUInteger, PKRevealControllerType)
 {
-    PKRevealControllerTypeNone,
-    PKRevealControllerTypeLeft,
-    PKRevealControllerTypeRight,
+    PKRevealControllerTypeNone  = 0,
+    PKRevealControllerTypeLeft  = 1 << 0,
+    PKRevealControllerTypeRight = 1 << 1,
     PKRevealControllerTypeBoth = (PKRevealControllerTypeLeft | PKRevealControllerTypeRight)
 };
 
@@ -104,7 +104,7 @@ extern NSString * const PKRevealControllerRecognizesPanningOnFrontViewKey;
  */
 extern NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey;
 
-typedef void(^PKDefaultCompletionHandler)(void);
+typedef void(^PKDefaultCompletionHandler)(BOOL finished);
 typedef void(^PKDefaultErrorHandler)(NSError *error);
 
 @interface PKRevealController : UIViewController <UIGestureRecognizerDelegate>
@@ -114,16 +114,22 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 @property (nonatomic, strong, readonly) UIViewController *leftViewController;
 @property (nonatomic, strong, readonly) UIViewController *rightViewController;
 
-@property (nonatomic, strong, readonly) NSDictionary *options;
-
 @property (nonatomic, strong, readonly) UIPanGestureRecognizer *revealPanGestureRecognizer;
 @property (nonatomic, strong, readonly) UITapGestureRecognizer *revealResetTapGestureRecognizer;
 
 @property (nonatomic, assign, readonly) PKRevealControllerState state;
 @property (nonatomic, assign, readonly) BOOL isPresentationModeActive;
 
-@property (nonatomic, assign, readwrite) BOOL enablePanGestureRecognizer;
-@property (nonatomic, assign, readwrite) BOOL enableRevealTapGestureRecognizer;
+@property (nonatomic, strong, readonly) NSDictionary *options;
+
+@property (nonatomic, assign, readwrite) CGFloat animationDuration;
+@property (nonatomic, assign, readwrite) UIViewAnimationCurve animationCurve;
+@property (nonatomic, assign, readwrite) PKRevealControllerAnimationType animationType;
+@property (nonatomic, assign, readwrite) CGFloat quickSwipeVelocity;
+@property (nonatomic, assign, readwrite) BOOL allowsOverdraw;
+@property (nonatomic, assign, readwrite) BOOL disablesFrontViewInteraction;
+@property (nonatomic, assign, readwrite) BOOL recognizesPanningOnFrontView;
+@property (nonatomic, assign, readwrite) BOOL recognizesResetTapOnFrontView;
 
 #pragma mark - Methods
 
@@ -222,29 +228,11 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 - (void)setLeftViewController:(UIViewController *)leftViewController;
 
 /**
- * Exchanges the current left view controller for a new one.
- *
- * @param UIViewController leftViewController - The new left view controller.
- * @param PKDefaultCompletionHandler completion - Executed on the main thread after the animation is completed.
- */
-- (void)setLeftViewController:(UIViewController *)leftViewController
-                   completion:(PKDefaultCompletionHandler)completion;
-
-/**
  * Exchanges the current right view controller for a new one.
  *
  * @param UIViewController rightViewController - Thew new right view controller.
  */
 - (void)setRightViewController:(UIViewController *)rightViewController;
-
-/**
- * Exchanges the current right view controller for a new one.
- *
- * @param UIViewController rightViewController - The new right view controller.
- * @param PKDefaultCompletionHandler completion - Executed on the main thread after the animation is completed.
- */
-- (void)setRightViewController:(UIViewController *)rightViewController
-                    completion:(PKDefaultCompletionHandler)completion;
 
 /**
  * Adjusts the minimum and maximum reveal width of any given view controller's view.
