@@ -178,6 +178,9 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     _frontViewController.revealController = self;
     _leftViewController.revealController = self;
     _rightViewController.revealController = self;
+    
+    _leftViewWidthRange = DEFAULT_LEFT_VIEW_WIDTH_RANGE;
+    _rightViewWidthRange = DEFAULT_RIGHT_VIEW_WIDTH_RANGE;
 }
 
 #pragma mark - API
@@ -553,8 +556,6 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 - (void)setup
 {
     self.state = PKRevealControllerFocusesFrontViewController;
-    self.leftViewWidthRange = DEFAULT_LEFT_VIEW_WIDTH_RANGE;
-    self.rightViewWidthRange = DEFAULT_RIGHT_VIEW_WIDTH_RANGE;
     
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
 }
