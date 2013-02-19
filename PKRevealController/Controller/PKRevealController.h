@@ -35,6 +35,25 @@ typedef NS_OPTIONS(NSUInteger, PKRevealControllerType)
     PKRevealControllerTypeBoth = (PKRevealControllerTypeLeft | PKRevealControllerTypeRight)
 };
 
+@class PKRevealController;
+
+@protocol PKRevealControllerDelegate <NSObject>
+
+@optional
+
+// Called when the reveal controller shows a new top view controller.
+- (void)revealController:(PKRevealController *)revealController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated;
+
+@end
+
+/*
+ * List of notifications that are posted to the default NSNotificationCenter
+ */
+
+extern NSString * const PKRevealControllerDidShowFrontViewControllerNotification;
+extern NSString * const PKRevealControllerDidShowLeftViewControllerNotification;
+extern NSString * const PKRevealControllerDidShowRightViewControllerNotification;
+
 /*
  * List of option keys that can be passed in the options dictionary.
  */
@@ -130,6 +149,8 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 @property (nonatomic, assign, readwrite) BOOL disablesFrontViewInteraction;
 @property (nonatomic, assign, readwrite) BOOL recognizesPanningOnFrontView;
 @property (nonatomic, assign, readwrite) BOOL recognizesResetTapOnFrontView;
+
+@property (nonatomic, assign, readwrite) id<PKRevealControllerDelegate> delegate;
 
 #pragma mark - Methods
 

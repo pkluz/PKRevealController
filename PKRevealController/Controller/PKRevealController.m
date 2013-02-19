@@ -48,9 +48,15 @@
 @property (nonatomic, assign, readwrite) CGPoint initialTouchLocation;
 @property (nonatomic, assign, readwrite) CGPoint previousTouchLocation;
 
+- (void)notifyDelegateDidShowViewController:(UIViewController *)controller animated:(BOOL)animated;
+
 @end
 
 @implementation PKRevealController
+
+NSString * const PKRevealControllerDidShowFrontViewControllerNotification = @"PKRevealControllerDidShowFrontViewControllerNotification";
+NSString * const PKRevealControllerDidShowLeftViewControllerNotification = @"PKRevealControllerDidShowLeftViewControllerNotification";
+NSString * const PKRevealControllerDidShowRightViewControllerNotification = @"PKRevealControllerDidShowRightViewControllerNotification";
 
 NSString * const PKRevealControllerAnimationDurationKey = @"PKRevealControllerAnimationDurationKey";
 NSString * const PKRevealControllerAnimationCurveKey = @"PKRevealControllerAnimationCurveKey";
@@ -181,6 +187,33 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     
     _leftViewWidthRange = DEFAULT_LEFT_VIEW_WIDTH_RANGE;
     _rightViewWidthRange = DEFAULT_RIGHT_VIEW_WIDTH_RANGE;
+}
+
+#pragma mark - Notifications and Delegate
+
+- (void)notifyDelegateDidShowViewController:(UIViewController *)controller animated:(BOOL)animated
+{
+    if ([self.delegate respondsToSelector:@selector(revealController:didShowViewController:animated:)]) {
+        [self.delegate revealController:self didShowViewController:controller animated:animated];
+    }
+    [self postNotificationForViewController:controller alreadyShown:YES];
+}
+
+- (void)postNotificationForViewController:(UIViewController *)controller alreadyShown:(BOOL)alreadyShown
+{
+    NSString *name = nil;
+    
+    if (controller == self.frontViewController) {
+        name = PKRevealControllerDidShowFrontViewControllerNotification;
+    } else if (controller == self.leftViewController) {
+        name = PKRevealControllerDidShowLeftViewControllerNotification;
+    } else if (controller == self.rightViewController) {
+        name = PKRevealControllerDidShowRightViewControllerNotification;
+    }
+    
+    if (name != nil) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:name object:controller];
+    }
 }
 
 #pragma mark - API
@@ -971,6 +1004,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
              weakSelf.state = PKRevealControllerFocusesLeftViewController;
              [weakSelf removeRightViewControllerFromHierarchy];
              [weakSelf updateResetTapGestureRecognizer];
+             [weakSelf notifyDelegateDidShowViewController:weakSelf.leftViewController animated:animated];
              safelyExecuteCompletionBlockOnMainThread(completion, finished);
          }];
     };
@@ -1010,6 +1044,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
             }
             weakSelf.state = PKRevealControllerFocusesRightViewController;
             [weakSelf updateResetTapGestureRecognizer];
+            [weakSelf notifyDelegateDidShowViewController:weakSelf.rightViewController animated:animated];
             safelyExecuteCompletionBlockOnMainThread(completion, finished);
         }];
     };
@@ -1046,6 +1081,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
          [weakSelf removeRightViewControllerFromHierarchy];
          [weakSelf removeLeftViewControllerFromHierarchy];
          [weakSelf updateResetTapGestureRecognizer];
+         [weakSelf notifyDelegateDidShowViewController:weakSelf.frontViewController animated:animated];
          safelyExecuteCompletionBlockOnMainThread(completion, finished);
      }];
 }
