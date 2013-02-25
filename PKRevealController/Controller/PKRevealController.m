@@ -24,6 +24,25 @@
 #define DEFAULT_RECOGNIZES_PAN_ON_FRONT_VIEW_VALUE YES
 #define DEFAULT_RECOGNIZES_RESET_TAP_ON_FRONT_VIEW_VALUE YES
 
+@interface PKRevealControllerAnimationDelegateWrapper : NSObject
+
+@property (nonatomic, weak) NSObject<PKRevealControllerAnimationDelegate> *delegate;
+
+@end
+
+@implementation PKRevealControllerAnimationDelegateWrapper
+
+-(BOOL)isEqual:(id)object
+{
+    if (object == nil || ![object isKindOfClass:self.class]) {
+        return NO;
+    } else {
+        return ([self delegate] == [(PKRevealControllerAnimationDelegateWrapper *)object delegate]);
+    }
+}
+
+@end
+
 @interface PKRevealController ()
 
 #pragma mark - Properties
@@ -47,6 +66,11 @@
 
 @property (nonatomic, assign, readwrite) CGPoint initialTouchLocation;
 @property (nonatomic, assign, readwrite) CGPoint previousTouchLocation;
+
+@property (nonatomic, strong) NSTimer *animationDelegateTimer;
+@property (nonatomic, assign) CGFloat animationDelegatePreviousLeftWidth;
+@property (nonatomic, assign) CGFloat animationDelegatePreviousRightWidth;
+@property (nonatomic, strong) NSMutableArray *animationDelegateWrappers;
 
 - (void)notifyDelegateDidShowViewController:(UIViewController *)controller animated:(BOOL)animated;
 
@@ -213,6 +237,106 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     
     if (name != nil) {
         [[NSNotificationCenter defaultCenter] postNotificationName:name object:controller];
+    }
+}
+
+#pragma mark - Animation Delegate
+
+#define kAnimationDelegateTimerInterval (1.0f/60.0f)
+
+- (void)startAnimationDelegateTimer
+{
+    if (self.animationDelegateTimer != nil) {
+        [self stopAnimationDelegateTimer];
+    }
+    [self animationDelegateTimerFired:nil];
+    self.animationDelegateTimer = [NSTimer timerWithTimeInterval:kAnimationDelegateTimerInterval target:self selector:@selector(animationDelegateTimerFired:) userInfo:nil repeats:YES];
+    [[NSRunLoop mainRunLoop] addTimer:self.animationDelegateTimer forMode:NSDefaultRunLoopMode];
+}
+
+- (void)stopAnimationDelegateTimer
+{
+    if (self.animationDelegateTimer != nil) {
+        [self.animationDelegateTimer invalidate];
+        self.animationDelegateTimer = nil;
+    }
+}
+
+- (void)animationDelegateTimerFired:(NSTimer *)timer
+{
+    CGRect currentFrame = self.frontViewContainer.frame;
+    
+    CGFloat leftWidth = MAX(currentFrame.origin.x, 0.0f);
+    CGFloat rightWidth = MAX((currentFrame.origin.x * -1.0f), 0.0f);
+    
+    BOOL leftChanged = (leftWidth != self.animationDelegatePreviousLeftWidth);
+    BOOL rightChanged = (rightWidth != self.animationDelegatePreviousRightWidth);
+    
+    self.animationDelegatePreviousLeftWidth = leftWidth;
+    self.animationDelegatePreviousRightWidth = rightWidth;
+    
+    if (timer != nil) {
+        [self notifyAnimationDelegatesWithLeftChanged:leftChanged rightChanged:rightChanged];
+    }
+}
+
+- (void)notifyAnimationDelegatesWithLeftChanged:(BOOL)leftChanged rightChanged:(BOOL)rightChanged
+{
+    if (self.animationDelegateWrappers.count > 0) {
+        
+        CGFloat leftWidth = self.animationDelegatePreviousLeftWidth;
+        CGFloat rightWidth = self.animationDelegatePreviousRightWidth;
+        
+        NSArray *delegateWrappers = [self.animationDelegateWrappers copy];
+        
+        for (PKRevealControllerAnimationDelegateWrapper *wrapper in delegateWrappers) {
+            if (leftChanged && [wrapper.delegate respondsToSelector:@selector(revealController:didChangeLeftViewControllerVisibleWidth:)]) {
+                [wrapper.delegate revealController:self didChangeLeftViewControllerVisibleWidth:leftWidth];
+            }
+            if (rightChanged && [wrapper.delegate respondsToSelector:@selector(revealController:didChangeRightViewControllerVisibleWidth:)]) {
+                [wrapper.delegate revealController:self didChangeRightViewControllerVisibleWidth:rightWidth];
+            }
+        }
+    }
+}
+
+- (void)addAnimationDelegate:(NSObject<PKRevealControllerAnimationDelegate> *)delegate
+{
+    if (delegate != nil) {
+        PKRevealControllerAnimationDelegateWrapper *wrapper = [PKRevealControllerAnimationDelegateWrapper new];
+        wrapper.delegate = delegate;
+        @synchronized(self)
+        {
+            if (self.animationDelegateWrappers == nil) {
+                self.animationDelegateWrappers = [NSMutableArray arrayWithObject:wrapper];
+            } else if (![self.animationDelegateWrappers containsObject:wrapper]) {
+                [self.animationDelegateWrappers addObject:wrapper];
+            }
+        }
+    }
+}
+
+- (void)removeAnimationDelegate:(NSObject<PKRevealControllerAnimationDelegate> *)delegate
+{
+    if (delegate != nil && self.animationDelegateWrappers.count > 0) {
+        
+        @synchronized(self)
+        {
+            NSArray *delegateWrappers = [self.animationDelegateWrappers copy];
+            for (PKRevealControllerAnimationDelegateWrapper *wrapper in delegateWrappers) {
+                if (wrapper.delegate == delegate || wrapper.delegate == nil) {
+                    [self.animationDelegateWrappers removeObject:wrapper];
+                }
+            }
+        }
+    }
+}
+
+- (void)removeAllAnimationDelegates
+{
+    @synchronized(self)
+    {
+        self.animationDelegateWrappers = nil;
     }
 }
 
@@ -442,6 +566,20 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     [self setupTapGestureRecognizer];
     
     [self addFrontViewControllerToHierarchy];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self startAnimationDelegateTimer];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    [self stopAnimationDelegateTimer];
 }
 
 #pragma mark - View Lifecycle (Controller)

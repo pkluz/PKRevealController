@@ -46,6 +46,18 @@ typedef NS_OPTIONS(NSUInteger, PKRevealControllerType)
 
 @end
 
+@protocol PKRevealControllerAnimationDelegate <NSObject>
+
+@optional
+
+// Called when the reveal controller changes the visible width of the left view controller.
+- (void)revealController:(PKRevealController *)revealController didChangeLeftViewControllerVisibleWidth:(CGFloat)width;
+
+// Called when the reveal controller changes the visible width of the right view controller.
+- (void)revealController:(PKRevealController *)revealController didChangeRightViewControllerVisibleWidth:(CGFloat)width;
+
+@end
+
 /*
  * List of notifications that are posted to the default NSNotificationCenter
  */
@@ -286,5 +298,20 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
  * @return BOOL - Returns YES if the reveal controller has a left side, NO otherwise.
  */
 - (BOOL)hasLeftViewController;
+
+/**
+ * @param PKRevealControllerAnimationDelegate delegate - Adds a delegate to receive notifications when reveal animations occur.
+ */
+- (void)addAnimationDelegate:(NSObject<PKRevealControllerAnimationDelegate> *)delegate;
+
+/**
+ * @param PKRevealControllerAnimationDelegate delegate - Removes a delegate from receiving notifications when reveal animations occur.
+ */
+- (void)removeAnimationDelegate:(NSObject<PKRevealControllerAnimationDelegate> *)delegate;
+
+/**
+ * Removes all reveal animation delegates.
+ */
+- (void)removeAllAnimationDelegates;
 
 @end
