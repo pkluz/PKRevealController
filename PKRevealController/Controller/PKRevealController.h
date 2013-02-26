@@ -280,6 +280,20 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
       forViewController:(UIViewController *)controller;
 
 /**
+ * @param UIViewController controller - The left or right view controller.
+ *
+ * @return CGFloat - The minimum width for the specified view controller. Returns 0 if the view controller is not recognized.
+ */
+- (CGFloat)minimumWidthForViewController:(UIViewController *)controller;
+
+/**
+ * @param UIViewController controller - The left or right view controller.
+ *
+ * @return CGFloat - The maximum width for the specified view controller. Returns 0 if the view controller is not recognized.
+ */
+- (CGFloat)maximumWidthForViewController:(UIViewController *)controller;
+
+/**
  * @return UIViewController - Returns the currently focused controller, i.e. the one that's most prominent at any given point in time. 
  */
 - (UIViewController *)focusedController;
