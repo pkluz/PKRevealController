@@ -1319,7 +1319,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 - (CGRect)frontViewFrameForCenter
 {
-    CGRect frame = self.view.bounds;
+	CGRect frame = _frontViewController ? _frontViewController.view.bounds : self.view.bounds;
     frame.origin = CGPointMake(0.0f, 0.0f);
     return frame;
 }
