@@ -1319,7 +1319,12 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 - (CGRect)frontViewFrameForCenter
 {
-    CGRect frame = self.view.bounds;
+	// while working with pkrevealcontroller within a tabbarcontroller
+	// where left is vc and right is nc
+	// i noticed unwanted shifting of a collectionview when using the pan gesture
+	// as a note my collectionview content offsets to compensate for translucent navbar 
+
+	CGRect frame = _frontViewController ? _frontViewController.view.bounds : self.view.bounds;
     frame.origin = CGPointMake(0.0f, 0.0f);
     return frame;
 }
