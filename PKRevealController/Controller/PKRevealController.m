@@ -509,6 +509,19 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     return PKRevealControllerTypeLeft == (self.type & PKRevealControllerTypeLeft);
 }
 
+- (void)setShadowColor:(UIColor *)color
+                offset:(CGSize)offset
+               opacity:(CGFloat)opacity
+                radius:(CGFloat)radius
+         forRevealSide:(PKRevealControllerType)revealSide
+{
+    if (self.frontViewContainer == nil)
+    {
+        [self initializeFrontViewContainer];
+    }
+    [self.frontViewContainer setShadowColor:color offset:offset opacity:opacity radius:radius forRevealSide:revealSide];
+}
+
 - (void)setMinimumWidth:(CGFloat)minWidth
            maximumWidth:(CGFloat)maxWidth
       forViewController:(UIViewController *)controller
@@ -545,11 +558,11 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 {
     if (controller == self.leftViewController)
     {
-        return NSRangeGetMax(self.leftViewWidthRange);
+        return NSMaxRange(self.leftViewWidthRange);
     }
     else if (controller == self.rightViewController)
     {
-        return NSRangeGetMax(self.rightViewWidthRange);
+        return NSMaxRange(self.rightViewWidthRange);
     }
     else
     {
@@ -616,6 +629,15 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 #pragma mark - View Lifecycle (Controller)
 
+- (void)initializeFrontViewContainer
+{
+    if (self.frontViewContainer == nil)
+    {
+        self.frontViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.frontViewController shadow:YES];
+        self.frontViewContainer.autoresizingMask = [self autoresizingMaskForFrontViewContainer];
+    }
+}
+
 - (void)addFrontViewControllerToHierarchy
 {
     if (self.frontViewController != nil && ![self.childViewControllers containsObject:self.frontViewController])
@@ -625,8 +647,11 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         
         if (self.frontViewContainer == nil)
         {
-            self.frontViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.frontViewController shadow:YES];
-            self.frontViewContainer.autoresizingMask = [self autoresizingMaskForFrontViewContainer];
+            [self initializeFrontViewContainer];
+        }
+        if (self.frontViewContainer.viewController != self.frontViewController)
+        {
+            self.frontViewContainer.viewController = self.frontViewController;
         }
         
         self.frontViewContainer.frame = [self frontViewFrameForCurrentState];

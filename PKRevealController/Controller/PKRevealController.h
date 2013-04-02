@@ -261,6 +261,21 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 - (void)setRightViewController:(UIViewController *)rightViewController;
 
 /**
+ * Adjusts the container shadow properties of a reveal side
+ *
+ * @param UIColor color - The color of the shadow (default black).
+ * @param CGSize offset - The shadow offset (default CGSizeZero).
+ * @param CGFloat opacity - The opacity of the shadow (default 0.5f).
+ * @param CGFloat radius - The shadow's radius (default 2.5f).
+ * @param PKRevealControllerType revealSide - The reveal side(s) on which the shadow will be adjusted.
+ */
+- (void)setShadowColor:(UIColor *)color
+                offset:(CGSize)offset
+               opacity:(CGFloat)opacity
+                radius:(CGFloat)radius
+         forRevealSide:(PKRevealControllerType)revealSide;
+
+/**
  * Adjusts the minimum and maximum reveal width of any given view controller's view.
  *
  * @param CGFloat minWidth - The default (minimum) width of the view to be shown.

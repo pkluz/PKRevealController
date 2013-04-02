@@ -12,6 +12,7 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
+#import "PKRevealControllerType.h"
 
 @interface PKRevealControllerContainerView : UIView
 
@@ -24,6 +25,14 @@
 
 - (void)enableUserInteractionForContainedView;
 - (void)disableUserInteractionForContainedView;
+
+#pragma mark Shadow
+
+- (void)setShadowColor:(UIColor *)color
+                offset:(CGSize)offset
+               opacity:(CGFloat)opacity
+                radius:(CGFloat)radius
+         forRevealSide:(PKRevealControllerType)revealSide;
 
 - (void)refreshShadowWithAnimationDuration:(NSTimeInterval)duration;
 
