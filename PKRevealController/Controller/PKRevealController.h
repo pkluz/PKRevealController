@@ -11,6 +11,7 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "PKRevealControllerType.h"
 #import "UIViewController+PKRevealController.h"
 
 typedef NS_ENUM(NSUInteger, PKRevealControllerState)
@@ -25,14 +26,6 @@ typedef NS_ENUM(NSUInteger, PKRevealControllerState)
 typedef NS_ENUM(NSUInteger, PKRevealControllerAnimationType)
 {
     PKRevealControllerAnimationTypeStatic // Rear view's do not move at all.
-};
-
-typedef NS_OPTIONS(NSUInteger, PKRevealControllerType)
-{
-    PKRevealControllerTypeNone  = 0,
-    PKRevealControllerTypeLeft  = 1 << 0,
-    PKRevealControllerTypeRight = 1 << 1,
-    PKRevealControllerTypeBoth = (PKRevealControllerTypeLeft | PKRevealControllerTypeRight)
 };
 
 @class PKRevealController;

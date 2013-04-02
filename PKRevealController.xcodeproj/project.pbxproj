@@ -32,6 +32,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A78FF04A170A681C00AF4329 /* PKRevealControllerType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PKRevealControllerType.h; path = Controller/PKRevealControllerType.h; sourceTree = "<group>"; };
 		F932018F16B85E56001C2B3E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		F94D66EA16AE1C1200F0DAE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
 		F94D66EB16AE1C1200F0DAE3 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "Supporting Files/main.m"; sourceTree = "<group>"; };
@@ -102,6 +103,7 @@
 		F9DD514216A972BA00F392F1 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				A78FF04A170A681C00AF4329 /* PKRevealControllerType.h */,
 				F94D66F416AE1C5800F0DAE3 /* PKRevealController.h */,
 				F94D66F516AE1C5800F0DAE3 /* PKRevealController.m */,
 				F94D66F716AE1C6200F0DAE3 /* PKRevealControllerContainerView.h */,
