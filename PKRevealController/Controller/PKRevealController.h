@@ -120,6 +120,22 @@ extern NSString * const PKRevealControllerDisablesFrontViewInteractionKey;
 extern NSString * const PKRevealControllerRecognizesPanningOnFrontViewKey;
 
 /*
+ * Determines whether there's a UIPanGestureRecognizer placed over the entire left view, enabling pan-based reveal closing.
+ *
+ * @default NO
+ * @value NSNumber containing BOOL
+ */
+extern NSString * const PKRevealControllerRecognizesPanningOnLeftViewKey;
+
+/*
+ * Determines whether there's a UIPanGestureRecognizer placed over the entire right view, enabling pan-based reveal closing.
+ *
+ * @default NO
+ * @value NSNumber containing BOOL
+ */
+extern NSString * const PKRevealControllerRecognizesPanningOnRightViewKey;
+
+/*
  * Determines whether there's a UITapGestureRecognizer placed over the entire front view, when presenting
  * one of the side views to enable snap-back-on-tap functionality.
  *
@@ -134,7 +150,7 @@ extern NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey;
  * @default 0.0f
  * @value NSNumber containing float between 0.0f and 1.0f
  */
-extern NSString * const PKRevealControllerLeftViewControllerSlideAmountKey;
+extern NSString * const PKRevealControllerLeftViewSlideAmountKey;
 
 /*
  * Determines the amount that the right view controller will slide with the front view controller movement.
@@ -142,7 +158,7 @@ extern NSString * const PKRevealControllerLeftViewControllerSlideAmountKey;
  * @default 0.0f
  * @value NSNumber containing float between 0.0f and 1.0f
  */
-extern NSString * const PKRevealControllerRightViewControllerSlideAmountKey;
+extern NSString * const PKRevealControllerRightViewSlideAmountKey;
 
 
 typedef void(^PKDefaultCompletionHandler)(BOOL finished);
@@ -155,7 +171,10 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 @property (nonatomic, strong, readonly) UIViewController *leftViewController;
 @property (nonatomic, strong, readonly) UIViewController *rightViewController;
 
-@property (nonatomic, strong, readonly) UIPanGestureRecognizer *revealPanGestureRecognizer;
+@property (nonatomic, strong, readonly) UIPanGestureRecognizer *revealFrontPanGestureRecognizer;
+@property (nonatomic, strong, readonly) UIPanGestureRecognizer *revealLeftPanGestureRecognizer;
+@property (nonatomic, strong, readonly) UIPanGestureRecognizer *revealRightPanGestureRecognizer;
+
 @property (nonatomic, strong, readonly) UITapGestureRecognizer *revealResetTapGestureRecognizer;
 
 @property (nonatomic, assign, readonly) PKRevealControllerState state;
@@ -170,6 +189,8 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 @property (nonatomic, assign, readwrite) BOOL allowsOverdraw;
 @property (nonatomic, assign, readwrite) BOOL disablesFrontViewInteraction;
 @property (nonatomic, assign, readwrite) BOOL recognizesPanningOnFrontView;
+@property (nonatomic, assign, readwrite) BOOL recognizesPanningOnLeftView;
+@property (nonatomic, assign, readwrite) BOOL recognizesPanningOnRightView;
 @property (nonatomic, assign, readwrite) BOOL recognizesResetTapOnFrontView;
 
 @property (nonatomic, assign, readwrite) id<PKRevealControllerDelegate> delegate;
