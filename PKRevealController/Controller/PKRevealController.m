@@ -762,7 +762,6 @@ NSString * const PKRevealControllerRightViewSlideAmountKey = @"PKRevealControlle
 
 - (void)addPanGestureRecognizerToLeftView
 {
-    IDLLogObject(self.revealLeftPanGestureRecognizer);
     [self.leftViewContainer addGestureRecognizer:self.revealLeftPanGestureRecognizer];
 }
 
