@@ -14,10 +14,19 @@
 #import <QuartzCore/QuartzCore.h>
 #import "PKRevealControllerType.h"
 
+@class PKRevealControllerContainerView;
+
+@protocol PKRevealControllerContainerViewDelegate <NSObject>
+
+-(void)containerView:(PKRevealControllerContainerView *)containerView didChangeFrame:(CGRect)frame;
+
+@end
+
 @interface PKRevealControllerContainerView : UIView
 
 #pragma mark - Properties
 @property (nonatomic, weak, readwrite) UIViewController *viewController;
+@property (nonatomic, weak, readwrite) id<PKRevealControllerContainerViewDelegate> delegate;
 
 #pragma mark - Methods
 - (id)initForController:(UIViewController *)controller;

@@ -128,6 +128,23 @@ extern NSString * const PKRevealControllerRecognizesPanningOnFrontViewKey;
  */
 extern NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey;
 
+/*
+ * Determines the amount that the left view controller will slide with the front view controller movement.
+ *
+ * @default 0.0f
+ * @value NSNumber containing float between 0.0f and 1.0f
+ */
+extern NSString * const PKRevealControllerLeftViewControllerSlideAmountKey;
+
+/*
+ * Determines the amount that the right view controller will slide with the front view controller movement.
+ *
+ * @default 0.0f
+ * @value NSNumber containing float between 0.0f and 1.0f
+ */
+extern NSString * const PKRevealControllerRightViewControllerSlideAmountKey;
+
+
 typedef void(^PKDefaultCompletionHandler)(BOOL finished);
 typedef void(^PKDefaultErrorHandler)(NSError *error);
 

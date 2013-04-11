@@ -43,7 +43,7 @@
 
 @end
 
-@interface PKRevealController ()
+@interface PKRevealController () <PKRevealControllerContainerViewDelegate>
 
 #pragma mark - Properties
 @property (nonatomic, assign, readwrite) PKRevealControllerState state;
@@ -67,7 +67,6 @@
 @property (nonatomic, assign, readwrite) CGPoint initialTouchLocation;
 @property (nonatomic, assign, readwrite) CGPoint previousTouchLocation;
 
-@property (nonatomic, strong) NSTimer *animationDelegateTimer;
 @property (nonatomic, assign) CGFloat animationDelegatePreviousLeftWidth;
 @property (nonatomic, assign) CGFloat animationDelegatePreviousRightWidth;
 @property (nonatomic, strong) NSMutableArray *animationDelegateWrappers;
@@ -90,6 +89,9 @@ NSString * const PKRevealControllerQuickSwipeToggleVelocityKey = @"PKRevealContr
 NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealControllerDisablesFrontViewInteractionKey";
 NSString * const PKRevealControllerRecognizesPanningOnFrontViewKey = @"PKRevealControllerRecognizesPanningOnFrontViewKey";
 NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKRevealControllerRecognizesResetTapOnFrontViewKey";
+
+NSString * const PKRevealControllerLeftViewControllerSlideAmountKey = @"PKRevealControllerLeftViewControllerSlideAmountKey";
+NSString * const PKRevealControllerRightViewControllerSlideAmountKey = @"PKRevealControllerRightViewControllerSlideAmountKey";
 
 #pragma mark - Initialization
 
@@ -242,44 +244,6 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 #pragma mark - Animation Delegate
 
-#define kAnimationDelegateTimerInterval (1.0f/60.0f)
-
-- (void)startAnimationDelegateTimer
-{
-    if (self.animationDelegateTimer != nil) {
-        [self stopAnimationDelegateTimer];
-    }
-    [self animationDelegateTimerFired:nil];
-    self.animationDelegateTimer = [NSTimer timerWithTimeInterval:kAnimationDelegateTimerInterval target:self selector:@selector(animationDelegateTimerFired:) userInfo:nil repeats:YES];
-    [[NSRunLoop mainRunLoop] addTimer:self.animationDelegateTimer forMode:NSDefaultRunLoopMode];
-}
-
-- (void)stopAnimationDelegateTimer
-{
-    if (self.animationDelegateTimer != nil) {
-        [self.animationDelegateTimer invalidate];
-        self.animationDelegateTimer = nil;
-    }
-}
-
-- (void)animationDelegateTimerFired:(NSTimer *)timer
-{
-    CGRect currentFrame = self.frontViewContainer.frame;
-    
-    CGFloat leftWidth = MAX(currentFrame.origin.x, 0.0f);
-    CGFloat rightWidth = MAX((currentFrame.origin.x * -1.0f), 0.0f);
-    
-    BOOL leftChanged = (leftWidth != self.animationDelegatePreviousLeftWidth);
-    BOOL rightChanged = (rightWidth != self.animationDelegatePreviousRightWidth);
-    
-    self.animationDelegatePreviousLeftWidth = leftWidth;
-    self.animationDelegatePreviousRightWidth = rightWidth;
-    
-    if (timer != nil) {
-        [self notifyAnimationDelegatesWithLeftChanged:leftChanged rightChanged:rightChanged];
-    }
-}
-
 - (void)notifyAnimationDelegatesWithLeftChanged:(BOOL)leftChanged rightChanged:(BOOL)rightChanged
 {
     if (self.animationDelegateWrappers.count > 0) {
@@ -337,6 +301,44 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     @synchronized(self)
     {
         self.animationDelegateWrappers = nil;
+    }
+}
+
+#pragma mark - PKRevealControllerContainerViewDelegate
+
+-(void)containerView:(PKRevealControllerContainerView *)containerView didChangeFrame:(CGRect)frame
+{
+    CGRect currentFrame = self.frontViewContainer.frame;
+    
+    CGFloat leftWidth = MAX(currentFrame.origin.x, 0.0f);
+    CGFloat rightWidth = MAX((currentFrame.origin.x * -1.0f), 0.0f);
+    
+    BOOL leftChanged = (leftWidth != _animationDelegatePreviousLeftWidth);
+    BOOL rightChanged = (rightWidth != _animationDelegatePreviousRightWidth);
+    
+    _animationDelegatePreviousLeftWidth = leftWidth;
+    _animationDelegatePreviousRightWidth = rightWidth;
+    
+    if (leftChanged) {
+        CGFloat slideAmount = [self floatPropertyForKey:PKRevealControllerLeftViewControllerSlideAmountKey default:0.0f];
+        slideAmount = MAX(0.0f, MIN(slideAmount, 1.0f));
+        slideAmount = MIN(slideAmount, 1.0f);
+        CGRect sideFrame = self.leftViewContainer.frame;
+        sideFrame.origin.x = slideAmount * (CGRectGetMinX(currentFrame)-sideFrame.size.width);
+        self.leftViewContainer.frame = sideFrame;
+    }
+    
+    if (rightChanged) {
+        CGFloat slideAmount = [self floatPropertyForKey:PKRevealControllerRightViewControllerSlideAmountKey default:0.0f];
+        slideAmount = MAX(0.0f, MIN(slideAmount, 1.0f));
+        CGRect sideFrame = self.rightViewContainer.frame;
+        CGFloat staticOrigin = currentFrame.size.width - sideFrame.size.width;
+        sideFrame.origin.x = staticOrigin +  slideAmount * (CGRectGetMaxX(currentFrame) - staticOrigin);
+        self.rightViewContainer.frame = sideFrame;
+    }
+    
+    if (leftChanged || rightChanged) {
+        [self notifyAnimationDelegatesWithLeftChanged:leftChanged rightChanged:rightChanged];
     }
 }
 
@@ -616,15 +618,11 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [self startAnimationDelegateTimer];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    
-    [self stopAnimationDelegateTimer];
 }
 
 #pragma mark - View Lifecycle (Controller)
@@ -654,6 +652,8 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
             self.frontViewContainer.viewController = self.frontViewController;
         }
         
+        self.frontViewContainer.delegate = self;
+        
         self.frontViewContainer.frame = [self frontViewFrameForCurrentState];
         [self.view addSubview:self.frontViewContainer];
         [self.frontViewController didMoveToParentViewController:self];
@@ -669,6 +669,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         [self removePanGestureRecognizerFromFrontView];
         [self.frontViewContainer removeFromSuperview];
         [self.frontViewController removeFromParentViewController];
+        self.frontViewContainer.delegate = nil;
     }
 }
 
@@ -1398,6 +1399,32 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     {
         safelyExecuteCompletionBlockOnMainThread(completion, finished);
     }];
+}
+
+#pragma mark - Helpers (Options)
+
+- (BOOL)booleanPropertyForKey:(NSString *)aKey default:(BOOL)defaultValue
+{
+    if (aKey == nil) return defaultValue;
+    
+    NSNumber *number = [_controllerOptions objectForKey:aKey];
+    if ([number isKindOfClass:[NSNumber class]]) {
+        return number.boolValue;
+    } else {
+        return defaultValue;
+    }
+}
+
+- (CGFloat)floatPropertyForKey:(NSString *)aKey default:(CGFloat)defaultValue
+{
+    if (aKey == nil) return defaultValue;
+    
+    NSNumber *number = [_controllerOptions objectForKey:aKey];
+    if ([number isKindOfClass:[NSNumber class]]) {
+        return number.floatValue;
+    } else {
+        return defaultValue;
+    }
 }
 
 #pragma mark - Helpers (Gestures)

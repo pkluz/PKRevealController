@@ -17,6 +17,8 @@
 @property (nonatomic, strong) UIView *leftShadowView;
 @property (nonatomic, strong) UIView *rightShadowView;
 
+@property (nonatomic, assign) CGRect previousFrame;
+
 #pragma mark - Properties
 
 - (void)setShadowColor:(UIColor *)color offset:(CGSize)offset opacity:(CGFloat)opacity radius:(CGFloat)radius forView:(UIView *)view;
@@ -152,6 +154,18 @@
 }
 
 #pragma mark - Layouting
+
+- (void)setFrame:(CGRect)frame
+{
+    [super setFrame:frame];
+    
+    if (!CGRectEqualToRect(frame, _previousFrame)) {
+        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(containerView:didChangeFrame:)]) {
+            [self.delegate containerView:self didChangeFrame:frame];
+        }
+        _previousFrame = frame;
+    }
+}
 
 - (void)layoutSubviews
 {
