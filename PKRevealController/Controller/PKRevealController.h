@@ -11,6 +11,7 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "PKRevealControllerType.h"
 #import "UIViewController+PKRevealController.h"
 
 typedef NS_ENUM(NSUInteger, PKRevealControllerState)
@@ -27,13 +28,36 @@ typedef NS_ENUM(NSUInteger, PKRevealControllerAnimationType)
     PKRevealControllerAnimationTypeStatic // Rear view's do not move at all.
 };
 
-typedef NS_OPTIONS(NSUInteger, PKRevealControllerType)
-{
-    PKRevealControllerTypeNone  = 0,
-    PKRevealControllerTypeLeft  = 1 << 0,
-    PKRevealControllerTypeRight = 1 << 1,
-    PKRevealControllerTypeBoth = (PKRevealControllerTypeLeft | PKRevealControllerTypeRight)
-};
+@class PKRevealController;
+
+@protocol PKRevealControllerDelegate <NSObject>
+
+@optional
+
+// Called when the reveal controller shows a new top view controller.
+- (void)revealController:(PKRevealController *)revealController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated;
+
+@end
+
+@protocol PKRevealControllerAnimationDelegate <NSObject>
+
+@optional
+
+// Called when the reveal controller changes the visible width of the left view controller.
+- (void)revealController:(PKRevealController *)revealController didChangeLeftViewControllerVisibleWidth:(CGFloat)width;
+
+// Called when the reveal controller changes the visible width of the right view controller.
+- (void)revealController:(PKRevealController *)revealController didChangeRightViewControllerVisibleWidth:(CGFloat)width;
+
+@end
+
+/*
+ * List of notifications that are posted to the default NSNotificationCenter
+ */
+
+extern NSString * const PKRevealControllerDidShowFrontViewControllerNotification;
+extern NSString * const PKRevealControllerDidShowLeftViewControllerNotification;
+extern NSString * const PKRevealControllerDidShowRightViewControllerNotification;
 
 /*
  * List of option keys that can be passed in the options dictionary.
@@ -96,6 +120,22 @@ extern NSString * const PKRevealControllerDisablesFrontViewInteractionKey;
 extern NSString * const PKRevealControllerRecognizesPanningOnFrontViewKey;
 
 /*
+ * Determines whether there's a UIPanGestureRecognizer placed over the entire left view, enabling pan-based reveal closing.
+ *
+ * @default NO
+ * @value NSNumber containing BOOL
+ */
+extern NSString * const PKRevealControllerRecognizesPanningOnLeftViewKey;
+
+/*
+ * Determines whether there's a UIPanGestureRecognizer placed over the entire right view, enabling pan-based reveal closing.
+ *
+ * @default NO
+ * @value NSNumber containing BOOL
+ */
+extern NSString * const PKRevealControllerRecognizesPanningOnRightViewKey;
+
+/*
  * Determines whether there's a UITapGestureRecognizer placed over the entire front view, when presenting
  * one of the side views to enable snap-back-on-tap functionality.
  *
@@ -103,6 +143,23 @@ extern NSString * const PKRevealControllerRecognizesPanningOnFrontViewKey;
  * @value NSNumber containing BOOL
  */
 extern NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey;
+
+/*
+ * Determines the amount that the left view controller will slide with the front view controller movement.
+ *
+ * @default 0.0f
+ * @value NSNumber containing float between 0.0f and 1.0f
+ */
+extern NSString * const PKRevealControllerLeftViewSlideAmountKey;
+
+/*
+ * Determines the amount that the right view controller will slide with the front view controller movement.
+ *
+ * @default 0.0f
+ * @value NSNumber containing float between 0.0f and 1.0f
+ */
+extern NSString * const PKRevealControllerRightViewSlideAmountKey;
+
 
 typedef void(^PKDefaultCompletionHandler)(BOOL finished);
 typedef void(^PKDefaultErrorHandler)(NSError *error);
@@ -114,7 +171,10 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 @property (nonatomic, strong, readonly) UIViewController *leftViewController;
 @property (nonatomic, strong, readonly) UIViewController *rightViewController;
 
-@property (nonatomic, strong, readonly) UIPanGestureRecognizer *revealPanGestureRecognizer;
+@property (nonatomic, strong, readonly) UIPanGestureRecognizer *revealFrontPanGestureRecognizer;
+@property (nonatomic, strong, readonly) UIPanGestureRecognizer *revealLeftPanGestureRecognizer;
+@property (nonatomic, strong, readonly) UIPanGestureRecognizer *revealRightPanGestureRecognizer;
+
 @property (nonatomic, strong, readonly) UITapGestureRecognizer *revealResetTapGestureRecognizer;
 
 @property (nonatomic, assign, readonly) PKRevealControllerState state;
@@ -129,7 +189,11 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 @property (nonatomic, assign, readwrite) BOOL allowsOverdraw;
 @property (nonatomic, assign, readwrite) BOOL disablesFrontViewInteraction;
 @property (nonatomic, assign, readwrite) BOOL recognizesPanningOnFrontView;
+@property (nonatomic, assign, readwrite) BOOL recognizesPanningOnLeftView;
+@property (nonatomic, assign, readwrite) BOOL recognizesPanningOnRightView;
 @property (nonatomic, assign, readwrite) BOOL recognizesResetTapOnFrontView;
+
+@property (nonatomic, assign, readwrite) id<PKRevealControllerDelegate> delegate;
 
 #pragma mark - Methods
 
@@ -161,6 +225,22 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 - (id)initWithFrontViewController:(UIViewController *)frontViewController
               rightViewController:(UIViewController *)rightViewController
                           options:(NSDictionary *)options;
+
+
+/**
+ * Shifts the front view to the position that's best suited to present the front controller's view. (Animates by default)
+ */
+- (void)showFrontViewController;
+
+/**
+ * Shifts the front view to the position that's best suited to present the left controller's view. (Animates by default)
+ */
+- (void)showLeftViewController;
+
+/**
+ * Shifts the front view to the position that's best suited to present the right controller's view. (Animates by default)
+ */
+- (void)showRightViewController;
 
 /**
  * Shifts the front view to the position that's best suited to present the desired controller's view. (Animates by default)
@@ -235,6 +315,21 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 - (void)setRightViewController:(UIViewController *)rightViewController;
 
 /**
+ * Adjusts the container shadow properties of a reveal side
+ *
+ * @param UIColor color - The color of the shadow (default black).
+ * @param CGSize offset - The shadow offset (default CGSizeZero).
+ * @param CGFloat opacity - The opacity of the shadow (default 0.5f).
+ * @param CGFloat radius - The shadow's radius (default 2.5f).
+ * @param PKRevealControllerType revealSide - The reveal side(s) on which the shadow will be adjusted.
+ */
+- (void)setShadowColor:(UIColor *)color
+                offset:(CGSize)offset
+               opacity:(CGFloat)opacity
+                radius:(CGFloat)radius
+         forRevealSide:(PKRevealControllerType)revealSide;
+
+/**
  * Adjusts the minimum and maximum reveal width of any given view controller's view.
  *
  * @param CGFloat minWidth - The default (minimum) width of the view to be shown.
@@ -245,6 +340,20 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 - (void)setMinimumWidth:(CGFloat)minWidth
            maximumWidth:(CGFloat)maxWidth
       forViewController:(UIViewController *)controller;
+
+/**
+ * @param UIViewController controller - The left or right view controller.
+ *
+ * @return CGFloat - The minimum width for the specified view controller. Returns 0 if the view controller is not recognized.
+ */
+- (CGFloat)minimumWidthForViewController:(UIViewController *)controller;
+
+/**
+ * @param UIViewController controller - The left or right view controller.
+ *
+ * @return CGFloat - The maximum width for the specified view controller. Returns 0 if the view controller is not recognized.
+ */
+- (CGFloat)maximumWidthForViewController:(UIViewController *)controller;
 
 /**
  * @return UIViewController - Returns the currently focused controller, i.e. the one that's most prominent at any given point in time. 
@@ -265,5 +374,20 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
  * @return BOOL - Returns YES if the reveal controller has a left side, NO otherwise.
  */
 - (BOOL)hasLeftViewController;
+
+/**
+ * @param PKRevealControllerAnimationDelegate delegate - Adds a delegate to receive notifications when reveal animations occur.
+ */
+- (void)addAnimationDelegate:(NSObject<PKRevealControllerAnimationDelegate> *)delegate;
+
+/**
+ * @param PKRevealControllerAnimationDelegate delegate - Removes a delegate from receiving notifications when reveal animations occur.
+ */
+- (void)removeAnimationDelegate:(NSObject<PKRevealControllerAnimationDelegate> *)delegate;
+
+/**
+ * Removes all reveal animation delegates.
+ */
+- (void)removeAllAnimationDelegates;
 
 @end

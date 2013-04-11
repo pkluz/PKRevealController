@@ -25,5 +25,7 @@
 
 #pragma mark - Properties
 @property (nonatomic, strong, readwrite) PKRevealController *revealController;
+@property (readonly) PKRevealController *navigationRevealController;
+@property (readonly) UINavigationController *frontRevealNavigationController;
 
 @end

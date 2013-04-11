@@ -12,11 +12,21 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
+#import "PKRevealControllerType.h"
+
+@class PKRevealControllerContainerView;
+
+@protocol PKRevealControllerContainerViewDelegate <NSObject>
+
+-(void)containerView:(PKRevealControllerContainerView *)containerView didChangeFrame:(CGRect)frame;
+
+@end
 
 @interface PKRevealControllerContainerView : UIView
 
 #pragma mark - Properties
 @property (nonatomic, weak, readwrite) UIViewController *viewController;
+@property (nonatomic, weak, readwrite) id<PKRevealControllerContainerViewDelegate> delegate;
 
 #pragma mark - Methods
 - (id)initForController:(UIViewController *)controller;
@@ -24,6 +34,14 @@
 
 - (void)enableUserInteractionForContainedView;
 - (void)disableUserInteractionForContainedView;
+
+#pragma mark Shadow
+
+- (void)setShadowColor:(UIColor *)color
+                offset:(CGSize)offset
+               opacity:(CGFloat)opacity
+                radius:(CGFloat)radius
+         forRevealSide:(PKRevealControllerType)revealSide;
 
 - (void)refreshShadowWithAnimationDuration:(NSTimeInterval)duration;
 

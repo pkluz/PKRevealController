@@ -22,9 +22,33 @@
 #define DEFAULT_QUICK_SWIPE_TOGGLE_VELOCITY_VALUE 800.0f
 #define DEFAULT_DISABLES_FRONT_VIEW_INTERACTION_VALUE YES
 #define DEFAULT_RECOGNIZES_PAN_ON_FRONT_VIEW_VALUE YES
+#define DEFAULT_RECOGNIZES_PAN_ON_LEFT_VIEW_VALUE NO
+#define DEFAULT_RECOGNIZES_PAN_ON_RIGHT_VIEW_VALUE NO
 #define DEFAULT_RECOGNIZES_RESET_TAP_ON_FRONT_VIEW_VALUE YES
 
-@interface PKRevealController ()
+#define DEFAULT_LEFT_VIEW_SLIDE_AMOUNT 0.0f
+#define DEFAULT_RIGHT_VIEW_SLIDE_AMOUNT 0.0f
+
+@interface PKRevealControllerAnimationDelegateWrapper : NSObject
+
+@property (nonatomic, weak) NSObject<PKRevealControllerAnimationDelegate> *delegate;
+
+@end
+
+@implementation PKRevealControllerAnimationDelegateWrapper
+
+-(BOOL)isEqual:(id)object
+{
+    if (object == nil || ![object isKindOfClass:self.class]) {
+        return NO;
+    } else {
+        return ([self delegate] == [(PKRevealControllerAnimationDelegateWrapper *)object delegate]);
+    }
+}
+
+@end
+
+@interface PKRevealController () <PKRevealControllerContainerViewDelegate>
 
 #pragma mark - Properties
 @property (nonatomic, assign, readwrite) PKRevealControllerState state;
@@ -42,15 +66,29 @@
 @property (nonatomic, assign, readwrite) NSRange rightViewWidthRange;
 
 @property (nonatomic, strong, readwrite) NSMutableDictionary *controllerOptions;
-@property (nonatomic, strong, readwrite) UIPanGestureRecognizer *revealPanGestureRecognizer;
+
+@property (nonatomic, strong, readwrite) UIPanGestureRecognizer *revealFrontPanGestureRecognizer;
+@property (nonatomic, strong, readwrite) UIPanGestureRecognizer *revealLeftPanGestureRecognizer;
+@property (nonatomic, strong, readwrite) UIPanGestureRecognizer *revealRightPanGestureRecognizer;
+
 @property (nonatomic, strong, readwrite) UITapGestureRecognizer *revealResetTapGestureRecognizer;
 
 @property (nonatomic, assign, readwrite) CGPoint initialTouchLocation;
 @property (nonatomic, assign, readwrite) CGPoint previousTouchLocation;
 
+@property (nonatomic, assign) CGFloat animationDelegatePreviousLeftWidth;
+@property (nonatomic, assign) CGFloat animationDelegatePreviousRightWidth;
+@property (nonatomic, strong) NSMutableArray *animationDelegateWrappers;
+
+- (void)notifyDelegateDidShowViewController:(UIViewController *)controller animated:(BOOL)animated;
+
 @end
 
 @implementation PKRevealController
+
+NSString * const PKRevealControllerDidShowFrontViewControllerNotification = @"PKRevealControllerDidShowFrontViewControllerNotification";
+NSString * const PKRevealControllerDidShowLeftViewControllerNotification = @"PKRevealControllerDidShowLeftViewControllerNotification";
+NSString * const PKRevealControllerDidShowRightViewControllerNotification = @"PKRevealControllerDidShowRightViewControllerNotification";
 
 NSString * const PKRevealControllerAnimationDurationKey = @"PKRevealControllerAnimationDurationKey";
 NSString * const PKRevealControllerAnimationCurveKey = @"PKRevealControllerAnimationCurveKey";
@@ -58,8 +96,15 @@ NSString * const PKRevealControllerAnimationTypeKey = @"PKRevealControllerAnimat
 NSString * const PKRevealControllerAllowsOverdrawKey = @"PKRevealControllerAllowsOverdrawKey";
 NSString * const PKRevealControllerQuickSwipeToggleVelocityKey = @"PKRevealControllerQuickSwipeToggleVelocityKey";
 NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealControllerDisablesFrontViewInteractionKey";
+
 NSString * const PKRevealControllerRecognizesPanningOnFrontViewKey = @"PKRevealControllerRecognizesPanningOnFrontViewKey";
+NSString * const PKRevealControllerRecognizesPanningOnLeftViewKey = @"PKRevealControllerRecognizesPanningOnLeftViewKey";
+NSString * const PKRevealControllerRecognizesPanningOnRightViewKey = @"PKRevealControllerRecognizesPanningOnRightViewKey";
+
 NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKRevealControllerRecognizesResetTapOnFrontViewKey";
+
+NSString * const PKRevealControllerLeftViewSlideAmountKey = @"PKRevealControllerLeftViewSlideAmountKey";
+NSString * const PKRevealControllerRightViewSlideAmountKey = @"PKRevealControllerRightViewSlideAmountKey";
 
 #pragma mark - Initialization
 
@@ -178,9 +223,153 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     _frontViewController.revealController = self;
     _leftViewController.revealController = self;
     _rightViewController.revealController = self;
+    
+    _leftViewWidthRange = DEFAULT_LEFT_VIEW_WIDTH_RANGE;
+    _rightViewWidthRange = DEFAULT_RIGHT_VIEW_WIDTH_RANGE;
+}
+
+#pragma mark - Notifications and Delegate
+
+- (void)notifyDelegateDidShowViewController:(UIViewController *)controller animated:(BOOL)animated
+{
+    if ([self.delegate respondsToSelector:@selector(revealController:didShowViewController:animated:)]) {
+        [self.delegate revealController:self didShowViewController:controller animated:animated];
+    }
+    [self postNotificationForViewController:controller alreadyShown:YES];
+}
+
+- (void)postNotificationForViewController:(UIViewController *)controller alreadyShown:(BOOL)alreadyShown
+{
+    NSString *name = nil;
+    
+    if (controller == self.frontViewController) {
+        name = PKRevealControllerDidShowFrontViewControllerNotification;
+    } else if (controller == self.leftViewController) {
+        name = PKRevealControllerDidShowLeftViewControllerNotification;
+    } else if (controller == self.rightViewController) {
+        name = PKRevealControllerDidShowRightViewControllerNotification;
+    }
+    
+    if (name != nil) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:name object:controller];
+    }
+}
+
+#pragma mark - Animation Delegate
+
+- (void)notifyAnimationDelegatesWithLeftChanged:(BOOL)leftChanged rightChanged:(BOOL)rightChanged
+{
+    if (self.animationDelegateWrappers.count > 0) {
+        
+        CGFloat leftWidth = self.animationDelegatePreviousLeftWidth;
+        CGFloat rightWidth = self.animationDelegatePreviousRightWidth;
+        
+        NSArray *delegateWrappers = [self.animationDelegateWrappers copy];
+        
+        for (PKRevealControllerAnimationDelegateWrapper *wrapper in delegateWrappers) {
+            if (leftChanged && [wrapper.delegate respondsToSelector:@selector(revealController:didChangeLeftViewControllerVisibleWidth:)]) {
+                [wrapper.delegate revealController:self didChangeLeftViewControllerVisibleWidth:leftWidth];
+            }
+            if (rightChanged && [wrapper.delegate respondsToSelector:@selector(revealController:didChangeRightViewControllerVisibleWidth:)]) {
+                [wrapper.delegate revealController:self didChangeRightViewControllerVisibleWidth:rightWidth];
+            }
+        }
+    }
+}
+
+- (void)addAnimationDelegate:(NSObject<PKRevealControllerAnimationDelegate> *)delegate
+{
+    if (delegate != nil) {
+        PKRevealControllerAnimationDelegateWrapper *wrapper = [PKRevealControllerAnimationDelegateWrapper new];
+        wrapper.delegate = delegate;
+        @synchronized(self)
+        {
+            if (self.animationDelegateWrappers == nil) {
+                self.animationDelegateWrappers = [NSMutableArray arrayWithObject:wrapper];
+            } else if (![self.animationDelegateWrappers containsObject:wrapper]) {
+                [self.animationDelegateWrappers addObject:wrapper];
+            }
+        }
+    }
+}
+
+- (void)removeAnimationDelegate:(NSObject<PKRevealControllerAnimationDelegate> *)delegate
+{
+    if (delegate != nil && self.animationDelegateWrappers.count > 0) {
+        
+        @synchronized(self)
+        {
+            NSArray *delegateWrappers = [self.animationDelegateWrappers copy];
+            for (PKRevealControllerAnimationDelegateWrapper *wrapper in delegateWrappers) {
+                if (wrapper.delegate == delegate || wrapper.delegate == nil) {
+                    [self.animationDelegateWrappers removeObject:wrapper];
+                }
+            }
+        }
+    }
+}
+
+- (void)removeAllAnimationDelegates
+{
+    @synchronized(self)
+    {
+        self.animationDelegateWrappers = nil;
+    }
+}
+
+#pragma mark - PKRevealControllerContainerViewDelegate
+
+-(void)containerView:(PKRevealControllerContainerView *)containerView didChangeFrame:(CGRect)frame
+{
+    CGRect currentFrame = self.frontViewContainer.frame;
+    
+    CGFloat leftWidth = MAX(currentFrame.origin.x, 0.0f);
+    CGFloat rightWidth = MAX((currentFrame.origin.x * -1.0f), 0.0f);
+    
+    BOOL leftChanged = (leftWidth != _animationDelegatePreviousLeftWidth);
+    BOOL rightChanged = (rightWidth != _animationDelegatePreviousRightWidth);
+    
+    _animationDelegatePreviousLeftWidth = leftWidth;
+    _animationDelegatePreviousRightWidth = rightWidth;
+    
+    if (leftChanged) {
+        CGFloat slideAmount = [self floatPropertyForKey:PKRevealControllerLeftViewSlideAmountKey default:DEFAULT_LEFT_VIEW_SLIDE_AMOUNT];
+        slideAmount = MAX(0.0f, MIN(slideAmount, 1.0f));
+        CGRect sideFrame = self.leftViewContainer.frame;
+        sideFrame.origin.x = slideAmount * (CGRectGetMinX(currentFrame)-sideFrame.size.width);
+        self.leftViewContainer.frame = sideFrame;
+    }
+    
+    if (rightChanged) {
+        CGFloat slideAmount = [self floatPropertyForKey:PKRevealControllerRightViewSlideAmountKey default:DEFAULT_RIGHT_VIEW_SLIDE_AMOUNT];
+        slideAmount = MAX(0.0f, MIN(slideAmount, 1.0f));
+        CGRect sideFrame = self.rightViewContainer.frame;
+        CGFloat staticOrigin = currentFrame.size.width - sideFrame.size.width;
+        sideFrame.origin.x = staticOrigin +  slideAmount * (CGRectGetMaxX(currentFrame) - staticOrigin);
+        self.rightViewContainer.frame = sideFrame;
+    }
+    
+    if (leftChanged || rightChanged) {
+        [self notifyAnimationDelegatesWithLeftChanged:leftChanged rightChanged:rightChanged];
+    }
 }
 
 #pragma mark - API
+
+- (void)showFrontViewController
+{
+    [self showViewController:self.frontViewController];
+}
+
+- (void)showLeftViewController
+{
+    [self showViewController:self.leftViewController];
+}
+
+- (void)showRightViewController
+{
+    [self showViewController:self.rightViewController];
+}
 
 - (void)showViewController:(UIViewController *)controller
 {
@@ -349,6 +538,19 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     return PKRevealControllerTypeLeft == (self.type & PKRevealControllerTypeLeft);
 }
 
+- (void)setShadowColor:(UIColor *)color
+                offset:(CGSize)offset
+               opacity:(CGFloat)opacity
+                radius:(CGFloat)radius
+         forRevealSide:(PKRevealControllerType)revealSide
+{
+    if (self.frontViewContainer == nil)
+    {
+        [self initializeFrontViewContainer];
+    }
+    [self.frontViewContainer setShadowColor:color offset:offset opacity:opacity radius:radius forRevealSide:revealSide];
+}
+
 - (void)setMinimumWidth:(CGFloat)minWidth
            maximumWidth:(CGFloat)maxWidth
       forViewController:(UIViewController *)controller
@@ -362,6 +564,38 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     else if (controller == self.rightViewController)
     {
         self.rightViewWidthRange = widthRange;
+    }
+}
+
+- (CGFloat)minimumWidthForViewController:(UIViewController *)controller
+{
+    if (controller == self.leftViewController)
+    {
+        return self.leftViewWidthRange.location;
+    }
+    else if (controller == self.rightViewController)
+    {
+        return self.rightViewWidthRange.location;
+    }
+    else
+    {
+        return 0.0f;
+    }
+}
+
+- (CGFloat)maximumWidthForViewController:(UIViewController *)controller
+{
+    if (controller == self.leftViewController)
+    {
+        return NSMaxRange(self.leftViewWidthRange);
+    }
+    else if (controller == self.rightViewController)
+    {
+        return NSMaxRange(self.rightViewWidthRange);
+    }
+    else
+    {
+        return 0.0f;
     }
 }
 
@@ -408,7 +642,26 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     [self addFrontViewControllerToHierarchy];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+}
+
 #pragma mark - View Lifecycle (Controller)
+
+- (void)initializeFrontViewContainer
+{
+    if (self.frontViewContainer == nil)
+    {
+        self.frontViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.frontViewController shadow:YES];
+        self.frontViewContainer.autoresizingMask = [self autoresizingMaskForFrontViewContainer];
+    }
+}
 
 - (void)addFrontViewControllerToHierarchy
 {
@@ -419,15 +672,20 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         
         if (self.frontViewContainer == nil)
         {
-            self.frontViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.frontViewController shadow:YES];
-            self.frontViewContainer.autoresizingMask = [self autoresizingMaskForFrontViewContainer];
+            [self initializeFrontViewContainer];
         }
+        if (self.frontViewContainer.viewController != self.frontViewController)
+        {
+            self.frontViewContainer.viewController = self.frontViewController;
+        }
+        
+        self.frontViewContainer.delegate = self;
         
         self.frontViewContainer.frame = [self frontViewFrameForCurrentState];
         [self.view addSubview:self.frontViewContainer];
         [self.frontViewController didMoveToParentViewController:self];
         
-        [self updatePanGestureRecognizer];
+        [self updatePanGestureRecognizers];
     }
 }
 
@@ -438,6 +696,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         [self removePanGestureRecognizerFromFrontView];
         [self.frontViewContainer removeFromSuperview];
         [self.frontViewController removeFromParentViewController];
+        self.frontViewContainer.delegate = nil;
     }
 }
 
@@ -452,6 +711,8 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         {
             self.leftViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.leftViewController shadow:NO];
             self.leftViewContainer.autoresizingMask = [self autoresizingMaskForLeftViewContainer];
+            
+            [self updatePanGestureRecognizers];
         }
         
         self.leftViewContainer.frame = [self leftViewFrame];
@@ -480,6 +741,8 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         {
             self.rightViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.rightViewController shadow:NO];
             self.rightViewContainer.autoresizingMask = [self autoresizingMaskForRightViewContainer];
+            
+            [self updatePanGestureRecognizers];
         }
         
         self.rightViewContainer.frame = [self rightViewFrame];
@@ -497,18 +760,78 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     }
 }
 
+#pragma mark Pan Gestures
+
 - (void)addPanGestureRecognizerToFrontView
 {
-    [self.frontViewContainer addGestureRecognizer:self.revealPanGestureRecognizer];
+    [self.frontViewContainer addGestureRecognizer:self.revealFrontPanGestureRecognizer];
 }
 
 - (void)removePanGestureRecognizerFromFrontView
 {
-    if ([[self.frontViewContainer gestureRecognizers] containsObject:self.revealPanGestureRecognizer])
+    if ([[self.frontViewContainer gestureRecognizers] containsObject:self.revealFrontPanGestureRecognizer])
     {
-        [self.frontViewContainer removeGestureRecognizer:self.revealPanGestureRecognizer];
+        [self.frontViewContainer removeGestureRecognizer:self.revealFrontPanGestureRecognizer];
     }
 }
+
+- (void)addPanGestureRecognizerToLeftView
+{
+    [self.leftViewContainer addGestureRecognizer:self.revealLeftPanGestureRecognizer];
+}
+
+- (void)removePanGestureRecognizerFromLeftView
+{
+    if ([[self.leftViewContainer gestureRecognizers] containsObject:self.revealLeftPanGestureRecognizer])
+    {
+        [self.leftViewContainer removeGestureRecognizer:self.revealLeftPanGestureRecognizer];
+    }
+}
+
+- (void)addPanGestureRecognizerToRightView
+{
+    [self.rightViewContainer addGestureRecognizer:self.revealRightPanGestureRecognizer];
+}
+
+- (void)removePanGestureRecognizerFromRightView
+{
+    if ([[self.rightViewContainer gestureRecognizers] containsObject:self.revealRightPanGestureRecognizer])
+    {
+        [self.rightViewContainer removeGestureRecognizer:self.revealRightPanGestureRecognizer];
+    }
+}
+
+- (void)updatePanGestureRecognizers
+{
+    if (self.recognizesPanningOnFrontView)
+    {
+        [self addPanGestureRecognizerToFrontView];
+    }
+    else
+    {
+        [self removePanGestureRecognizerFromFrontView];
+    }
+    
+    if (self.recognizesPanningOnLeftView)
+    {
+        [self addPanGestureRecognizerToLeftView];
+    }
+    else
+    {
+        [self removePanGestureRecognizerFromLeftView];
+    }
+    
+    if (self.recognizesPanningOnRightView)
+    {
+        [self addPanGestureRecognizerToRightView];
+    }
+    else
+    {
+        [self removePanGestureRecognizerFromRightView];
+    }
+}
+
+#pragma mark Tap Gestures
 
 - (void)addTapGestureRecognizerToFrontView
 {
@@ -520,18 +843,6 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     if ([[self.frontViewContainer gestureRecognizers] containsObject:self.revealResetTapGestureRecognizer])
     {
         [self.frontViewContainer removeGestureRecognizer:self.revealResetTapGestureRecognizer];
-    }
-}
-
-- (void)updatePanGestureRecognizer
-{
-    if (self.recognizesPanningOnFrontView)
-    {
-        [self addPanGestureRecognizerToFrontView];
-    }
-    else
-    {
-        [self removePanGestureRecognizerFromFrontView];
     }
 }
 
@@ -553,8 +864,6 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 - (void)setup
 {
     self.state = PKRevealControllerFocusesFrontViewController;
-    self.leftViewWidthRange = DEFAULT_LEFT_VIEW_WIDTH_RANGE;
-    self.rightViewWidthRange = DEFAULT_RIGHT_VIEW_WIDTH_RANGE;
     
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
 }
@@ -567,9 +876,12 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 - (void)setupPanGestureRecognizer
 {
     SEL panRecognitionCallback = @selector(didRecognizePanWithGestureRecognizer:);
-    self.revealPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                              action:panRecognitionCallback];
-    self.revealPanGestureRecognizer.delegate = self;
+    self.revealFrontPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:panRecognitionCallback];
+    self.revealFrontPanGestureRecognizer.delegate = self;
+    self.revealLeftPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:panRecognitionCallback];
+    self.revealLeftPanGestureRecognizer.delegate = self;
+    self.revealRightPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:panRecognitionCallback];
+    self.revealRightPanGestureRecognizer.delegate = self;
 }
 
 - (void)setupTapGestureRecognizer
@@ -731,7 +1043,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 {
     [self.controllerOptions setObject:[NSNumber numberWithBool:recognizesPanningOnFrontView]
                                forKey:PKRevealControllerRecognizesPanningOnFrontViewKey];
-    [self updatePanGestureRecognizer];
+    [self updatePanGestureRecognizers];
 }
 
 - (BOOL)recognizesPanningOnFrontView
@@ -742,6 +1054,50 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     {
         [self setRecognizesPanningOnFrontView:DEFAULT_RECOGNIZES_PAN_ON_FRONT_VIEW_VALUE];
         return [self recognizesPanningOnFrontView];
+    }
+    else
+    {
+        return [number boolValue];
+    }
+}
+
+- (void)setRecognizesPanningOnLeftView:(BOOL)recognizesPanningOnLeftView
+{
+    [self.controllerOptions setObject:[NSNumber numberWithBool:recognizesPanningOnLeftView]
+                               forKey:PKRevealControllerRecognizesPanningOnLeftViewKey];
+    [self updatePanGestureRecognizers];
+}
+
+- (BOOL)recognizesPanningOnLeftView
+{
+    NSNumber *number = [self.controllerOptions objectForKey:PKRevealControllerRecognizesPanningOnLeftViewKey];
+    
+    if (number == nil)
+    {
+        [self setRecognizesPanningOnLeftView:DEFAULT_RECOGNIZES_PAN_ON_LEFT_VIEW_VALUE];
+        return [self recognizesPanningOnLeftView];
+    }
+    else
+    {
+        return [number boolValue];
+    }
+}
+
+- (void)setRecognizesPanningOnRightView:(BOOL)recognizesPanningOnRightView
+{
+    [self.controllerOptions setObject:[NSNumber numberWithBool:recognizesPanningOnRightView]
+                               forKey:PKRevealControllerRecognizesPanningOnRightViewKey];
+    [self updatePanGestureRecognizers];
+}
+
+- (BOOL)recognizesPanningOnRightView
+{
+    NSNumber *number = [self.controllerOptions objectForKey:PKRevealControllerRecognizesPanningOnRightViewKey];
+    
+    if (number == nil)
+    {
+        [self setRecognizesPanningOnRightView:DEFAULT_RECOGNIZES_PAN_ON_RIGHT_VIEW_VALUE];
+        return [self recognizesPanningOnRightView];
     }
     else
     {
@@ -800,7 +1156,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
                         
         default:
         {
-            self.revealPanGestureRecognizer.enabled = YES;
+            recognizer.enabled = YES;
         }
             break;
     }
@@ -841,17 +1197,25 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         [self snapFrontViewToClosestEdge];
     }
     
-    self.revealPanGestureRecognizer.enabled = YES;
+    recognizer.enabled = YES;
 }
 
 #pragma mark - Gesture Delegation
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
-    if (gestureRecognizer == self.revealPanGestureRecognizer)
+    if (gestureRecognizer == self.revealFrontPanGestureRecognizer)
     {
-        CGPoint translation = [self.revealPanGestureRecognizer translationInView:self.frontViewContainer];
+        CGPoint translation = [self.revealFrontPanGestureRecognizer translationInView:self.frontViewContainer];
         return (fabs(translation.x) >= fabs(translation.y));
+    }
+    else if (gestureRecognizer == self.revealLeftPanGestureRecognizer && ![self isLeftViewVisible])
+    {
+        return NO;
+    }
+    else if (gestureRecognizer == self.revealRightPanGestureRecognizer && ![self isRightViewVisible])
+    {
+        return NO;
     }
     else if (gestureRecognizer == self.revealResetTapGestureRecognizer)
     {
@@ -970,6 +1334,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
              weakSelf.state = PKRevealControllerFocusesLeftViewController;
              [weakSelf removeRightViewControllerFromHierarchy];
              [weakSelf updateResetTapGestureRecognizer];
+             [weakSelf notifyDelegateDidShowViewController:weakSelf.leftViewController animated:animated];
              safelyExecuteCompletionBlockOnMainThread(completion, finished);
          }];
     };
@@ -1009,6 +1374,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
             }
             weakSelf.state = PKRevealControllerFocusesRightViewController;
             [weakSelf updateResetTapGestureRecognizer];
+            [weakSelf notifyDelegateDidShowViewController:weakSelf.rightViewController animated:animated];
             safelyExecuteCompletionBlockOnMainThread(completion, finished);
         }];
     };
@@ -1045,6 +1411,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
          [weakSelf removeRightViewControllerFromHierarchy];
          [weakSelf removeLeftViewControllerFromHierarchy];
          [weakSelf updateResetTapGestureRecognizer];
+         [weakSelf notifyDelegateDidShowViewController:weakSelf.frontViewController animated:animated];
          safelyExecuteCompletionBlockOnMainThread(completion, finished);
      }];
 }
@@ -1166,6 +1533,32 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     {
         safelyExecuteCompletionBlockOnMainThread(completion, finished);
     }];
+}
+
+#pragma mark - Helpers (Options)
+
+- (BOOL)booleanPropertyForKey:(NSString *)aKey default:(BOOL)defaultValue
+{
+    if (aKey == nil) return defaultValue;
+    
+    NSNumber *number = [_controllerOptions objectForKey:aKey];
+    if ([number isKindOfClass:[NSNumber class]]) {
+        return number.boolValue;
+    } else {
+        return defaultValue;
+    }
+}
+
+- (CGFloat)floatPropertyForKey:(NSString *)aKey default:(CGFloat)defaultValue
+{
+    if (aKey == nil) return defaultValue;
+    
+    NSNumber *number = [_controllerOptions objectForKey:aKey];
+    if ([number isKindOfClass:[NSNumber class]]) {
+        return number.floatValue;
+    } else {
+        return defaultValue;
+    }
 }
 
 #pragma mark - Helpers (Gestures)
