@@ -356,6 +356,21 @@ NSString * const PKRevealControllerRightViewSlideAmountKey = @"PKRevealControlle
 
 #pragma mark - API
 
+- (void)showFrontViewController
+{
+    [self showViewController:self.frontViewController];
+}
+
+- (void)showLeftViewController
+{
+    [self showViewController:self.leftViewController];
+}
+
+- (void)showRightViewController
+{
+    [self showViewController:self.rightViewController];
+}
+
 - (void)showViewController:(UIViewController *)controller
 {
     [self showViewController:controller

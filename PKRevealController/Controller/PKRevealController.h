@@ -226,6 +226,22 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
               rightViewController:(UIViewController *)rightViewController
                           options:(NSDictionary *)options;
 
+
+/**
+ * Shifts the front view to the position that's best suited to present the front controller's view. (Animates by default)
+ */
+- (void)showFrontViewController;
+
+/**
+ * Shifts the front view to the position that's best suited to present the left controller's view. (Animates by default)
+ */
+- (void)showLeftViewController;
+
+/**
+ * Shifts the front view to the position that's best suited to present the right controller's view. (Animates by default)
+ */
+- (void)showRightViewController;
+
 /**
  * Shifts the front view to the position that's best suited to present the desired controller's view. (Animates by default)
  *
