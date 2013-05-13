@@ -64,7 +64,6 @@
 {
     [super layoutSubviews];
     // layout controller view
-    self.viewController.view.frame = self.viewController.view.bounds;
 }
 
 - (void)refreshShadowWithAnimationDuration:(NSTimeInterval)duration
