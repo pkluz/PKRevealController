@@ -45,6 +45,15 @@ typedef NS_OPTIONS(NSUInteger, PKRevealControllerType)
  */
 
 /*
+ * Determines whether the left and right side menues should fade in/out when being slided
+ *
+ * @default NO
+ * @value NSNumber containing BOOL
+ */
+extern NSString * const PKRevealControllerFadeMenuesWhileSlidingKey;
+
+
+/*
  * Animation duration for automatic front view movement.
  *
  * @default 0.185sec
@@ -132,6 +141,7 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 @property (nonatomic, assign, readwrite) PKRevealControllerAnimationType animationType;
 @property (nonatomic, assign, readwrite) CGFloat quickSwipeVelocity;
 @property (nonatomic, assign, readwrite) BOOL allowsOverdraw;
+@property (nonatomic, assign, readwrite) BOOL fadeMenuesWhileSliding;
 @property (nonatomic, assign, readwrite) BOOL disablesFrontViewInteraction;
 @property (nonatomic, assign, readwrite) BOOL recognizesPanningOnFrontView;
 @property (nonatomic, assign, readwrite) BOOL recognizesResetTapOnFrontView;

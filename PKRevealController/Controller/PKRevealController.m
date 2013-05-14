@@ -20,6 +20,7 @@
 #define DEFAULT_ALLOWS_OVERDRAW_VALUE YES
 #define DEFAULT_ANIMATION_TYPE_VALUE PKRevealControllerAnimationTypeStatic
 #define DEFAULT_QUICK_SWIPE_TOGGLE_VELOCITY_VALUE 800.0f
+#define DEFAULT_FADE_MENUES_WHILE_SLIDING NO
 #define DEFAULT_DISABLES_FRONT_VIEW_INTERACTION_VALUE YES
 #define DEFAULT_RECOGNIZES_PAN_ON_FRONT_VIEW_VALUE YES
 #define DEFAULT_RECOGNIZES_RESET_TAP_ON_FRONT_VIEW_VALUE YES
@@ -52,6 +53,7 @@
 
 @implementation PKRevealController
 
+NSString * const PKRevealControllerFadeMenuesWhileSlidingKey = @"PKRevealControllerFadeMenuesWhileSlidingKey";
 NSString * const PKRevealControllerAnimationDurationKey = @"PKRevealControllerAnimationDurationKey";
 NSString * const PKRevealControllerAnimationCurveKey = @"PKRevealControllerAnimationCurveKey";
 NSString * const PKRevealControllerAnimationTypeKey = @"PKRevealControllerAnimationTypeKey";
@@ -704,6 +706,29 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 #pragma mark -
 
+- (BOOL)fadeMenuesWhileSliding
+{
+    NSNumber *number = [self.controllerOptions objectForKey:PKRevealControllerFadeMenuesWhileSlidingKey];
+    
+    if (number == nil)
+    {
+        [self setDisablesFrontViewInteraction:DEFAULT_FADE_MENUES_WHILE_SLIDING];
+        return [self fadeMenuesWhileSliding];
+    }
+    else
+    {
+        return [number boolValue];
+    }
+}
+
+- (void)setFadeMenuesWhileSliding:(BOOL)fadeMenuesWhileSliding
+{
+    [self.controllerOptions setObject:[NSNumber numberWithBool:fadeMenuesWhileSliding]
+                               forKey:PKRevealControllerFadeMenuesWhileSlidingKey];
+}
+
+
+
 - (BOOL)disablesFrontViewInteraction
 {
     NSNumber *number = [self.controllerOptions objectForKey:PKRevealControllerDisablesFrontViewInteractionKey];
@@ -819,16 +844,20 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     CGPoint currentTouchLocation = [recognizer locationInView:self.view];
     
 
-    if ([self isLeftViewVisible])
+    if (self.fadeMenuesWhileSliding)
     {
-        float newAlpha = currentTouchLocation.x/self.leftViewWidthRange.length;
-        [self.leftViewContainer setAlpha:newAlpha];
+        if ([self isLeftViewVisible])
+        {
+            float newAlpha = currentTouchLocation.x/self.leftViewWidthRange.length;
+            [self.leftViewContainer setAlpha:newAlpha];
+        }
+        else if ([self isRightViewVisible])
+        {
+            float newAlpha = currentTouchLocation.x/self.rightViewWidthRange.length;
+            [self.rightViewContainer setAlpha:newAlpha];
+        }
     }
-    else if ([self isRightViewVisible])
-    {
-        float newAlpha = currentTouchLocation.x/self.rightViewWidthRange.length;
-        [self.rightViewContainer setAlpha:newAlpha];
-    }
+    
     
     CGFloat delta = currentTouchLocation.x - self.previousTouchLocation.x;
     self.previousTouchLocation = currentTouchLocation;
@@ -997,10 +1026,13 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         [weakSelf removeRightViewControllerFromHierarchy];
         [weakSelf addLeftViewControllerToHierarchy];
         
-        [UIView animateWithDuration:DEFAULT_ANIMATION_DURATION_VALUE
-                         animations:^{
-                             [weakSelf.leftViewContainer setAlpha:1.0];
-                         }];
+        if (weakSelf.fadeMenuesWhileSliding)
+        {
+            [UIView animateWithDuration:DEFAULT_ANIMATION_DURATION_VALUE
+                             animations:^{
+                                 [weakSelf.leftViewContainer setAlpha:1.0];
+                             }];
+        }
         
         [weakSelf setFrontViewFrame:[weakSelf frontViewFrameForVisibleLeftView]
                            animated:animated
@@ -1042,11 +1074,14 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         [weakSelf removeLeftViewControllerFromHierarchy];
         [weakSelf addRightViewControllerToHierarchy];
         
-        [UIView animateWithDuration:DEFAULT_ANIMATION_DURATION_VALUE
-                         animations:^{
-                             [weakSelf.rightViewContainer setAlpha:1.0];
-                         }];
-
+        if (weakSelf.fadeMenuesWhileSliding)
+        {
+            [UIView animateWithDuration:DEFAULT_ANIMATION_DURATION_VALUE
+                             animations:^{
+                                 [weakSelf.rightViewContainer setAlpha:1.0];
+                             }];
+        }
+        
         [weakSelf setFrontViewFrame:[weakSelf frontViewFrameForVisibleRightView]
                            animated:animated
                          completion:^(BOOL finished)
