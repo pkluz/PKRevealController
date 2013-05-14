@@ -13,6 +13,11 @@
 #import <UIKit/UIKit.h>
 #import "UIViewController+PKRevealController.h"
 
+
+@protocol PKPanGestureControlProtocol <NSObject>
+-(BOOL)allowPanGestureForRecognizer:(UIGestureRecognizer *)gestureRecognizer withTouch:(UITouch *)touch;
+@end
+
 typedef NS_ENUM(NSUInteger, PKRevealControllerState)
 {
     PKRevealControllerFocusesLeftViewController,

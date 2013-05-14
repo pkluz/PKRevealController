@@ -817,6 +817,19 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 - (void)handleGestureChangedWithRecognizer:(UIPanGestureRecognizer *)recognizer
 {
     CGPoint currentTouchLocation = [recognizer locationInView:self.view];
+    
+
+    if ([self isLeftViewVisible])
+    {
+        float newAlpha = currentTouchLocation.x/self.leftViewWidthRange.length;
+        [self.leftViewContainer setAlpha:newAlpha];
+    }
+    else if ([self isRightViewVisible])
+    {
+        float newAlpha = currentTouchLocation.x/self.rightViewWidthRange.length;
+        [self.rightViewContainer setAlpha:newAlpha];
+    }
+    
     CGFloat delta = currentTouchLocation.x - self.previousTouchLocation.x;
     self.previousTouchLocation = currentTouchLocation;
     
@@ -860,6 +873,31 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     
     return YES;
 }
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    BOOL allowGesture = YES;
+    
+    UIViewController* visibleVC = self.frontViewController;
+    
+    if ([self.frontViewController isKindOfClass:[UINavigationController class]])
+    {
+        UINavigationController* navController = (UINavigationController*)self.frontViewController;
+        visibleVC = navController.visibleViewController;
+    }
+    
+    if ([visibleVC conformsToProtocol:@protocol(PKPanGestureControlProtocol)] &&
+        !([self isLeftViewVisible] || [self isRightViewVisible]) )
+    {
+        UIViewController<PKPanGestureControlProtocol>* vcProtocol =
+        (UIViewController<PKPanGestureControlProtocol> *)visibleVC;
+
+        allowGesture = [vcProtocol allowPanGestureForRecognizer:gestureRecognizer withTouch:touch];
+    }
+    
+    return allowGesture;
+}
+
 
 #pragma mark - Translation
 
@@ -959,6 +997,11 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         [weakSelf removeRightViewControllerFromHierarchy];
         [weakSelf addLeftViewControllerToHierarchy];
         
+        [UIView animateWithDuration:DEFAULT_ANIMATION_DURATION_VALUE
+                         animations:^{
+                             [weakSelf.leftViewContainer setAlpha:1.0];
+                         }];
+        
         [weakSelf setFrontViewFrame:[weakSelf frontViewFrameForVisibleLeftView]
                            animated:animated
                          completion:^(BOOL finished)
@@ -999,6 +1042,11 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         [weakSelf removeLeftViewControllerFromHierarchy];
         [weakSelf addRightViewControllerToHierarchy];
         
+        [UIView animateWithDuration:DEFAULT_ANIMATION_DURATION_VALUE
+                         animations:^{
+                             [weakSelf.rightViewContainer setAlpha:1.0];
+                         }];
+
         [weakSelf setFrontViewFrame:[weakSelf frontViewFrameForVisibleRightView]
                            animated:animated
                          completion:^(BOOL finished)
