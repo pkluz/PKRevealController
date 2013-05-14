@@ -712,7 +712,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     
     if (number == nil)
     {
-        [self setDisablesFrontViewInteraction:DEFAULT_FADE_MENUES_WHILE_SLIDING];
+        [self setFadeMenuesWhileSliding:DEFAULT_FADE_MENUES_WHILE_SLIDING];
         return [self fadeMenuesWhileSliding];
     }
     else
