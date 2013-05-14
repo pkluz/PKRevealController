@@ -13,6 +13,11 @@
 #import <UIKit/UIKit.h>
 #import "UIViewController+PKRevealController.h"
 
+
+@protocol PKPanGestureControlProtocol <NSObject>
+-(BOOL)allowPanGestureForRecognizer:(UIGestureRecognizer *)gestureRecognizer withTouch:(UITouch *)touch;
+@end
+
 typedef NS_ENUM(NSUInteger, PKRevealControllerState)
 {
     PKRevealControllerFocusesLeftViewController,
@@ -38,6 +43,15 @@ typedef NS_OPTIONS(NSUInteger, PKRevealControllerType)
 /*
  * List of option keys that can be passed in the options dictionary.
  */
+
+/*
+ * Determines whether the left and right side menues should fade in/out when being slided
+ *
+ * @default NO
+ * @value NSNumber containing BOOL
+ */
+extern NSString * const PKRevealControllerFadeMenuesWhileSlidingKey;
+
 
 /*
  * Animation duration for automatic front view movement.
@@ -127,6 +141,7 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 @property (nonatomic, assign, readwrite) PKRevealControllerAnimationType animationType;
 @property (nonatomic, assign, readwrite) CGFloat quickSwipeVelocity;
 @property (nonatomic, assign, readwrite) BOOL allowsOverdraw;
+@property (nonatomic, assign, readwrite) BOOL fadeMenuesWhileSliding;
 @property (nonatomic, assign, readwrite) BOOL disablesFrontViewInteraction;
 @property (nonatomic, assign, readwrite) BOOL recognizesPanningOnFrontView;
 @property (nonatomic, assign, readwrite) BOOL recognizesResetTapOnFrontView;
