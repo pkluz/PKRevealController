@@ -1042,8 +1042,6 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
              [weakSelf.frontViewContainer enableUserInteractionForContainedView];
          }
          weakSelf.state = PKRevealControllerFocusesFrontViewController;
-         [weakSelf removeRightViewControllerFromHierarchy];
-         [weakSelf removeLeftViewControllerFromHierarchy];
          [weakSelf updateResetTapGestureRecognizer];
          safelyExecuteCompletionBlockOnMainThread(completion, finished);
      }];
