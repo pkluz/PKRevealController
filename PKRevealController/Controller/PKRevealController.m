@@ -848,6 +848,10 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
+    CGPoint touchPosition = [gestureRecognizer locationInView:self.view];
+    if(!(touchPosition.x < 50.0 || touchPosition.x > self.view.bounds.size.width - 50.0f))
+        return FALSE;
+    
     if (gestureRecognizer == self.revealPanGestureRecognizer)
     {
         CGPoint translation = [self.revealPanGestureRecognizer translationInView:self.frontViewContainer];
