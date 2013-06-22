@@ -1298,7 +1298,11 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
             break;
             
         case PKRevealControllerFocusesLeftViewControllerInPresentationMode:
+			returnRect = [self frontViewFrameForLeftViewPresentationMode];
+			break;
+			
         case PKRevealControllerFocusesRightViewControllerInPresentationMode:
+			returnRect = [self frontViewFrameForRightViewPresentationMode];
             break;
     }
     
