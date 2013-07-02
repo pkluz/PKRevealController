@@ -135,7 +135,7 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 @property (nonatomic, assign, readwrite) BOOL disablesFrontViewInteraction;
 @property (nonatomic, assign, readwrite) BOOL recognizesPanningOnFrontView;
 @property (nonatomic, assign, readwrite) BOOL recognizesResetTapOnFrontView;
-@property (nonatomic, assign) id <PKRevealDelegate>delegate;
+@property (nonatomic, assign, readwrite) id <PKRevealDelegate>delegate;
 
 #pragma mark - Methods
 
