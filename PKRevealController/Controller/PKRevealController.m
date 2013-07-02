@@ -198,6 +198,10 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         if ([self hasLeftViewController])
         {
             [self showLeftViewControllerAnimated:animated completion:completion];
+            
+            if ([self.delegate respondsToSelector:@selector(revealViewControllerDidAppear:)]) {
+                [self.delegate revealViewControllerDidAppear:self.leftViewController];
+            }
         }
         
     }
@@ -206,11 +210,19 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         if ([self hasRightViewController])
         {
             [self showRightViewControllerAnimated:animated completion:completion];
+            
+            if ([self.delegate respondsToSelector:@selector(revealViewControllerDidAppear:)]) {
+                [self.delegate revealViewControllerDidAppear:self.rightViewController];
+            }
         }
     }
     else if (controller == self.frontViewController)
     {
         [self showFrontViewControllerAnimated:animated completion:completion];
+        
+        if ([self.delegate respondsToSelector:@selector(revealViewControllerDidAppear:)]) {
+            [self.delegate revealViewControllerDidAppear:self.frontViewController];
+        }
     }
 }
 
@@ -803,6 +815,10 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
             self.revealPanGestureRecognizer.enabled = YES;
         }
             break;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(revealDidRecognizePanWithGestureRecognizer:)]) {
+        [self.delegate revealDidRecognizePanWithGestureRecognizer:recognizer];
     }
 }
 
