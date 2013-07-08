@@ -155,6 +155,10 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     if (self != nil)
     {
         [self commonInitializer];
+        if (self.controllerOptions == nil)
+        {
+            self.controllerOptions = [NSMutableDictionary dictionaryWithCapacity:10];
+        }
     }
     
     return self;
