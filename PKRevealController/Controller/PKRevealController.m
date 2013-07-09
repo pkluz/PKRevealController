@@ -408,6 +408,47 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     [self addFrontViewControllerToHierarchy];
 }
 
+// iOS 5 compatibility
+- (void)viewWillUnload
+{
+	[self dislodgeViewHierarchy];
+	[super viewWillUnload];
+}
+
+-(void)didReceiveMemoryWarning
+{
+	[super didReceiveMemoryWarning];
+	
+	// make sure main view is not attched to window.
+    BOOL shouldDislodge = (self.isViewLoaded && ([self.view window] == nil));
+
+	// also check if iOS is greater than 6.0
+	BOOL isGreaterOrEqualToiOS6 = \
+		([[[UIDevice currentDevice] systemVersion]
+		  compare:@"6.0" options:NSNumericSearch] != NSOrderedAscending);
+	
+    if(isGreaterOrEqualToiOS6 && shouldDislodge)
+    {
+		[self dislodgeViewHierarchy];
+		self.view = nil;
+    }
+}
+
+#pragma View Destruction
+// common view destructor
+- (void)dislodgeViewHierarchy
+{
+	self.revealPanGestureRecognizer.delegate = nil;
+	self.revealPanGestureRecognizer = nil;
+	
+	self.revealResetTapGestureRecognizer.delegate = nil;
+	self.revealResetTapGestureRecognizer = nil;
+	
+	self.frontViewContainer = nil;
+	self.leftViewContainer = nil;
+	self.rightViewContainer = nil;
+}
+
 #pragma mark - View Lifecycle (Controller)
 
 - (void)addFrontViewControllerToHierarchy
@@ -429,6 +470,25 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         
         [self updatePanGestureRecognizer];
     }
+	
+	// frontViewController isn't nil & it's been added as a child v.c.
+	else
+	{
+        if (self.frontViewContainer == nil)
+        {
+            self.frontViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.frontViewController shadow:YES];
+            self.frontViewContainer.autoresizingMask = [self autoresizingMaskForFrontViewContainer];
+			self.frontViewContainer.frame = [self frontViewFrameForCurrentState];
+			self.frontViewContainer.viewController = self.frontViewController;
+        }
+		
+		if(![[self.view subviews] containsObject:[self frontViewContainer]])
+		{
+			[self.view addSubview:self.frontViewContainer];
+			[self updatePanGestureRecognizer];
+		}
+	}
+
 }
 
 - (void)removeFrontViewControllerFromHierarchy
@@ -458,6 +518,21 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         [self.view insertSubview:self.leftViewContainer belowSubview:self.frontViewContainer];
         [self.leftViewController didMoveToParentViewController:self];
     }
+	else
+	{
+        if (self.leftViewContainer == nil)
+        {
+            self.leftViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.leftViewController shadow:NO];
+            self.leftViewContainer.autoresizingMask = [self autoresizingMaskForLeftViewContainer];
+			self.leftViewContainer.frame = [self leftViewFrame];
+			self.leftViewContainer.viewController = self.leftViewController;
+        }
+        
+		if(![[self.view subviews] containsObject:[self leftViewContainer]])
+		{
+			[self.view insertSubview:self.leftViewContainer belowSubview:self.frontViewContainer];
+		}
+	}
 }
 
 - (void)removeLeftViewControllerFromHierarchy
@@ -486,6 +561,21 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         [self.view insertSubview:self.rightViewContainer belowSubview:self.frontViewContainer];
         [self.rightViewController didMoveToParentViewController:self];
     }
+	else
+	{
+        if (self.rightViewContainer == nil)
+        {
+            self.rightViewContainer = [[PKRevealControllerContainerView alloc] initForController:self.rightViewController shadow:NO];
+            self.rightViewContainer.autoresizingMask = [self autoresizingMaskForRightViewContainer];
+			self.rightViewContainer.frame = [self rightViewFrame];
+			self.rightViewContainer.viewController = self.rightViewController;
+        }
+		
+		if(![[self.view subviews] containsObject:[self rightViewContainer]])
+		{
+			[self.view insertSubview:self.rightViewContainer belowSubview:self.frontViewContainer];
+		}
+	}
 }
 
 - (void)removeRightViewControllerFromHierarchy
@@ -1448,6 +1538,13 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 - (void)dealloc
 {
+	//since these two gestures are 'strong', make sure they get proper treatment
+	self.revealPanGestureRecognizer.delegate = nil;
+	self.revealPanGestureRecognizer = nil;
+	
+	self.revealResetTapGestureRecognizer.delegate = nil;
+	self.revealResetTapGestureRecognizer = nil;
+	
     [self.frontViewController removeFromParentViewController];
     [self.frontViewController.view removeFromSuperview];
     self.frontViewContainer = nil;
