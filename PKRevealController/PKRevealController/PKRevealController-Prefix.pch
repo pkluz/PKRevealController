@@ -1,0 +1,8 @@
+//
+// Prefix header for all source files of the 'PKRevealController' target in the 'PKRevealController' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import "PKLog.h"
+#endif
