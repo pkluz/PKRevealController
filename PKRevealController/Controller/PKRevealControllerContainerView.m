@@ -35,10 +35,6 @@
     if (self != nil)
     {
         self.viewController = controller;
-        if (hasShadow)
-        {
-            [self setupShadow];
-        }
         self.shadow = hasShadow;
     }
     
@@ -64,6 +60,9 @@
 {
     [super layoutSubviews];
     // layout controller view
+    if (self.shadow && !self.layer.shadowPath) {
+        [self setupShadow];
+    }
     self.viewController.view.frame = self.viewController.view.bounds;
 }
 
