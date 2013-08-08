@@ -155,10 +155,6 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     if (self != nil)
     {
         [self commonInitializer];
-        if (self.controllerOptions == nil)
-        {
-            self.controllerOptions = [NSMutableDictionary dictionaryWithCapacity:10];
-        }
     }
     
     return self;
@@ -182,6 +178,11 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     _frontViewController.revealController = self;
     _leftViewController.revealController = self;
     _rightViewController.revealController = self;
+    
+    if (self.controllerOptions == nil)
+    {
+        self.controllerOptions = [NSMutableDictionary dictionaryWithCapacity:10];
+    }    
 }
 
 #pragma mark - API
