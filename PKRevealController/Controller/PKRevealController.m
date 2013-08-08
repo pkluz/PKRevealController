@@ -179,7 +179,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     _leftViewController.revealController = self;
     _rightViewController.revealController = self;
     
-    if (self.controllerOptions == nil)
+    if (!self.controllerOptions)
     {
         self.controllerOptions = [NSMutableDictionary dictionaryWithCapacity:10];
     }    
