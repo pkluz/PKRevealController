@@ -23,6 +23,10 @@
 #define DEFAULT_DISABLES_FRONT_VIEW_INTERACTION_VALUE YES
 #define DEFAULT_RECOGNIZES_PAN_ON_FRONT_VIEW_VALUE YES
 #define DEFAULT_RECOGNIZES_RESET_TAP_ON_FRONT_VIEW_VALUE YES
+#define DEFAULT_OPENS_LEFT_VIEW_CONTROLLER_ON_LANDSCAPE NO
+#define DEFAULT_OPENS_LEFT_VIEW_CONTROLLER_ON_PORTRAIT NO
+#define DEFAULT_RESIZE_FRONT_VIEW_CONTROLLER_ON_LANDSCAPE NO
+#define DEFAULT_RESIZE_FRONT_VIEW_CONTROLLER_ON_PORTRAIT NO
 
 @interface PKRevealController ()
 
@@ -60,6 +64,11 @@ NSString * const PKRevealControllerQuickSwipeToggleVelocityKey = @"PKRevealContr
 NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"PKRevealControllerDisablesFrontViewInteractionKey";
 NSString * const PKRevealControllerRecognizesPanningOnFrontViewKey = @"PKRevealControllerRecognizesPanningOnFrontViewKey";
 NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKRevealControllerRecognizesResetTapOnFrontViewKey";
+NSString * const PKRevealControllerOpensLeftViewControllerOnPortraitKey = @"PKRevealControllerOpensLeftViewControllerOnPortraitKey";
+NSString * const PKRevealControllerOpensLeftViewControllerOnLandscapeKey = @"PKRevealControllerOpensLeftViewControllerOnLandscapeKey";
+NSString * const PKRevealControllerResizesFrontViewControllerOnPortraitKey = @"PKRevealControllerResizesFrontViewControllerOnPortraitKey";
+NSString * const PKRevealControllerResizesFrontViewControllerOnLandscapeKey = @"PKRevealControllerResizesFrontViewControllerOnLandscapeKey";
+
 
 #pragma mark - Initialization
 
@@ -773,6 +782,91 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     }
 }
 
+#pragma mark -
+
+- (void)setOpensLeftViewControllerOnLandscape:(BOOL)opensLeftViewControllerOnLandscape
+{
+    [self.controllerOptions setObject:[NSNumber numberWithBool:opensLeftViewControllerOnLandscape]
+                               forKey:PKRevealControllerOpensLeftViewControllerOnLandscapeKey];
+}
+
+- (BOOL)opensLeftViewControllerOnLandscape {
+    NSNumber *number = [self.controllerOptions objectForKey:PKRevealControllerOpensLeftViewControllerOnLandscapeKey];
+    if (number == nil)
+    {
+        [self setOpensLeftViewControllerOnLandscape:DEFAULT_OPENS_LEFT_VIEW_CONTROLLER_ON_LANDSCAPE];
+        return [self opensLeftViewControllerOnLandscape];
+    }
+    else
+    {
+        return [number boolValue];
+    }
+}
+
+#pragma mark -
+
+- (void)setOpensLeftViewControllerOnPortrait:(BOOL)opensLeftViewControllerOnPortrait
+{
+    [self.controllerOptions setObject:[NSNumber numberWithBool:opensLeftViewControllerOnPortrait]
+                               forKey:PKRevealControllerOpensLeftViewControllerOnPortraitKey];
+}
+
+- (BOOL)opensLeftViewControllerOnPortrait {
+    NSNumber *number = [self.controllerOptions objectForKey:PKRevealControllerOpensLeftViewControllerOnPortraitKey];
+    if (number == nil)
+    {
+        [self setOpensLeftViewControllerOnPortrait:DEFAULT_OPENS_LEFT_VIEW_CONTROLLER_ON_PORTRAIT];
+        return [self opensLeftViewControllerOnPortrait];
+    }
+    else
+    {
+        return [number boolValue];
+    }
+}
+
+#pragma mark -
+
+- (void)setResizesFrontViewControllerOnPortrait:(BOOL)resizesFrontViewControllerOnPortrait
+{
+    [self.controllerOptions setObject:[NSNumber numberWithBool:resizesFrontViewControllerOnPortrait]
+                               forKey:PKRevealControllerResizesFrontViewControllerOnPortraitKey];
+}
+
+- (BOOL)resizesFrontViewControllerOnPortrait
+{
+    NSNumber *number = [self.controllerOptions objectForKey:PKRevealControllerResizesFrontViewControllerOnPortraitKey];
+    if (number == nil)
+    {
+        [self setResizesFrontViewControllerOnPortrait:DEFAULT_RESIZE_FRONT_VIEW_CONTROLLER_ON_PORTRAIT];
+        return [self resizesFrontViewControllerOnPortrait];
+    }
+    else
+    {
+        return [number boolValue];
+    }
+}
+
+#pragma mark -
+
+- (void)setResizesFrontViewControllerOnLandscape:(BOOL)resizesFrontViewControllerOnLandscape
+{
+    [self.controllerOptions setObject:[NSNumber numberWithBool:resizesFrontViewControllerOnLandscape]
+                               forKey:PKRevealControllerResizesFrontViewControllerOnLandscapeKey];
+}
+
+- (BOOL)resizesFrontViewControllerOnLandscape {
+    NSNumber *number = [self.controllerOptions objectForKey:PKRevealControllerResizesFrontViewControllerOnLandscapeKey];
+    if (number == nil)
+    {
+        [self setResizesFrontViewControllerOnLandscape:DEFAULT_RESIZE_FRONT_VIEW_CONTROLLER_ON_LANDSCAPE];
+        return [self resizesFrontViewControllerOnLandscape];
+    }
+    else
+    {
+        return [number boolValue];
+    }
+}
+
 #pragma mark - Gesture Recognition
 
 - (void)didRecognizeTapWithGestureRecognizer:(UITapGestureRecognizer *)recognizer
@@ -1308,13 +1402,35 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 - (CGRect)frontViewFrameForVisibleLeftView
 {
     CGFloat offset = [self leftViewMinWidth];
-    return CGRectOffset([self frontViewFrameForCenter], offset, 0.0f);
+    CGRect frame = [self frontViewFrameForCenter];
+
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    if (self.resizesFrontViewControllerOnLandscape && UIInterfaceOrientationIsLandscape(orientation)) {
+        frame.size.width -= offset;
+    } else if (self.resizesFrontViewControllerOnPortrait && UIInterfaceOrientationIsPortrait(orientation)) {
+        frame.size.width -= offset;
+    }
+
+    return CGRectOffset(frame, offset, 0.0f);
 }
 
 - (CGRect)frontViewFrameForVisibleRightView
 {
     CGFloat offset = [self rightViewMinWidth];
-    return CGRectOffset([self frontViewFrameForCenter], -offset, 0.0f);
+    CGRect frame = [self frontViewFrameForCenter];
+
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+
+    if (self.resizesFrontViewControllerOnLandscape && UIInterfaceOrientationIsLandscape(orientation)) {
+        frame.size.width -= offset;
+        return frame;
+    } else if (self.resizesFrontViewControllerOnPortrait && UIInterfaceOrientationIsPortrait(orientation)) {
+        frame.size.width -= offset;
+        return frame;
+    }
+
+    return CGRectOffset(frame, -offset, 0.0f);
 }
 
 - (CGRect)frontViewFrameForCenter
@@ -1441,6 +1557,20 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
                                          duration:(NSTimeInterval)duration
 {
+    if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation)) {
+        if (self.opensLeftViewControllerOnPortrait) {
+            [self showViewController:self.leftViewController];
+        } else if (self.opensLeftViewControllerOnLandscape) {
+            [self showViewController:self.frontViewController];
+        }
+    } else {
+        if (self.opensLeftViewControllerOnLandscape) {
+            [self showViewController:self.leftViewController];
+        } else if (self.opensLeftViewControllerOnPortrait) {
+            [self showViewController:self.frontViewController];
+        }
+    }
+
     [self.frontViewContainer refreshShadowWithAnimationDuration:duration];
 }
 
