@@ -104,6 +104,40 @@ extern NSString * const PKRevealControllerRecognizesPanningOnFrontViewKey;
  */
 extern NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey;
 
+/*
+ * Determines wether leftViewController is opened during rotation to portrait.
+ *
+ * @default NO
+ * @value NSNumber containing BOOL
+ */
+extern NSString * const PKRevealControllerOpensLeftViewControllerOnPortraitKey;
+
+/*
+ * Determines wether leftViewController is opened during rotation to landscape.
+ *
+ * @default NO
+ * @value NSNumber containing BOOL
+ */
+extern NSString * const PKRevealControllerOpensLeftViewControllerOnLandscapeKey;
+
+/*
+ * Determines wether the frontViewController is resized when leftViewController is shown. Useful
+ * on iPad.
+ *
+ * @default NO
+ * @value NSNumber containing BOOL
+ */
+extern NSString * const PKRevealControllerResizesFrontViewControllerOnPortraitKey;
+
+/*
+ * Determines wether the frontViewController is resized when leftViewController is shown. Useful
+ * on iPad.
+ *
+ * @default NO
+ * @value NSNumber containing BOOL
+ */
+extern NSString * const PKRevealControllerResizesFrontViewControllerOnLandscapeKey;
+
 typedef void(^PKDefaultCompletionHandler)(BOOL finished);
 typedef void(^PKDefaultErrorHandler)(NSError *error);
 
@@ -130,6 +164,10 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 @property (nonatomic, assign, readwrite) BOOL disablesFrontViewInteraction;
 @property (nonatomic, assign, readwrite) BOOL recognizesPanningOnFrontView;
 @property (nonatomic, assign, readwrite) BOOL recognizesResetTapOnFrontView;
+@property (nonatomic, assign, readwrite) BOOL opensLeftViewControllerOnPortrait;
+@property (nonatomic, assign, readwrite) BOOL opensLeftViewControllerOnLandscape;
+@property (nonatomic, assign, readwrite) BOOL resizesFrontViewControllerOnPortrait;
+@property (nonatomic, assign, readwrite) BOOL resizesFrontViewControllerOnLandscape;
 
 #pragma mark - Methods
 
