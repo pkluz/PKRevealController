@@ -106,6 +106,7 @@ extern NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey;
 
 typedef void(^PKDefaultCompletionHandler)(BOOL finished);
 typedef void(^PKDefaultErrorHandler)(NSError *error);
+typedef void(^PKDefaultRotationHandler)(PKRevealController *revealController, UIInterfaceOrientation interfaceOrientation, NSTimeInterval duration);
 
 @interface PKRevealController : UIViewController <UIGestureRecognizerDelegate>
 
@@ -130,6 +131,8 @@ typedef void(^PKDefaultErrorHandler)(NSError *error);
 @property (nonatomic, assign, readwrite) BOOL disablesFrontViewInteraction;
 @property (nonatomic, assign, readwrite) BOOL recognizesPanningOnFrontView;
 @property (nonatomic, assign, readwrite) BOOL recognizesResetTapOnFrontView;
+
+@property (nonatomic, copy, readwrite) PKDefaultRotationHandler onRotationBlock;
 
 #pragma mark - Methods
 
