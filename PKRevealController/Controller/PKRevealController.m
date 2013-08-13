@@ -1442,6 +1442,10 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
                                          duration:(NSTimeInterval)duration
 {
     [self.frontViewContainer refreshShadowWithAnimationDuration:duration];
+
+    if (self.onRotationBlock) {
+        self.onRotationBlock(self, toInterfaceOrientation, duration);
+    }
 }
 
 #pragma mark - Memory Management
