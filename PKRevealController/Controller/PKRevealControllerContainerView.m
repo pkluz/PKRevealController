@@ -92,7 +92,7 @@
     {
         [_viewController.view removeFromSuperview];
         _viewController = controller;
-        _viewController.view.frame = _viewController.view.bounds;
+        _viewController.view.frame = self.bounds;
         [self addSubview:_viewController.view];
     }
 }
