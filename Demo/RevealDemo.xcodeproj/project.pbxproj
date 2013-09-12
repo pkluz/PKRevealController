@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F91C4B2B178EF45300F0C49C /* PKRevealController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F91C4B2A178EF45300F0C49C /* PKRevealController.framework */; };
+		BCF0593517E1E676001A4C7C /* libPKRevealControllerStaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BCF0590717E1E472001A4C7C /* libPKRevealControllerStaticLib.a */; };
 		F94A4E70178B26B8003D323B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F94A4E6F178B26B8003D323B /* InfoPlist.strings */; };
 		F94A4E7D178B3B04003D323B /* reveal_menu_icon_landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = F94A4E79178B3B04003D323B /* reveal_menu_icon_landscape.png */; };
 		F94A4E7E178B3B04003D323B /* reveal_menu_icon_landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F94A4E7A178B3B04003D323B /* reveal_menu_icon_landscape@2x.png */; };
@@ -31,8 +31,25 @@
 		F9C0CD8B177DC90A00CAAB3E /* RightDemoViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9C0CD84177DC90A00CAAB3E /* RightDemoViewController~iphone.xib */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		BCF0590617E1E472001A4C7C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BCF0590117E1E471001A4C7C /* PKRevealController.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F9838092177C967700BC5290;
+			remoteInfo = PKRevealController;
+		};
+		BCF0593217E1E662001A4C7C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BCF0590117E1E471001A4C7C /* PKRevealController.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BCF058DD17E1E354001A4C7C;
+			remoteInfo = PKRevealController;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		F91C4B2A178EF45300F0C49C /* PKRevealController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PKRevealController.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/PKRevealControllerWorkspace-eaegnsbsoyautzfgjkwuiihomozi/Build/Products/Debug-iphoneos/PKRevealController.framework"; sourceTree = "<group>"; };
+		BCF0590117E1E471001A4C7C /* PKRevealController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PKRevealController.xcodeproj; path = ../PKRevealController/PKRevealController.xcodeproj; sourceTree = "<group>"; };
 		F94A4E6F178B26B8003D323B /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		F94A4E79178B3B04003D323B /* reveal_menu_icon_landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reveal_menu_icon_landscape.png; sourceTree = "<group>"; };
 		F94A4E7A178B3B04003D323B /* reveal_menu_icon_landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reveal_menu_icon_landscape@2x.png"; sourceTree = "<group>"; };
@@ -68,7 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F91C4B2B178EF45300F0C49C /* PKRevealController.framework in Frameworks */,
+				BCF0593517E1E676001A4C7C /* libPKRevealControllerStaticLib.a in Frameworks */,
 				F9C0CD7A177DC18500CAAB3E /* QuartzCore.framework in Frameworks */,
 				F98380BD177CA5C100BC5290 /* UIKit.framework in Frameworks */,
 				F98380BF177CA5C100BC5290 /* Foundation.framework in Frameworks */,
@@ -79,10 +96,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BCF0590217E1E471001A4C7C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BCF0590717E1E472001A4C7C /* libPKRevealControllerStaticLib.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		F98380B0177CA5C100BC5290 = {
 			isa = PBXGroup;
 			children = (
-				F91C4B2A178EF45300F0C49C /* PKRevealController.framework */,
+				BCF0590117E1E471001A4C7C /* PKRevealController.xcodeproj */,
 				F98380C2177CA5C100BC5290 /* RevealDemo */,
 				F98380BB177CA5C100BC5290 /* Frameworks */,
 				F98380BA177CA5C100BC5290 /* Products */,
@@ -160,6 +185,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				BCF0593317E1E662001A4C7C /* PBXTargetDependency */,
 			);
 			name = RevealDemo;
 			productName = RevealDemo;
@@ -185,12 +211,29 @@
 			mainGroup = F98380B0177CA5C100BC5290;
 			productRefGroup = F98380BA177CA5C100BC5290 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = BCF0590217E1E471001A4C7C /* Products */;
+					ProjectRef = BCF0590117E1E471001A4C7C /* PKRevealController.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				F98380B8177CA5C100BC5290 /* RevealDemo */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		BCF0590717E1E472001A4C7C /* libPKRevealControllerStaticLib.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			name = libPKRevealControllerStaticLib.a;
+			path = libPKRevealController.a;
+			remoteRef = BCF0590617E1E472001A4C7C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		F98380B7177CA5C100BC5290 /* Resources */ = {
@@ -228,6 +271,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BCF0593317E1E662001A4C7C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PKRevealController;
+			targetProxy = BCF0593217E1E662001A4C7C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		F98380D4177CA5C100BC5290 /* Debug */ = {
@@ -292,15 +343,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Spark Inspector.app/Contents/Resources/Frameworks\"",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/PKRevealControllerWorkspace-eaegnsbsoyautzfgjkwuiihomozi/Build/Products/Debug-iphoneos\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RevealDemo/RevealDemo-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				INFOPLIST_FILE = "RevealDemo/RevealDemo-Info.plist";
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -310,15 +361,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Spark Inspector.app/Contents/Resources/Frameworks\"",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/PKRevealControllerWorkspace-eaegnsbsoyautzfgjkwuiihomozi/Build/Products/Debug-iphoneos\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RevealDemo/RevealDemo-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				INFOPLIST_FILE = "RevealDemo/RevealDemo-Info.plist";
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
