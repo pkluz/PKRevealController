@@ -1,32 +1,32 @@
-# Mac OS X Finder and whatnot
-.DS_Store
-*.swp
-*~.nib
+# Mac OS X
+*.DS_Store
 
-# XCode (and ancestors) per-user config (very noisy, and not relevant)
-*.mode1
+# Xcode
+*.pbxuser
 *.mode1v3
 *.mode2v3
-*.perspective
 *.perspectivev3
-*.pbxuser
+*.xcuserstate
+project.xcworkspace/
+xcuserdata/
 
-# XCode 4
-xcuserdata
+# Generated files
+*.o
+*.pyc
 
-# build products
+#Python modules
+MANIFEST
+dist/
 build/
 
-# Other source repository archive directories (protects when importing)
-.hg
-.svn
-CVS
+# Backup files
+*~.nib
+\#*#
+.#*
 
-# temporary script folders/files
-ThirdParty/boost/*
+# AppCode
+.idea/
 
-# Eclipse Workspace
-.metadata
-
-# Maya temporary
-.mayaSwatches/
+# MailCore
+*.tmp
+*.list.tmp
