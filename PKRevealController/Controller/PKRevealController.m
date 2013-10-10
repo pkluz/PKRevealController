@@ -436,6 +436,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     if ([self.childViewControllers containsObject:self.frontViewController])
     {
         [self removePanGestureRecognizerFromFrontView];
+        [self.frontViewController willMoveToParentViewController:nil];
         [self.frontViewContainer removeFromSuperview];
         [self.frontViewController removeFromParentViewController];
     }
@@ -464,6 +465,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 {
     if ([self.childViewControllers containsObject:self.leftViewController])
     {
+        [self.leftViewController willMoveToParentViewController:nil];
         [self.leftViewContainer removeFromSuperview];
         [self.leftViewController removeFromParentViewController];
     }
@@ -492,6 +494,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 {
     if ([self.childViewControllers containsObject:self.rightViewController])
     {
+        [self.rightViewController willMoveToParentViewController:nil];
         [self.rightViewContainer removeFromSuperview];
         [self.rightViewController removeFromParentViewController];
     }
@@ -1448,14 +1451,17 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 - (void)dealloc
 {
+    [self.frontViewController willMoveToParentViewController:nil];
     [self.frontViewController removeFromParentViewController];
     [self.frontViewController.view removeFromSuperview];
     self.frontViewContainer = nil;
     
+    [self.leftViewController willMoveToParentViewController:nil];
     [self.leftViewController removeFromParentViewController];
     [self.leftViewController.view removeFromSuperview];
     self.leftViewContainer = nil;
-        
+    
+    [self.rightViewController willMoveToParentViewController:nil];
     [self.rightViewController removeFromParentViewController];
     [self.rightViewController.view removeFromSuperview];
     self.rightViewContainer = nil;
