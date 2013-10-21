@@ -1159,7 +1159,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
                           options:(UIViewAnimationOptions)options
                        completion:(PKDefaultCompletionHandler)completion
 {
-    [UIView animateWithDuration:duration delay:0.0f options:options animations:^
+    [UIView animateWithDuration:animated ? duration : 0 delay:0.0f options:options animations:^
     {
         self.frontViewContainer.frame = frame;
     }
