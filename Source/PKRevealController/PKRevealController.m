@@ -614,6 +614,32 @@ typedef struct
     self.animator = [PKLayerAnimator animatorForLayer:self.frontView.layer];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    switch (self.state)
+    {
+        case PKRevealControllerShowsLeftViewController:
+            return [self.leftViewController preferredStatusBarStyle];
+            break;
+        case PKRevealControllerShowsRightViewController:
+            return [self.rightViewController preferredStatusBarStyle];
+            break;
+        case PKRevealControllerShowsFrontViewController:
+            return [self.frontViewController preferredStatusBarStyle];
+            break;
+        case PKRevealControllerShowsLeftViewControllerInPresentationMode:
+            return [self.leftViewController preferredStatusBarStyle];
+            break;
+        case PKRevealControllerShowsRightViewControllerInPresentationMode:
+            return [self.rightViewController preferredStatusBarStyle];
+            break;
+            
+        default:
+            return UIStatusBarStyleDefault;
+            break;
+    }
+}
+
 #pragma mark - KVO
 
 + (BOOL)automaticallyNotifiesObserversForKey:(NSString *)key

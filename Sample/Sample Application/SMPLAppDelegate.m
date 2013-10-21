@@ -48,13 +48,13 @@
 
 - (void)revealController:(PKRevealController *)revealController didChangeToState:(PKRevealControllerState)state
 {
-    NSLog(@"%@ (%lu)", NSStringFromSelector(_cmd), state);
+    NSLog(@"%@ (%d)", NSStringFromSelector(_cmd), (int)state);
 }
 
 - (void)revealController:(PKRevealController *)revealController willChangeToState:(PKRevealControllerState)next
 {
     PKRevealControllerState current = revealController.state;
-    NSLog(@"%@ (%lu -> %lu)", NSStringFromSelector(_cmd), current, next);
+    NSLog(@"%@ (%d -> %d)", NSStringFromSelector(_cmd), (int)current, (int)next);
 }
 
 #pragma mark - Helpers
