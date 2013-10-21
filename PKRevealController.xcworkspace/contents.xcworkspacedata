@@ -5,6 +5,6 @@
       location = "group:Source/PKRevealController.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Sample/Sample Application/Sample Application.xcodeproj">
+      location = "group:Sample/Sample Application.xcodeproj">
    </FileRef>
 </Workspace>
