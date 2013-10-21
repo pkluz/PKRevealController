@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>DABC83FB-6FB2-4065-8B74-0EED1A4B42A4</string>
+	<key>IDESourceControlProjectName</key>
+	<string>PKRevealController</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>55512366-884B-41F8-BB76-7E255B315D79</key>
+		<string>https://github.com/jhneves/PKRevealController.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>PKRevealController.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>55512366-884B-41F8-BB76-7E255B315D79</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/jhneves/PKRevealController.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>55512366-884B-41F8-BB76-7E255B315D79</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>55512366-884B-41F8-BB76-7E255B315D79</string>
+			<key>IDESourceControlWCCName</key>
+			<string>PKRevealController</string>
+		</dict>
+	</array>
+</dict>
+</plist>
