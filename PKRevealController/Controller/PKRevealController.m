@@ -256,6 +256,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         
         _frontViewController = frontViewController;
         _frontViewController.revealController = self;
+        _frontViewController.view.frame = self.view.bounds;
         
         [self addFrontViewControllerToHierarchy];
     }
@@ -1158,7 +1159,7 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
                           options:(UIViewAnimationOptions)options
                        completion:(PKDefaultCompletionHandler)completion
 {
-    [UIView animateWithDuration:duration delay:0.0f options:options animations:^
+    [UIView animateWithDuration:animated ? duration : 0 delay:0.0f options:options animations:^
     {
         self.frontViewContainer.frame = frame;
     }
@@ -1433,9 +1434,26 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-    return [self.frontViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation]
+    if ([self hasLeftViewController] && [self hasRightViewController])
+    {
+        return [self.frontViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation]
         && [self.leftViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation]
         && [self.rightViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation];
+    }
+    else if ([self hasLeftViewController])
+    {
+        return [self.frontViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation]
+        && [self.leftViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation];
+    }
+    else if ([self hasRightViewController])
+    {
+        return [self.frontViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation]
+        && [self.rightViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation];
+    }
+    else
+    {
+        return [self.frontViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation];
+    }
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
