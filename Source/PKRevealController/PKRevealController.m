@@ -615,31 +615,42 @@ typedef struct
     self.animator = [PKLayerAnimator animatorForLayer:self.frontView.layer];
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_7_0
+
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
+    UIViewController *controller = nil;
+    
     switch (self.state)
     {
-        case PKRevealControllerShowsLeftViewController:
-            return [self.leftViewController preferredStatusBarStyle];
-            break;
-        case PKRevealControllerShowsRightViewController:
-            return [self.rightViewController preferredStatusBarStyle];
-            break;
-        case PKRevealControllerShowsFrontViewController:
-            return [self.frontViewController preferredStatusBarStyle];
-            break;
         case PKRevealControllerShowsLeftViewControllerInPresentationMode:
-            return [self.leftViewController preferredStatusBarStyle];
+        case PKRevealControllerShowsLeftViewController:
+            controller = self.leftViewController;
             break;
         case PKRevealControllerShowsRightViewControllerInPresentationMode:
-            return [self.rightViewController preferredStatusBarStyle];
+        case PKRevealControllerShowsRightViewController:
+            controller = self.rightViewController;
+            break;
+        case PKRevealControllerShowsFrontViewController:
+            controller = self.frontViewController;
             break;
             
         default:
-            return UIStatusBarStyleDefault;
+        {
+            // Fail quitely.
+        }
             break;
     }
+    
+    if ([controller respondsToSelector:@selector(preferredStatusBarStyle)])
+    {
+        return [controller preferredStatusBarStyle];
+    }
+    
+    return UIStatusBarStyleDefault;
 }
+
+#endif
 
 #pragma mark - KVO
 
