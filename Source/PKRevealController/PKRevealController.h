@@ -69,14 +69,11 @@ FOUNDATION_EXTERN NSString * const PKRevealControllerRecognizesResetTapOnFrontVi
 @property (nonatomic, readonly) UIViewController *frontViewController;
 @property (nonatomic, readonly) UIViewController *leftViewController;
 @property (nonatomic, readonly) UIViewController *rightViewController;
-
 @property (nonatomic, readonly) UIPanGestureRecognizer *revealPanGestureRecognizer;
 @property (nonatomic, readonly) UITapGestureRecognizer *revealResetTapGestureRecognizer;
-
 @property (nonatomic, readonly) PKRevealControllerState state;
 @property (nonatomic, readonly) PKRevealControllerType type __deprecated;
 @property (nonatomic, readonly) BOOL isPresentationModeActive;
-
 @property (nonatomic, readonly) NSDictionary *options;
 
 @property (nonatomic, assign, readwrite) CGFloat animationDuration;
@@ -88,7 +85,6 @@ FOUNDATION_EXTERN NSString * const PKRevealControllerRecognizesResetTapOnFrontVi
 @property (nonatomic, assign, readwrite) BOOL recognizesPanningOnFrontView;
 @property (nonatomic, assign, readwrite) BOOL recognizesResetTapOnFrontView;
 @property (nonatomic, assign, readwrite) BOOL recognizesResetTapOnFrontViewInPresentationMode;
-
 @property (nonatomic, weak, readwrite) id<PKRevealing> delegate;
 
 
