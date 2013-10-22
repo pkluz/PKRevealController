@@ -28,6 +28,7 @@
 #import "NSObject+PKBlocks.h"
 #import "PKLayerAnimator.h"
 #import "PKRevealControllerView.h"
+#import "PKLog.h"
 
 #define DEFAULT_ANIMATION_DURATION_VALUE 0.185
 #define DEFAULT_ANIMATION_CURVE_VALUE UIViewAnimationCurveLinear

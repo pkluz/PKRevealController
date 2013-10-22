@@ -26,6 +26,7 @@
 
 #import "PKAnimation.h"
 #import "NSObject+PKBlocks.h"
+#import "PKLog.h"
 
 @implementation PKAnimation
 

@@ -26,5 +26,4 @@
 
 #ifdef __OBJC__
     #import <Foundation/Foundation.h>
-    #import "PKLog.h"
 #endif
