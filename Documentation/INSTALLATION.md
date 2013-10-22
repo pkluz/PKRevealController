@@ -2,13 +2,9 @@
 
 You can install **PKRevealController** either using **[CocoaPods](http://cocoapods.org)** or the **static library**. Please note, that the CocoaPods version will always be the most stable, whilst the static library will include the most recent changes, bug fixes and features.
 
-<br />
-
 ## CocoaPods
 
 Simply add `pod 'PKRevealController'` to your Podfile.
-
-<br />
 
 ## Static Library
 
