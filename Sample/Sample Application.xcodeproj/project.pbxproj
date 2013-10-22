@@ -19,6 +19,16 @@
 		F9712B0A18153BCC003E94C3 /* UIViewController+PKRevealController.h in Resources */ = {isa = PBXBuildFile; fileRef = F9712B0818153BCC003E94C3 /* UIViewController+PKRevealController.h */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		F93CB8961816D11B0036850C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F93CB8921816D11B0036850C /* PKRevealController.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F9621E7B1815246000469E41;
+			remoteInfo = PKRevealController;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		F92FE58B18152D8E00668004 /* Sample Application.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sample Application.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F92FE58E18152D8E00668004 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -33,8 +43,9 @@
 		F92FE5A018152D8E00668004 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F92FE5A718152D8F00668004 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		F92FE5BD18152DB300668004 /* libPKRevealController.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPKRevealController.a; path = "../../Source/build/Debug-iphoneos/libPKRevealController.a"; sourceTree = "<group>"; };
-		F9712B0718153BCC003E94C3 /* PKRevealController.h */ = {isa = PBXFileReference; lastKnownFileType = file; name = PKRevealController.h; path = ../Headers/PKRevealController.h; sourceTree = "<group>"; };
-		F9712B0818153BCC003E94C3 /* UIViewController+PKRevealController.h */ = {isa = PBXFileReference; lastKnownFileType = file; name = "UIViewController+PKRevealController.h"; path = "../Headers/UIViewController+PKRevealController.h"; sourceTree = "<group>"; };
+		F93CB8921816D11B0036850C /* PKRevealController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PKRevealController.xcodeproj; path = ../Source/PKRevealController.xcodeproj; sourceTree = "<group>"; };
+		F9712B0718153BCC003E94C3 /* PKRevealController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PKRevealController.h; path = ../Headers/PKRevealController.h; sourceTree = "<group>"; };
+		F9712B0818153BCC003E94C3 /* UIViewController+PKRevealController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIViewController+PKRevealController.h"; path = "../Headers/UIViewController+PKRevealController.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +83,7 @@
 		F92FE58D18152D8E00668004 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F93CB8921816D11B0036850C /* PKRevealController.xcodeproj */,
 				F92FE5C218152E8000668004 /* PKRevealController */,
 				F92FE58E18152D8E00668004 /* Foundation.framework */,
 				F92FE59018152D8E00668004 /* CoreGraphics.framework */,
@@ -111,6 +123,14 @@
 				F92FE5BD18152DB300668004 /* libPKRevealController.a */,
 			);
 			name = PKRevealController;
+			sourceTree = "<group>";
+		};
+		F93CB8931816D11B0036850C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F93CB8971816D11B0036850C /* libPKRevealController.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -158,12 +178,28 @@
 			mainGroup = F92FE58218152D8E00668004;
 			productRefGroup = F92FE58C18152D8E00668004 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = F93CB8931816D11B0036850C /* Products */;
+					ProjectRef = F93CB8921816D11B0036850C /* PKRevealController.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				F92FE58A18152D8E00668004 /* Sample Application */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		F93CB8971816D11B0036850C /* libPKRevealController.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPKRevealController.a;
+			remoteRef = F93CB8961816D11B0036850C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		F92FE58918152D8E00668004 /* Resources */ = {
