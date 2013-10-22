@@ -4,7 +4,7 @@ You can install **PKRevealController** either using **[CocoaPods](http://cocoapo
 
 ## CocoaPods
 
-Simply add `pod 'PKRevealController'` to your Podfile.
+Simply add `pod 'PKRevealController'` to your Podfile, execute a `pod update` and `#import <PKRevealController/PKRevealController.h>`.
 
 ## Static Library
 
