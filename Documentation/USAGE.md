@@ -2,8 +2,6 @@
 
 The `PKRevealController.h` file is extensively documented. Make yourself familiar with it. There's also a sample project in the `Sample/` directory which I recommend you take a look at.
 
-<br />
-
 ## Setup
 
 1. Instantiate.
@@ -20,8 +18,6 @@ The `PKRevealController.h` file is extensively documented. Make yourself familia
    ```objective-c
    self.window.rootViewController = revealController;
    ```
-   
-<br />
 
 ## Interaction
 
