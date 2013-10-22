@@ -13,10 +13,12 @@
 - Requires iOS 6.0 or later
 - Requires Automatic Reference Counting (ARC)
 
-## Installation
+## Installation & Usage
 
 If you're using [CocoaPods](http://www.cocoapods.org), simply add `pod 'PKRevealController'` to your Podfile. If you wish to use the **static library** check out the [installation documentation](https://github.com/pkluz/PKRevealController/blob/master/Documentation/INSTALLATION.md).
 
+Take a look at the [usage documentation](https://github.com/pkluz/PKRevealController/blob/master/Documentation/USAGE.md) to find out how easy it is to work with the controller.
+ 
 ## Donations & Contact
 
 Keeping this project alive and up to date takes **a lot of time**. So does responding to all the e-mails I receive. Nevertheless you're free to get in touch with me, be it via [mail](mailto:Philip.Kluz@zuui.org) or issue on GitHub. I'll try to help you as quickly as I can, but I make no promises.
