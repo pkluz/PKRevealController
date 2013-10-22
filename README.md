@@ -1,4 +1,4 @@
-![PKRevealController v2.0](http://imageshack.us/a/img401/4317/0mmv.png)
+![PKRevealController v2.0](http://img34.imageshack.us/img34/1456/hns1.png)
 
 
 **Introducing PKRevealController 2** - The second version of one of the most popular view controller containers for iOS, enabling you to present multiple controllers on top of one another. It is easy to set-up and highly flexible.
