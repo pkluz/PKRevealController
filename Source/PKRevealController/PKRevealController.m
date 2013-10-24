@@ -418,6 +418,11 @@ typedef struct
         }
         
         _frontViewController = frontViewController;
+        
+        if (_frontViewController)
+        {
+            [self addViewController:_frontViewController container:self.frontView];
+        }
     }
 }
 
@@ -431,6 +436,11 @@ typedef struct
         }
         
         _leftViewController = leftViewController;
+        
+        if (_leftViewController)
+        {
+            [self addViewController:_leftViewController container:self.leftView];
+        }
     }
 }
 
@@ -444,6 +454,11 @@ typedef struct
         }
         
         _rightViewController = rightViewController;
+        
+        if (_rightViewController)
+        {
+            [self addViewController:_rightViewController container:self.rightView];
+        }
     }
 }
 
