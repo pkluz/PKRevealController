@@ -21,7 +21,7 @@ Take a look at the [usage documentation](https://github.com/pkluz/PKRevealContro
  
 ## Donations & Contact
 
-Keeping this project alive and up to date takes **a lot of time**. So does responding to all the e-mails I receive. Nevertheless you're free to get in touch with me, be it via [mail](mailto:Philip.Kluz@zuui.org) or issue on GitHub. I'll try to help you as quickly as I can, but I make no promises.
+Keeping this project alive and up to date takes **a lot of time**. So does responding to all the e-mails I receive. Nevertheless you're free to get in touch with me, be it via [twitter @pkluz](http://twitter.com/pkluz), [mail](mailto:Philip.Kluz@zuui.org) or issue on GitHub. I'll try to help you as quickly as I can, but I make no promises.
 
 You can support me by donating to my **coffee fund**! It'll remind me to stay hydrated and *keep shipping!* :)
 
