@@ -74,10 +74,6 @@ typedef struct
 }
 
 #pragma mark - Properties
-@property (nonatomic, strong, readwrite) UIViewController *frontViewController;
-@property (nonatomic, strong, readwrite) UIViewController *leftViewController;
-@property (nonatomic, strong, readwrite) UIViewController *rightViewController;
-
 @property (nonatomic, strong, readwrite) PKRevealControllerView *frontView;
 @property (nonatomic, strong, readwrite) PKRevealControllerView *leftView;
 @property (nonatomic, strong, readwrite) PKRevealControllerView *rightView;
