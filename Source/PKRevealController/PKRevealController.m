@@ -1072,6 +1072,7 @@ typedef struct
         [self addChildViewController:childController];
         childController.view.frame = container.bounds;
         childController.view.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
+        childController.revealController = self;
         [container addSubview:childController.view];
         [self didMoveToParentViewController:self];
     }
@@ -1084,6 +1085,7 @@ typedef struct
         [childController willMoveToParentViewController:nil];
         [childController.view removeFromSuperview];
         [childController removeFromParentViewController];
+        childController.revealController = nil;
     }
 }
 
