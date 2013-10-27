@@ -29,6 +29,6 @@
 @interface NSObject (PKBlocks)
 
 #pragma mark - Methods
-- (void)performBlock:(void(^)(void))block onMainThread:(BOOL)mainThread;
+- (void)pk_performBlock:(void(^)(void))block onMainThread:(BOOL)mainThread;
 
 @end

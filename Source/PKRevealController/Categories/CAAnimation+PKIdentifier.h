@@ -29,6 +29,6 @@
 @interface CAAnimation (PKIdentifier)
 
 #pragma mark - Properties
-@property (nonatomic, assign, readwrite) NSInteger identifier;
+@property (nonatomic, assign, readwrite) NSInteger pk_identifier;
 
 @end

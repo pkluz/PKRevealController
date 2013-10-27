@@ -31,12 +31,12 @@
 
 static char identifierKey;
 
-- (void)setIdentifier:(NSInteger)identifier
+- (void)setPk_identifier:(NSInteger)pk_identifier
 {
-    objc_setAssociatedObject(self, &identifierKey, [NSNumber numberWithInteger:identifier], OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, &identifierKey, [NSNumber numberWithInteger:pk_identifier], OBJC_ASSOCIATION_ASSIGN);
 }
 
-- (NSInteger)identifier
+- (NSInteger)pk_identifier
 {
     return [objc_getAssociatedObject(self, &identifierKey) integerValue];
 }

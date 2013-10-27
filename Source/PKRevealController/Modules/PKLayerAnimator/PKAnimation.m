@@ -104,7 +104,7 @@
 {
     self.animating = YES;
     
-    [self performBlock:^
+    [self pk_performBlock:^
     {
         if (self.startHandler)
         {
@@ -118,7 +118,7 @@
 {
     self.animating = NO;
     
-    [self performBlock:^
+    [self pk_performBlock:^
     {
         if (self.completionHandler)
         {

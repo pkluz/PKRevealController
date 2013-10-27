@@ -92,7 +92,7 @@ static NSString *kShadowTransitionAnimationKey = @"shadowTransitionAnimation";
 
 - (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)flag
 {
-    if (flag && animation.identifier == SHADOW_TRANSITION_ANIMATION_IDENTIFIER)
+    if (flag && animation.pk_identifier == SHADOW_TRANSITION_ANIMATION_IDENTIFIER)
     {
         [self setNeedsLayout];
     }

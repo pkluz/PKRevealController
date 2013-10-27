@@ -175,9 +175,9 @@
 {
     self.animating = YES;
     
-    PKAnimation *animation = self.animations[anim.identifier];
+    PKAnimation *animation = self.animations[anim.pk_identifier];
     
-    [self performBlock:^
+    [self pk_performBlock:^
     {
         if (self.progressHandler)
         {
@@ -189,7 +189,7 @@
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
 {
-    NSInteger currentIndex = anim.identifier;
+    NSInteger currentIndex = anim.pk_identifier;
     NSInteger lastAnimationIndex = [self.animations count] - 1;
     
     if (flag && currentIndex < lastAnimationIndex)
@@ -200,7 +200,7 @@
         PKAnimation *nextAnimation = self.animations[nextAnimationIndex];
         nextAnimation.fromValue = [((CALayer *)self.layer.presentationLayer) valueForKeyPath:nextAnimation.keyPath];
         
-        [self performBlock:^
+        [self pk_performBlock:^
         {
             if (self.progressHandler)
             {
@@ -219,7 +219,7 @@
         self.animating = NO;
         [self stopAnimation];
         
-        [self performBlock:^
+        [self pk_performBlock:^
         {
             if (self.completionHandler)
             {

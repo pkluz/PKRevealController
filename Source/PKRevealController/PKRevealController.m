@@ -336,7 +336,7 @@ typedef struct
         {
             PKLog(@"%@ ERROR - %s : Cannot implicitly determine which side to enter presentation mode for. Please use enterPresentationModeForController:animated:completion: method.", [self class], __PRETTY_FUNCTION__);
             
-            [self performBlock:^
+            [self pk_performBlock:^
             {
                 if (completion)
                 {
@@ -394,7 +394,7 @@ typedef struct
     }
     else
     {
-        [self performBlock:^
+        [self pk_performBlock:^
         {
             if (completion)
             {
@@ -1122,7 +1122,7 @@ typedef struct
         [self updateTapGestureRecognizerPrecence];
         [self updatePanGestureRecognizerPresence];
         
-        [self performBlock:^
+        [self pk_performBlock:^
         {
             if (completion)
             {
