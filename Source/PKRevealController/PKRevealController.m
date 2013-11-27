@@ -1074,6 +1074,9 @@ typedef struct
         childController.view.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
         childController.revealController = self;
         [container addSubview:childController.view];
+		if ([container isKindOfClass:[PKRevealControllerView class]]) {
+			((PKRevealControllerView *)container).viewController = childController;
+		}
         [self didMoveToParentViewController:self];
     }
 }
