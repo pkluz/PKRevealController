@@ -44,12 +44,7 @@ static char revealControllerKey;
     
     if (!controller)
     {
-        if (self.parentViewController)
-        {
-            return [self.parentViewController revealController];
-        }
-        
-        return nil;
+        controller = self.parentViewController.revealController;
     }
     
     return controller;
