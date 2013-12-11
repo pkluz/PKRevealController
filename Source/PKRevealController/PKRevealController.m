@@ -1103,15 +1103,16 @@ typedef struct
                                                                            values:[self keyPositionsToState:toState]
                                                                          duration:self.animationDuration];
     
+    __weak PKRevealController *weakSelf = self;
     animation.progressHandler = ^(NSValue *fromValue, NSValue *toValue, NSUInteger index)
     {
-        if ([fromValue CGPointValue].x == [self centerPointForState:PKRevealControllerShowsFrontViewController].x)
+        if ([fromValue CGPointValue].x == [weakSelf centerPointForState:PKRevealControllerShowsFrontViewController].x)
         {
-            [self updateRearViewVisibilityForFrontViewPosition:[toValue CGPointValue]];
+            [weakSelf updateRearViewVisibilityForFrontViewPosition:[toValue CGPointValue]];
         }
         else
         {
-            [self updateRearViewVisibility];
+            [weakSelf updateRearViewVisibility];
         }
     };
     
@@ -1119,13 +1120,13 @@ typedef struct
     {
         if (finished)
         {
-            [self updateRearViewVisibility];
+            [weakSelf updateRearViewVisibility];
         }
         
-        [self updateTapGestureRecognizerPrecence];
-        [self updatePanGestureRecognizerPresence];
+        [weakSelf updateTapGestureRecognizerPrecence];
+        [weakSelf updatePanGestureRecognizerPresence];
         
-        [self pk_performBlock:^
+        [weakSelf pk_performBlock:^
         {
             if (completion)
             {
