@@ -596,9 +596,9 @@ typedef struct
 
 - (void)setRecognizesResetTapOnFrontView:(BOOL)recognizesResetTapOnFrontView
 {
-    if (_recognizesPanningOnFrontView != recognizesResetTapOnFrontView)
+    if (_recognizesResetTapOnFrontView != recognizesResetTapOnFrontView)
     {
-        _recognizesPanningOnFrontView = recognizesResetTapOnFrontView;
+        _recognizesResetTapOnFrontView = recognizesResetTapOnFrontView;
         [self updateTapGestureRecognizerPrecence];
     }
 }
