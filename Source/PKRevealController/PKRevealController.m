@@ -1077,7 +1077,7 @@ typedef struct
 		if ([container isKindOfClass:[PKRevealControllerView class]]) {
 			((PKRevealControllerView *)container).viewController = childController;
 		}
-        [self didMoveToParentViewController:self];
+        [childController didMoveToParentViewController:self];
     }
 }
 
