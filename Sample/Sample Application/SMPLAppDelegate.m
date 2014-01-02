@@ -35,6 +35,7 @@
                                                                     rightViewController:[self rightViewController]];
     // Step 3: Configure.
     self.revealController.delegate = self;
+    self.revealController.allowsShadow = YES;
     self.revealController.animationDuration = 0.25;
     
     // Step 4: Apply.
