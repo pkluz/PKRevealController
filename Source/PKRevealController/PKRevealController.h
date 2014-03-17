@@ -154,6 +154,21 @@ FOUNDATION_EXTERN NSString * const PKRevealControllerRecognizesResetTapOnFrontVi
                                     rightViewController:(UIViewController *)rightViewController;
 
 /**
+ Shifts the front view to the position that's best suited to present the left controller's view. (Animates by default)
+ */
+- (void)showLeftViewController;
+
+/**
+ Shifts the front view to the position that's best suited to present the right controller's view. (Animates by default)
+ */
+- (void)showRightViewController;
+
+/**
+ Shifts the front view to the position that's best suited to present the front controller's view. (Animates by default)
+ */
+- (void)showFrontViewController;
+
+/**
  Shifts the front view to the position that's best suited to present the desired controller's view. (Animates by default)
  
  @param controller This is either the left or the right view controller (if present - respectively).
