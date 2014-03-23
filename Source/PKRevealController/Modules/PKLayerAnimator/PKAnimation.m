@@ -32,7 +32,7 @@
 
 @synthesize layer = _layer;
 @synthesize animating = _animating;
-@synthesize key = _key;
+@dynamic key;
 @synthesize startHandler = _startHandler;
 @synthesize completionHandler = _completionHandler;
 
