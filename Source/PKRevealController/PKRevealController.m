@@ -909,6 +909,8 @@ typedef struct
     {
         [self hideRearViews];
     }
+    
+    self.state = [self stateForCurrentFrontViewPosition];
 }
 
 - (void)updateRearViewVisibility
