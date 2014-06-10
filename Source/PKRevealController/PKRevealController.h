@@ -229,7 +229,7 @@ FOUNDATION_EXTERN NSString * const PKRevealControllerRecognizesResetTapOnFrontVi
  Adjusts the minimum and maximum reveal width of any given view controller's view.
  
  @param minWidth The default (minimum) width of the view to be shown.
- @param minWidth The maximum width of the view to be shown when overdrawing (if applicable) or entering presentation mode.
+ @param maxWidth The maximum width of the view to be shown when overdrawing (if applicable) or entering presentation mode.
  @param controller The view controller whose view reveal sizing is being adjusted.
  */
 - (void)setMinimumWidth:(CGFloat)minWidth
