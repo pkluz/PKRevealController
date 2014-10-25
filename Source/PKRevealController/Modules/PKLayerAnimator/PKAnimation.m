@@ -32,23 +32,24 @@
 
 @synthesize layer = _layer;
 @synthesize animating = _animating;
-@synthesize key = _key;
+@dynamic key;
 @synthesize startHandler = _startHandler;
 @synthesize completionHandler = _completionHandler;
 
 #pragma mark - Initialization
 
-+ (id)animation
++ (instancetype)animation
 {
-    CABasicAnimation *animation = [super animation];
+    PKAnimation *animation = self.new;
     animation.delegate = animation;
     return animation;
 }
 
-+ (id)animationWithKeyPath:(NSString *)path
++ (instancetype)animationWithKeyPath:(NSString *)path
 {
-    CABasicAnimation *animation = [super animationWithKeyPath:path];
+    PKAnimation *animation = self.new;
     animation.delegate = animation;
+    animation.keyPath = path;
     return animation;
 }
 
