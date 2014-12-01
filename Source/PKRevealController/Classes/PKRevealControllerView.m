@@ -66,6 +66,7 @@ static NSString *kShadowTransitionAnimationKey = @"shadowTransitionAnimation";
         self.layer.shadowRadius = 0.0;
         self.layer.shadowPath = nil;
     }
+    _shadow = shadow;
 }
 
 #pragma mark - API
