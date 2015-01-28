@@ -38,16 +38,16 @@
 
 #pragma mark - Initialization
 
-+ (id)animation
++ (instancetype)animation
 {
-    CABasicAnimation *animation = [super animation];
+    PKAnimation *animation = [super animation];
     animation.delegate = animation;
     return animation;
 }
 
-+ (id)animationWithKeyPath:(NSString *)path
++ (instancetype)animationWithKeyPath:(NSString *)path
 {
-    CABasicAnimation *animation = [super animationWithKeyPath:path];
+    PKAnimation *animation = [super animationWithKeyPath:path];
     animation.delegate = animation;
     return animation;
 }
