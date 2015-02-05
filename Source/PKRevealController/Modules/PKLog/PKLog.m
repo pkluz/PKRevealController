@@ -27,12 +27,17 @@
 #import "PKLog.h"
 #import <libgen.h>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-macros"
+
 #define STACK_IDX 0
 #define FRAMEWORK_IDX 1
 #define MEMORY_ADDR_IDX 2
 #define CLASS_CALLER_IDX 3
 #define FUNCTION_CALLER_IDX 4
 #define LINE_CALLER_IDX 5
+
+#pragma clang diagnostic pop
 
 void PKLog(NSString *format, ...)
 {
