@@ -26,8 +26,6 @@
     frontViewController.view.backgroundColor = [UIColor orangeColor];
     
     UINavigationController *frontNavigationController = [[UINavigationController alloc] initWithRootViewController:frontViewController];
-    UIViewController *rightViewController = [[UIViewController alloc] init];
-    rightViewController.view.backgroundColor = [UIColor redColor];
     
     // Step 2: Instantiate.
     self.revealController = [PKRevealController revealControllerWithFrontViewController:frontNavigationController
