@@ -122,7 +122,112 @@
     XCTAssertFalse(self.revealController.hasRightViewController);
 }
 
+#pragma mark - Showing controllers
+- (void)testThatShowControllerChangesStateProperlyForFrontLeftAndRightController
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:YES];
+    
+    [self.revealController showViewController:self.revealController.leftViewController animated:NO completion:nil];
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsLeftViewController);
+    
+    [self.revealController showViewController:self.revealController.rightViewController animated:NO completion:nil];
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsRightViewController);
+    
+    [self.revealController showViewController:self.revealController.frontViewController animated:NO completion:nil];
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsFrontViewController);
+}
+
+- (void)testThatShowControllerDoesntChangeStateForInvalidControllers
+{
+    // given
+    [self defaultInitializerWithSideControllersLeft:YES right:NO];
+    [self.revealController showViewController:self.revealController.leftViewController animated:NO completion:nil];
+    
+    // when trying to show new controller (not left or right)
+    UIViewController *controller = [UIViewController new];
+    [self.revealController showViewController:controller animated:NO completion:nil];
+    
+    // then verify state not changed
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsLeftViewController);
+    
+    // when trying to show nil controller
+    [self.revealController showViewController:nil animated:NO completion:nil];
+    
+    // then verify state not changed
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsLeftViewController);
+}
+
+- (void)testShowControllerAnimatedCompletionCalledForValidController
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:YES];
+    [self showRightControllerAndVerifyCompletionIsCalledAnimated:YES];
+}
+
+- (void)testShowControllerAnimatedCompletionCalledForInvalidController
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:NO];
+    [self showRightControllerAndVerifyCompletionIsCalledAnimated:YES];
+}
+
+- (void)testShowControllerCompletionCalledEvenWithoutAnimation
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:YES];
+    [self showRightControllerAndVerifyCompletionIsCalledAnimated:NO];
+}
+
+#pragma mark - Test presentation mode
+- (void)testEnterPresentationModeFailureWithoutSideControllers
+{
+    self.revealController = [PKRevealController new];
+    [self.revealController view];
+    
+    [self enterPresentationModeAndVerifyActiveStatus:NO animated:YES];
+}
+
+- (void)testEnterPresentationModeFailureWithoutSpecifyingSideController
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:YES];
+    [self enterPresentationModeAndVerifyActiveStatus:NO animated:YES];
+}
+
+- (void)testEnterPresentationModeSuccessByFirstShowingSideController
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:YES];
+    [self.revealController showViewController:self.revealController.leftViewController animated:NO completion:nil];
+    
+    [self enterPresentationModeAndVerifyActiveStatus:YES animated:YES];
+}
+
+- (void)testEnterPresentationModeSuccessWithOneSideController
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:NO];
+    [self enterPresentationModeAndVerifyActiveStatus:YES animated:YES];
+}
+
+- (void)testEnterPresentationModeCompletionCalledEvenWithoutAnimation
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:NO];
+    [self enterPresentationModeAndVerifyActiveStatus:YES animated:NO];
+}
+
 #pragma mark - Helpers
+- (void)defaultInitializerWithSideControllersLeft:(BOOL)useLeft right:(BOOL)useRight
+{
+    UIViewController *frontVC = [UIViewController new];
+    UIViewController *leftVC = useLeft ? [UIViewController new] : nil;
+    UIViewController *rightVC = useRight ? [UIViewController new] : nil;
+    
+    self.revealController = [PKRevealController revealControllerWithFrontViewController:frontVC
+                                                                     leftViewController:leftVC
+                                                                    rightViewController:rightVC];
+    XCTAssertNotNil(self.revealController);
+    
+    [self.revealController view];
+    
+    // setup very fast animations for faster tests
+    self.revealController.animationDuration = 0.001f;
+}
+
 - (void)verifyDefaultConfiguration
 {
     XCTAssertNotNil(self.revealController);
@@ -146,7 +251,31 @@
     
     XCTAssertEqualWithAccuracy(self.revealController.animationDuration, 0.185, 0.0001);
     XCTAssertEqualWithAccuracy(self.revealController.quickSwipeVelocity, 800, 0.0001);
+}
+
+- (void)showRightControllerAndVerifyCompletionIsCalledAnimated:(BOOL)animated
+{
+    NSString *expectationDescription = [NSString stringWithFormat:@"show controller%@ finished", animated ? @" animated" : @""];
+    XCTestExpectation *expectation = [self expectationWithDescription:expectationDescription];
     
+    [self.revealController showViewController:self.revealController.rightViewController animated:animated completion:^(BOOL finished) {
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:0.01 handler:nil];
+}
+
+- (void)enterPresentationModeAndVerifyActiveStatus:(BOOL)active animated:(BOOL)animated
+{
+    NSString *expectationDescription = [NSString stringWithFormat:@"enter presentation mode%@ finished", animated ? @" animated" : @""];
+    XCTestExpectation *expectation = [self expectationWithDescription:expectationDescription];
+    
+    [self.revealController enterPresentationModeAnimated:animated completion:^(BOOL finished) {
+        [expectation fulfill];
+        XCTAssertEqual(self.revealController.isPresentationModeActive, active);
+    }];
+    
+    [self waitForExpectationsWithTimeout:0.01 handler:nil];
 }
 
 @end

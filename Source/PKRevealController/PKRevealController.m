@@ -284,6 +284,13 @@ typedef struct
         toState = PKRevealControllerShowsRightViewController;
         toPoint = [self centerPointForState:toState];
     }
+    else if (![controller isEqual:self.frontViewController])
+    {
+        if (completion) {
+            completion(NO);
+        }
+        return;
+    }
     
     if (animated)
     {
@@ -292,6 +299,10 @@ typedef struct
     else
     {
         self.frontView.layer.position = toPoint;
+        [self updateRearViewVisibility];
+        if (completion) {
+            completion(YES);
+        }
     }
 }
 
