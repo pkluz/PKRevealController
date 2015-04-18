@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B31FE1321AE2B7C60050288C /* PKRevealController_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = B31FE1311AE2B7C60050288C /* PKRevealController_Tests.m */; };
+		B31FE1331AE2B7C60050288C /* libPKRevealController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9621E7B1815246000469E41 /* libPKRevealController.a */; };
 		F92FE58018152CE700668004 /* PKRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = F983809F177C967700BC5290 /* PKRevealController.m */; };
 		F92FE58118152D0000668004 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F98380A8177C96B400BC5290 /* UIKit.framework */; };
 		F9621E9E1815248E00469E41 /* PKLog.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B95F57178857C40052D84A /* PKLog.m */; };
@@ -19,6 +21,16 @@
 		F9621EA51815248E00469E41 /* CAAnimation+PKIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = F94A4E72178B351B003D323B /* CAAnimation+PKIdentifier.m */; };
 		F9621EA61815249000469E41 /* PKRevealControllerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B95F5C178885AC0052D84A /* PKRevealControllerView.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B31FE1341AE2B7C60050288C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F9838088177C967700BC5290 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F9621E7A1815246000469E41;
+			remoteInfo = PKRevealController;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		F9621E791815246000469E41 /* CopyFiles */ = {
@@ -33,6 +45,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B31FE12D1AE2B7C60050288C /* PKRevealController Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PKRevealController Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B31FE1301AE2B7C60050288C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B31FE1311AE2B7C60050288C /* PKRevealController_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PKRevealController_Tests.m; sourceTree = "<group>"; };
 		F903801E17846F9E001A8B34 /* PKAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKAnimation.h; sourceTree = "<group>"; };
 		F903801F17846F9E001A8B34 /* PKAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKAnimation.m; sourceTree = "<group>"; };
 		F92AA8371780927100740679 /* CALayer+PKConvenienceAnimations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+PKConvenienceAnimations.h"; sourceTree = "<group>"; };
@@ -62,6 +77,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B31FE12A1AE2B7C60050288C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B31FE1331AE2B7C60050288C /* libPKRevealController.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F9621E781815246000469E41 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -73,6 +96,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B31FE12E1AE2B7C60050288C /* PKRevealController Tests */ = {
+			isa = PBXGroup;
+			children = (
+				B31FE1311AE2B7C60050288C /* PKRevealController_Tests.m */,
+				B31FE12F1AE2B7C60050288C /* Supporting Files */,
+			);
+			path = "PKRevealController Tests";
+			sourceTree = "<group>";
+		};
+		B31FE12F1AE2B7C60050288C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B31FE1301AE2B7C60050288C /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		F9621EA81815274600469E41 /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -95,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				F9838097177C967700BC5290 /* PKRevealController */,
+				B31FE12E1AE2B7C60050288C /* PKRevealController Tests */,
 				F9838093177C967700BC5290 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -103,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				F9621E7B1815246000469E41 /* libPKRevealController.a */,
+				B31FE12D1AE2B7C60050288C /* PKRevealController Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -189,6 +231,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		B31FE12C1AE2B7C60050288C /* PKRevealController Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B31FE1381AE2B7C60050288C /* Build configuration list for PBXNativeTarget "PKRevealController Tests" */;
+			buildPhases = (
+				B31FE1291AE2B7C60050288C /* Sources */,
+				B31FE12A1AE2B7C60050288C /* Frameworks */,
+				B31FE12B1AE2B7C60050288C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B31FE1351AE2B7C60050288C /* PBXTargetDependency */,
+			);
+			name = "PKRevealController Tests";
+			productName = "PKRevealController Tests";
+			productReference = B31FE12D1AE2B7C60050288C /* PKRevealController Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		F9621E7A1815246000469E41 /* PKRevealController */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F9621E981815246000469E41 /* Build configuration list for PBXNativeTarget "PKRevealController" */;
@@ -214,6 +274,11 @@
 			attributes = {
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "zuui.org (Philip Kluz)";
+				TargetAttributes = {
+					B31FE12C1AE2B7C60050288C = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
 			};
 			buildConfigurationList = F983808B177C967700BC5290 /* Build configuration list for PBXProject "PKRevealController" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -228,11 +293,30 @@
 			projectRoot = "";
 			targets = (
 				F9621E7A1815246000469E41 /* PKRevealController */,
+				B31FE12C1AE2B7C60050288C /* PKRevealController Tests */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		B31FE12B1AE2B7C60050288C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		B31FE1291AE2B7C60050288C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B31FE1321AE2B7C60050288C /* PKRevealController_Tests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F9621E771815246000469E41 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -252,7 +336,72 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		B31FE1351AE2B7C60050288C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F9621E7A1815246000469E41 /* PKRevealController */;
+			targetProxy = B31FE1341AE2B7C60050288C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		B31FE1361AE2B7C60050288C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "PKRevealController Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B31FE1371AE2B7C60050288C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "PKRevealController Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		F9621E991815246000469E41 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
