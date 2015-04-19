@@ -136,27 +136,40 @@
 }
 
 #pragma mark - Showing controllers
-- (void)testThatShowControllerChangesStateProperlyForFrontLeftAndRightControllers
+- (void)testThatShowControllerChangesStateProperlyForLeftSideControllers
 {
-    [self defaultInitializerWithSideControllersLeft:YES right:YES];
+    [self defaultInitializerWithSideControllersLeft:YES right:NO];
     
     [self.revealController showViewController:self.revealController.leftViewController animated:NO completion:nil];
     XCTAssertEqual(self.revealController.state, PKRevealControllerShowsLeftViewController);
     XCTAssertTrue([self.revealController isLeftViewVisible]);
     XCTAssertFalse([self.revealController isRightViewVisible]);
     XCTAssertFalse(self.revealController.frontViewController.view.userInteractionEnabled);
+    XCTAssertEqualObjects(self.revealController.focusedController, self.revealController.leftViewController);
+}
+
+- (void)testThatShowControllerChangesStateProperlyForRightSideControllers
+{
+    [self defaultInitializerWithSideControllersLeft:NO right:YES];
     
     [self.revealController showViewController:self.revealController.rightViewController animated:NO completion:nil];
     XCTAssertEqual(self.revealController.state, PKRevealControllerShowsRightViewController);
     XCTAssertFalse([self.revealController isLeftViewVisible]);
     XCTAssertTrue([self.revealController isRightViewVisible]);
     XCTAssertFalse(self.revealController.frontViewController.view.userInteractionEnabled);
+    XCTAssertEqualObjects(self.revealController.focusedController, self.revealController.rightViewController);
+}
+
+- (void)testThatShowControllerChangesStateProperlyForFrontControllers
+{
+    [self defaultInitializerWithSideControllersLeft:NO right:NO];
     
     [self.revealController showViewController:self.revealController.frontViewController animated:NO completion:nil];
     XCTAssertEqual(self.revealController.state, PKRevealControllerShowsFrontViewController);
     XCTAssertFalse([self.revealController isLeftViewVisible]);
     XCTAssertFalse([self.revealController isRightViewVisible]);
     XCTAssertTrue(self.revealController.frontViewController.view.userInteractionEnabled);
+    XCTAssertEqualObjects(self.revealController.focusedController, self.revealController.frontViewController);
 }
 
 - (void)testThatShowControllerDoesntChangeStateForInvalidControllers
@@ -316,7 +329,7 @@
 #pragma mark - Min/max width
 - (void)testThatMinMaxWidthConfigurationIsSavedForLeftSideController
 {
-    [self defaultInitializerWithSideControllersLeft:YES right:YES];
+    [self defaultInitializerWithSideControllersLeft:YES right:NO];
     [self.revealController setMinimumWidth:100.0 maximumWidth:200.0 forViewController:self.revealController.leftViewController];
     
     XCTAssertEqualWithAccuracy([self.revealController leftViewMinWidth], 100.0, 0.001);
@@ -325,7 +338,7 @@
 
 - (void)testThatMinMaxWidthConfigurationIsSavedForRightSideController
 {
-    [self defaultInitializerWithSideControllersLeft:YES right:YES];
+    [self defaultInitializerWithSideControllersLeft:NO right:YES];
     [self.revealController setMinimumWidth:100.0 maximumWidth:200.0 forViewController:self.revealController.rightViewController];
     
     XCTAssertEqualWithAccuracy([self.revealController rightViewMinWidth], 100.0, 0.001);
@@ -356,9 +369,13 @@
 {
     // given - min width:100, max width:200
     [self testThatMinMaxWidthConfigurationIsSavedForLeftSideController];
+    CGFloat initialPosition = self.revealController.frontViewLayer.position.x;
     
     // when
     [self.revealController showViewController:self.revealController.leftViewController animated:NO completion:nil];
+    
+    // then
+    XCTAssertEqualWithAccuracy(self.revealController.frontViewLayer.position.x - initialPosition, 100.0, 0.001);
 }
 
 - (void)testThatMaxWidthIsUsedWhenControllerIsInPresentationMode
@@ -366,9 +383,6 @@
     // given - min width:100, max width:200
     [self testThatMinMaxWidthConfigurationIsSavedForLeftSideController];
     CGFloat initialPosition = self.revealController.frontViewLayer.position.x;
-    
-    // then
-    XCTAssertEqualWithAccuracy(self.revealController.frontViewLayer.position.x - initialPosition, 100.0, 0.001);
     
     // when
     [self.revealController enterPresentationModeAnimated:NO completion:nil];
