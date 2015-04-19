@@ -272,17 +272,14 @@ typedef struct
                 completion:(PKDefaultCompletionHandler)completion
 {
     PKRevealControllerState toState = PKRevealControllerShowsFrontViewController;
-    CGPoint toPoint = [self centerPointForState:toState];
     
     if ([controller isEqual:self.leftViewController])
     {
         toState = PKRevealControllerShowsLeftViewController;
-        toPoint = [self centerPointForState:toState];
     }
     else if ([controller isEqual:self.rightViewController])
     {
         toState = PKRevealControllerShowsRightViewController;
-        toPoint = [self centerPointForState:toState];
     }
     else if (![controller isEqual:self.frontViewController])
     {
@@ -462,13 +459,16 @@ typedef struct
            maximumWidth:(CGFloat)maxWidth
       forViewController:(UIViewController *)controller
 {
+    NSUInteger location = MAX(0, minWidth);
+    NSRange range = NSMakeRange(location, MAX(0, (maxWidth - location)));
+    
     if ([controller isEqual:self.leftViewController])
     {
-        self.leftViewWidthRange = NSMakeRange(minWidth, (maxWidth - minWidth));
+        self.leftViewWidthRange = range;
     }
     else if ([controller isEqual:self.rightViewController])
     {
-        self.rightViewWidthRange = NSMakeRange(minWidth, (maxWidth - minWidth));
+        self.rightViewWidthRange = range;
     }
 }
 
@@ -578,6 +578,8 @@ typedef struct
     [self.view addSubview:self.frontView];
     
     [self addViewController:self.frontViewController container:self.frontView];
+    [self addViewController:self.leftViewController container:self.leftView];
+    [self addViewController:self.rightViewController container:self.rightView];
 }
 
 - (void)setupGestureRecognizers

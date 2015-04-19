@@ -16,6 +16,14 @@
 - (BOOL)isLeftViewVisible;
 - (BOOL)isRightViewVisible;
 
+- (CGFloat)leftViewMinWidth;
+- (CGFloat)leftViewMaxWidth;
+
+- (CGFloat)rightViewMinWidth;
+- (CGFloat)rightViewMaxWidth;
+
+- (CALayer *)frontViewLayer;
+
 @end
 
 @interface PKRevealControllerTest : XCTestCase
@@ -128,7 +136,7 @@
 }
 
 #pragma mark - Showing controllers
-- (void)testThatShowControllerChangesStateProperlyForFrontLeftAndRightController
+- (void)testThatShowControllerChangesStateProperlyForFrontLeftAndRightControllers
 {
     [self defaultInitializerWithSideControllersLeft:YES right:YES];
     
@@ -189,7 +197,7 @@
     [self showRightControllerAndVerifyCompletionIsCalledAnimated:NO];
 }
 
-#pragma mark - Test presentation mode
+#pragma mark - Presentation mode
 - (void)testEnterPresentationModeFailureWithoutSideControllers
 {
     self.revealController = [PKRevealController new];
@@ -238,7 +246,7 @@
     [self enterPresentationModeAndVerifyActiveStatus:YES animated:NO];
 }
 
-#pragma mark - Test resigning presentation mode
+#pragma mark - Resigning presentation mode
 - (void)testResignPresentationModeWithLeftSideController
 {
     [self defaultInitializerWithSideControllersLeft:YES right:NO];
@@ -304,6 +312,102 @@
     
     [self waitForExpectationsWithTimeout:0.01 handler:nil];
 }
+
+#pragma mark - Min/max width
+- (void)testThatMinMaxWidthConfigurationIsSavedForLeftSideController
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:YES];
+    [self.revealController setMinimumWidth:100.0 maximumWidth:200.0 forViewController:self.revealController.leftViewController];
+    
+    XCTAssertEqualWithAccuracy([self.revealController leftViewMinWidth], 100.0, 0.001);
+    XCTAssertEqualWithAccuracy([self.revealController leftViewMaxWidth], 200.0, 0.001);
+}
+
+- (void)testThatMinMaxWidthConfigurationIsSavedForRightSideController
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:YES];
+    [self.revealController setMinimumWidth:100.0 maximumWidth:200.0 forViewController:self.revealController.rightViewController];
+    
+    XCTAssertEqualWithAccuracy([self.revealController rightViewMinWidth], 100.0, 0.001);
+    XCTAssertEqualWithAccuracy([self.revealController rightViewMaxWidth], 200.0, 0.001);
+}
+
+- (void)testThatMinMaxWidthConfigurationDoesNotSaveInvalidData
+{
+    // given
+    [self defaultInitializerWithSideControllersLeft:YES right:YES];
+    
+    // when max width is less than min width
+    [self.revealController setMinimumWidth:100.0 maximumWidth:0.0 forViewController:self.revealController.leftViewController];
+    
+    // then assert that max value is equal to min value
+    XCTAssertEqualWithAccuracy([self.revealController leftViewMinWidth], 100.0, 0.001);
+    XCTAssertEqualWithAccuracy([self.revealController leftViewMaxWidth], 100.0, 0.001);
+    
+    // when min width is less than zero
+    [self.revealController setMinimumWidth:-100.0 maximumWidth:100.0 forViewController:self.revealController.leftViewController];
+    
+    // then assert the default configuration
+    XCTAssertEqualWithAccuracy([self.revealController leftViewMinWidth], 0.0, 0.001);
+    XCTAssertEqualWithAccuracy([self.revealController leftViewMaxWidth], 100.0, 0.001);
+}
+
+- (void)testThatMinWidthIsUsedWhenControllerIsShown
+{
+    // given - min width:100, max width:200
+    [self testThatMinMaxWidthConfigurationIsSavedForLeftSideController];
+    
+    // when
+    [self.revealController showViewController:self.revealController.leftViewController animated:NO completion:nil];
+}
+
+- (void)testThatMaxWidthIsUsedWhenControllerIsInPresentationMode
+{
+    // given - min width:100, max width:200
+    [self testThatMinMaxWidthConfigurationIsSavedForLeftSideController];
+    CGFloat initialPosition = self.revealController.frontViewLayer.position.x;
+    
+    // then
+    XCTAssertEqualWithAccuracy(self.revealController.frontViewLayer.position.x - initialPosition, 100.0, 0.001);
+    
+    // when
+    [self.revealController enterPresentationModeAnimated:NO completion:nil];
+    
+    // then
+    XCTAssertEqualWithAccuracy(self.revealController.frontViewLayer.position.x - initialPosition, 200.0, 0.001);
+}
+
+#pragma mark - Retrieving reveal controller from managed controllers
+- (void)testRetrievingRevealControllerForManagedControllers
+{
+    // given
+    UIViewController *frontVC = [UIViewController new];
+    UIViewController *leftVC = [UIViewController new];
+    UIViewController *rightVC = [UIViewController new];
+    
+    self.revealController = [PKRevealController revealControllerWithFrontViewController:frontVC
+                                                                     leftViewController:leftVC
+                                                                    rightViewController:rightVC];
+    XCTAssertNotNil(self.revealController);
+    [self.revealController view];
+    
+    // then assert that reveal controller could be retrieved from managed controllers
+    XCTAssertEqualObjects(self.revealController, frontVC.revealController);
+    XCTAssertEqualObjects(self.revealController, leftVC.revealController);
+    XCTAssertEqualObjects(self.revealController, rightVC.revealController);
+    
+    // when
+    self.revealController.frontViewController = nil;
+    self.revealController.leftViewController = nil;
+    self.revealController.rightViewController = nil;
+    
+    // then assert that reveal controller could not be retrieved from managed controllers
+    XCTAssertNil(frontVC.revealController);
+    XCTAssertNil(leftVC.revealController);
+    XCTAssertNil(rightVC.revealController);
+}
+
+
 #pragma mark - Helpers
 - (void)defaultInitializerWithSideControllersLeft:(BOOL)useLeft right:(BOOL)useRight
 {
@@ -345,6 +449,8 @@
     
     XCTAssertEqualWithAccuracy(self.revealController.animationDuration, 0.185, 0.0001);
     XCTAssertEqualWithAccuracy(self.revealController.quickSwipeVelocity, 800, 0.0001);
+    XCTAssertEqualWithAccuracy([self.revealController leftViewMinWidth], 260.0, 0.001);
+    XCTAssertEqualWithAccuracy([self.revealController leftViewMaxWidth], 300.0, 0.001);
 }
 
 - (void)showRightControllerAndVerifyCompletionIsCalledAnimated:(BOOL)animated
