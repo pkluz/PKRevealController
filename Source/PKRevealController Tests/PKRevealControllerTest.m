@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
+#import <OCMock/OCMock.h>
 
 #import "PKRevealController.h"
 
 @interface PKRevealController (PKRevealControllerTest)
+
+@property (nonatomic, assign, readwrite) PKRevealControllerState state;
 
 - (BOOL)isLeftViewVisible;
 - (BOOL)isRightViewVisible;
@@ -23,6 +26,8 @@
 - (CGFloat)rightViewMaxWidth;
 
 - (CALayer *)frontViewLayer;
+
+- (void)didRecognizeTapGesture:(UITapGestureRecognizer *)recognizer;
 
 @end
 
@@ -420,6 +425,157 @@
     XCTAssertNil(leftVC.revealController);
     XCTAssertNil(rightVC.revealController);
 }
+
+#pragma mark - Handle tap gestures
+- (void)testThatFrontControllerIsShownOnTapWhileLeftControllerIsShown
+{
+    // given
+    [self defaultInitializerWithSideControllersLeft:YES right:NO];
+    [self.revealController showViewController:self.revealController.leftViewController animated:NO completion:nil];
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsLeftViewController);
+    
+    id delegateMock = [OCMockObject mockForProtocol:@protocol(PKRevealing)];
+    self.revealController.delegate = delegateMock;
+    
+    [[delegateMock expect] revealController:self.revealController willChangeToState:PKRevealControllerShowsFrontViewController];
+    [[delegateMock expect] revealController:self.revealController didChangeToState:PKRevealControllerShowsFrontViewController];
+    
+    // when
+    [self.revealController didRecognizeTapGesture:self.revealController.revealResetTapGestureRecognizer];
+    
+    // verify that state has changed
+    XCTAssertNoThrow([delegateMock verifyWithDelay:0.01]);
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsFrontViewController);
+}
+
+- (void)testThatFrontControllerIsShownOnTapWhileLeftControllerIsInPresentationMode
+{
+    // given
+    [self defaultInitializerWithSideControllersLeft:YES right:NO];
+    [self.revealController enterPresentationModeAnimated:NO completion:nil];
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsLeftViewControllerInPresentationMode);
+    
+    id delegateMock = [OCMockObject mockForProtocol:@protocol(PKRevealing)];
+    self.revealController.delegate = delegateMock;
+    
+    [[delegateMock expect] revealController:self.revealController willChangeToState:PKRevealControllerShowsFrontViewController];
+    [[delegateMock expect] revealController:self.revealController didChangeToState:PKRevealControllerShowsFrontViewController];
+    
+    // when
+    [self.revealController didRecognizeTapGesture:self.revealController.revealResetTapGestureRecognizer];
+    
+    // verify that state has changed
+    XCTAssertNoThrow([delegateMock verifyWithDelay:0.01]);
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsFrontViewController);
+}
+
+- (void)testRemovingTapGestureWhileSideControllerIsShown
+{
+    // given
+    [self defaultInitializerWithSideControllersLeft:YES right:NO];
+    [self.revealController showViewController:self.revealController.leftViewController animated:NO completion:nil];
+    XCTAssertNotNil(self.revealController.revealResetTapGestureRecognizer.view);
+    
+    // when
+    self.revealController.recognizesResetTapOnFrontViewInPresentationMode = NO;
+    
+    // then
+    XCTAssertNotNil(self.revealController.revealResetTapGestureRecognizer.view);
+    
+    // when
+    self.revealController.recognizesResetTapOnFrontView = NO;
+    
+    // then
+    XCTAssertNil(self.revealController.revealResetTapGestureRecognizer.view);
+}
+
+- (void)testRemovingTapGestureWhileSideControllerIsInPresentationMode
+{
+    // given
+    [self defaultInitializerWithSideControllersLeft:YES right:NO];
+    [self.revealController enterPresentationModeAnimated:NO completion:nil];
+    XCTAssertNotNil(self.revealController.revealResetTapGestureRecognizer.view);
+    
+    // when
+    self.revealController.recognizesResetTapOnFrontView = NO;
+    
+    // then
+    XCTAssertNotNil(self.revealController.revealResetTapGestureRecognizer.view);
+    
+    // when
+    self.revealController.recognizesResetTapOnFrontViewInPresentationMode = NO;
+    
+    // then
+    XCTAssertNil(self.revealController.revealResetTapGestureRecognizer.view);
+}
+
+#pragma mark - Supported interface orientations
+- (void)testSupportedInterfaceOrientationsBothSideControllers
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:YES];
+    
+    id  mockFrontController= [OCMockObject partialMockForObject:self.revealController.frontViewController];
+    id  mockLeftSideController = [OCMockObject partialMockForObject:self.revealController.leftViewController];
+    id  mockRightSideController = [OCMockObject partialMockForObject:self.revealController.rightViewController];
+    
+    [[[mockFrontController stub] andReturnValue:@(UIInterfaceOrientationMaskLandscape)] supportedInterfaceOrientations];
+    [[[mockLeftSideController stub] andReturnValue:@(UIInterfaceOrientationMaskLandscape)] supportedInterfaceOrientations];
+    [[[mockRightSideController stub] andReturnValue:@(UIInterfaceOrientationMaskAll)] supportedInterfaceOrientations];
+    
+    XCTAssertTrue(self.revealController.supportedInterfaceOrientations & UIInterfaceOrientationMaskLandscapeLeft);
+    XCTAssertTrue(self.revealController.supportedInterfaceOrientations & UIInterfaceOrientationMaskLandscapeRight);
+    XCTAssertFalse(self.revealController.supportedInterfaceOrientations & UIInterfaceOrientationMaskPortrait);
+}
+
+- (void)testSupportedInterfaceOrientationsLeftSideController
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:NO];
+    
+    id  mockFrontController= [OCMockObject partialMockForObject:self.revealController.frontViewController];
+    id  mockLeftSideController = [OCMockObject partialMockForObject:self.revealController.leftViewController];
+    
+    [[[mockFrontController stub] andReturnValue:@(UIInterfaceOrientationMaskLandscape)] supportedInterfaceOrientations];
+    [[[mockLeftSideController stub] andReturnValue:@(UIInterfaceOrientationMaskLandscape)] supportedInterfaceOrientations];
+    
+    XCTAssertTrue(self.revealController.supportedInterfaceOrientations & UIInterfaceOrientationMaskLandscape);
+    XCTAssertFalse(self.revealController.supportedInterfaceOrientations & UIInterfaceOrientationMaskPortrait);
+}
+
+- (void)testSupportedInterfaceOrientationsRightSideController
+{
+    [self defaultInitializerWithSideControllersLeft:NO right:YES];
+    
+    id  mockFrontController= [OCMockObject partialMockForObject:self.revealController.frontViewController];
+    id  mockRightSideController = [OCMockObject partialMockForObject:self.revealController.rightViewController];
+    
+    [[[mockFrontController stub] andReturnValue:@(UIInterfaceOrientationMaskLandscape)] supportedInterfaceOrientations];
+    [[[mockRightSideController stub] andReturnValue:@(UIInterfaceOrientationMaskLandscape)] supportedInterfaceOrientations];
+    
+    XCTAssertTrue(self.revealController.supportedInterfaceOrientations & UIInterfaceOrientationMaskLandscape);
+    XCTAssertFalse(self.revealController.supportedInterfaceOrientations & UIInterfaceOrientationMaskPortrait);
+}
+
+- (void)testSupportedInterfaceOrientationsWithoutSideControllers
+{
+    [self defaultInitializerWithSideControllersLeft:NO right:NO];
+    
+    id  mockFrontController= [OCMockObject partialMockForObject:self.revealController.frontViewController];
+    
+    [[[mockFrontController stub] andReturnValue:@(UIInterfaceOrientationMaskLandscape)] supportedInterfaceOrientations];
+    
+    XCTAssertTrue(self.revealController.supportedInterfaceOrientations & UIInterfaceOrientationMaskLandscape);
+    XCTAssertFalse(self.revealController.supportedInterfaceOrientations & UIInterfaceOrientationMaskPortrait);
+}
+
+- (void)testSupportedInterfaceOrientationsWithoutFrontController
+{
+    [self defaultInitializerWithSideControllersLeft:NO right:NO];
+    self.revealController.frontViewController = nil;
+    
+    XCTAssertFalse(self.revealController.supportedInterfaceOrientations & UIInterfaceOrientationMaskLandscape);
+    XCTAssertFalse(self.revealController.supportedInterfaceOrientations & UIInterfaceOrientationMaskPortrait);
+}
+
 
 
 #pragma mark - Helpers

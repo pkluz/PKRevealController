@@ -596,6 +596,15 @@ typedef struct
     [self updateTapGestureRecognizerPrecence];
 }
 
+- (void)setRecognizesResetTapOnFrontViewInPresentationMode:(BOOL)recognizesResetTapOnFrontViewInPresentationMode
+{
+    if (_recognizesResetTapOnFrontViewInPresentationMode != recognizesResetTapOnFrontViewInPresentationMode)
+    {
+        _recognizesResetTapOnFrontViewInPresentationMode = recognizesResetTapOnFrontViewInPresentationMode;
+        [self updateTapGestureRecognizerPrecence];
+    }
+}
+
 - (void)setRecognizesResetTapOnFrontView:(BOOL)recognizesResetTapOnFrontView
 {
     if (_recognizesResetTapOnFrontView != recognizesResetTapOnFrontView)
