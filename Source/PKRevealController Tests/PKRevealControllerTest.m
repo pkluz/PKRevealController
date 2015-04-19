@@ -11,6 +11,13 @@
 
 #import "PKRevealController.h"
 
+@interface PKRevealController (PKRevealControllerTest)
+
+- (BOOL)isLeftViewVisible;
+- (BOOL)isRightViewVisible;
+
+@end
+
 @interface PKRevealControllerTest : XCTestCase
 
 @property PKRevealController *revealController;
@@ -88,7 +95,6 @@
     
     // when
     self.revealController = [PKRevealController revealControllerWithFrontViewController:frontVC
-                                                                     leftViewController:nil
                                                                     rightViewController:rightVC];
     
     // then
@@ -109,8 +115,7 @@
     
     // when
     self.revealController = [PKRevealController revealControllerWithFrontViewController:frontVC
-                                                                     leftViewController:leftVC
-                                                                    rightViewController:nil];
+                                                                     leftViewController:leftVC];
     
     // then
     [self verifyDefaultConfiguration];
@@ -129,12 +134,21 @@
     
     [self.revealController showViewController:self.revealController.leftViewController animated:NO completion:nil];
     XCTAssertEqual(self.revealController.state, PKRevealControllerShowsLeftViewController);
+    XCTAssertTrue([self.revealController isLeftViewVisible]);
+    XCTAssertFalse([self.revealController isRightViewVisible]);
+    XCTAssertFalse(self.revealController.frontViewController.view.userInteractionEnabled);
     
     [self.revealController showViewController:self.revealController.rightViewController animated:NO completion:nil];
     XCTAssertEqual(self.revealController.state, PKRevealControllerShowsRightViewController);
+    XCTAssertFalse([self.revealController isLeftViewVisible]);
+    XCTAssertTrue([self.revealController isRightViewVisible]);
+    XCTAssertFalse(self.revealController.frontViewController.view.userInteractionEnabled);
     
     [self.revealController showViewController:self.revealController.frontViewController animated:NO completion:nil];
     XCTAssertEqual(self.revealController.state, PKRevealControllerShowsFrontViewController);
+    XCTAssertFalse([self.revealController isLeftViewVisible]);
+    XCTAssertFalse([self.revealController isRightViewVisible]);
+    XCTAssertTrue(self.revealController.frontViewController.view.userInteractionEnabled);
 }
 
 - (void)testThatShowControllerDoesntChangeStateForInvalidControllers
@@ -190,7 +204,7 @@
     [self enterPresentationModeAndVerifyActiveStatus:NO animated:YES];
 }
 
-- (void)testEnterPresentationModeSuccessByFirstShowingSideController
+- (void)testEnterPresentationModeSuccessByFirstShowingLeftSideController
 {
     [self defaultInitializerWithSideControllersLeft:YES right:YES];
     [self.revealController showViewController:self.revealController.leftViewController animated:NO completion:nil];
@@ -198,9 +212,23 @@
     [self enterPresentationModeAndVerifyActiveStatus:YES animated:YES];
 }
 
-- (void)testEnterPresentationModeSuccessWithOneSideController
+- (void)testEnterPresentationModeSuccessByFirstShowingRightSideController
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:YES];
+    [self.revealController showViewController:self.revealController.rightViewController animated:NO completion:nil];
+    
+    [self enterPresentationModeAndVerifyActiveStatus:YES animated:YES];
+}
+
+- (void)testEnterPresentationModeSuccessWithLeftSideController
 {
     [self defaultInitializerWithSideControllersLeft:YES right:NO];
+    [self enterPresentationModeAndVerifyActiveStatus:YES animated:YES];
+}
+
+- (void)testEnterPresentationModeSuccessWithRightSideController
+{
+    [self defaultInitializerWithSideControllersLeft:NO right:YES];
     [self enterPresentationModeAndVerifyActiveStatus:YES animated:YES];
 }
 
@@ -210,6 +238,72 @@
     [self enterPresentationModeAndVerifyActiveStatus:YES animated:NO];
 }
 
+#pragma mark - Test resigning presentation mode
+- (void)testResignPresentationModeWithLeftSideController
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:NO];
+    [self.revealController enterPresentationModeAnimated:NO completion:nil];
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsLeftViewControllerInPresentationMode);
+    
+    [self.revealController resignPresentationModeEntirely:NO animated:NO completion:nil];
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsLeftViewController);
+}
+
+- (void)testResignPresentationModeWithRightSideController
+{
+    [self defaultInitializerWithSideControllersLeft:NO right:YES];
+    [self.revealController enterPresentationModeAnimated:NO completion:nil];
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsRightViewControllerInPresentationMode);
+    
+    [self.revealController resignPresentationModeEntirely:NO animated:NO completion:nil];
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsRightViewController);
+}
+
+- (void)testResignPresentationModeEntirelyWithLeftSideController
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:NO];
+    [self.revealController enterPresentationModeAnimated:NO completion:nil];
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsLeftViewControllerInPresentationMode);
+    
+    [self.revealController resignPresentationModeEntirely:YES animated:NO completion:nil];
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsFrontViewController);
+}
+
+- (void)testResignPresentationModeEntirelyWithRightSideController
+{
+    [self defaultInitializerWithSideControllersLeft:NO right:YES];
+    [self.revealController enterPresentationModeAnimated:NO completion:nil];
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsRightViewControllerInPresentationMode);
+    
+    [self.revealController resignPresentationModeEntirely:YES animated:NO completion:nil];
+    XCTAssertEqual(self.revealController.state, PKRevealControllerShowsFrontViewController);
+}
+
+- (void)testResignPresentationModeAnimatedCompletionCalled
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:NO];
+    [self.revealController enterPresentationModeAnimated:NO completion:nil];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"resign presentation mode animated finished"];
+    [self.revealController resignPresentationModeEntirely:YES animated:YES completion:^(BOOL finished) {
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:0.01 handler:nil];
+}
+
+- (void)testResignPresentationModeCompletionCalledEvenWithoutAnimation
+{
+    [self defaultInitializerWithSideControllersLeft:YES right:NO];
+    [self.revealController enterPresentationModeAnimated:NO completion:nil];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"resign presentation mode animated finished"];
+    [self.revealController resignPresentationModeEntirely:YES animated:NO completion:^(BOOL finished) {
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:0.01 handler:nil];
+}
 #pragma mark - Helpers
 - (void)defaultInitializerWithSideControllersLeft:(BOOL)useLeft right:(BOOL)useRight
 {

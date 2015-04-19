@@ -292,18 +292,7 @@ typedef struct
         return;
     }
     
-    if (animated)
-    {
-        [self animateToState:toState completion:completion];
-    }
-    else
-    {
-        self.frontView.layer.position = toPoint;
-        [self updateRearViewVisibility];
-        if (completion) {
-            completion(YES);
-        }
-    }
+    [self changeState:toState animated:animated completion:completion];
 }
 
 - (void)enterPresentationModeForViewController:(UIViewController *)controller
@@ -323,7 +312,7 @@ typedef struct
         toState = PKRevealControllerShowsRightViewControllerInPresentationMode;
     }
     
-    [self animateToState:toState completion:completion];
+    [self changeState:toState animated:animated completion:completion];
 }
 
 - (void)enterPresentationModeAnimated:(BOOL)animated
@@ -367,7 +356,7 @@ typedef struct
         toState = PKRevealControllerShowsRightViewControllerInPresentationMode;
     }
     
-    [self animateToState:toState completion:completion];
+    [self changeState:toState animated:animated completion:completion];
 }
 
 - (void)resignPresentationModeEntirely:(BOOL)entirely
@@ -388,7 +377,7 @@ typedef struct
         }
     }
     
-    [self animateToState:toState completion:completion];
+    [self changeState:toState animated:animated completion:completion];
 }
 
 - (void)setFrontViewController:(UIViewController *)frontViewController
@@ -1027,13 +1016,13 @@ typedef struct
 
 - (BOOL)isLeftViewVisible
 {
-    CALayer *layer = (CALayer *)[self.frontView.layer presentationLayer];
+    CALayer *layer = [self frontViewLayer];
     return (layer.position.x > CGRectGetMidX(self.view.bounds));
 }
 
 - (BOOL)isRightViewVisible
 {
-    CALayer *layer = (CALayer *)[self.frontView.layer presentationLayer];
+    CALayer *layer = [self frontViewLayer];
     return (layer.position.x < CGRectGetMidX(self.view.bounds));
 }
 
@@ -1280,6 +1269,39 @@ typedef struct
     {
         return PKRevealControllerTypeNone;
     }
+}
+
+- (void)changeState:(PKRevealControllerState)toState animated:(BOOL)animated completion:(PKDefaultCompletionHandler)completion
+{
+    if (animated)
+    {
+        [self animateToState:toState completion:completion];
+    }
+    else
+    {
+        [self updateRearViewVisibility];
+        CGPoint toPoint = [self centerPointForState:toState];
+        
+        self.frontView.layer.position = toPoint;
+        [(CALayer *)[self.frontView.layer presentationLayer] setPosition:toPoint];
+        
+        [self updateRearViewVisibility];
+        [self updateTapGestureRecognizerPrecence];
+        [self updatePanGestureRecognizerPresence];
+        
+        [self pk_performBlock:^
+         {
+             if (completion)
+             {
+                 completion(YES);
+             }
+         } onMainThread:YES];
+    }
+}
+
+- (CALayer *)frontViewLayer
+{
+    return [self.frontView.layer presentationLayer] ?: self.frontView.layer;
 }
 
 #pragma mark - Positioning & Sizing
