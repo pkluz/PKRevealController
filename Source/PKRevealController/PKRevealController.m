@@ -283,9 +283,13 @@ typedef struct
     }
     else if (![controller isEqual:self.frontViewController])
     {
-        if (completion) {
-            completion(NO);
-        }
+        [self pk_performBlock:^
+         {
+             if (completion)
+             {
+                 completion(NO);
+             }
+         } onMainThread:YES];
         return;
     }
     
