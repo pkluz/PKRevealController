@@ -74,7 +74,7 @@ static NSString *kShadowTransitionAnimationKey = @"shadowTransitionAnimation";
 {
     UIBezierPath *existingShadowPath = nil;
     
-    if (self.layer.shadowPath)
+    if (self.layer.shadowPath != nil)
     {
         existingShadowPath = [UIBezierPath bezierPathWithCGPath:self.layer.shadowPath];
     }
