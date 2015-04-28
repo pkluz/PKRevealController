@@ -677,6 +677,31 @@ typedef struct
 
 #pragma mark - Gesture Recognition
 
+// Fixes swipe to delete behavior in UITableViews
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    UITableView *tableView;
+    
+    if ([otherGestureRecognizer.view.superview isKindOfClass:UITableView.class])
+    {
+        tableView = (UITableView *)otherGestureRecognizer.view.superview;
+    }
+    if ([tableView.delegate respondsToSelector:@selector(tableView:canEditRowAtIndexPath:)])
+    {
+        if ([gestureRecognizer isKindOfClass:UIPanGestureRecognizer.class])
+        {
+            UIPanGestureRecognizer *panGestureRecognizer = (UIPanGestureRecognizer *)gestureRecognizer;
+            CGPoint velocity = [panGestureRecognizer velocityInView:tableView];
+            // On swiping when in edit mode, don't want to open the reveal at the same time
+            if (velocity.x < 0.0)
+            {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
 - (void)didRecognizeTapGesture:(UITapGestureRecognizer *)recognizer
 {
     if (self.state != PKRevealControllerShowsFrontViewController)
