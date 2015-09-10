@@ -272,27 +272,28 @@ typedef struct
                 completion:(PKDefaultCompletionHandler)completion
 {
     PKRevealControllerState toState = PKRevealControllerShowsFrontViewController;
-    CGPoint toPoint = [self centerPointForState:toState];
     
     if ([controller isEqual:self.leftViewController])
     {
         toState = PKRevealControllerShowsLeftViewController;
-        toPoint = [self centerPointForState:toState];
     }
     else if ([controller isEqual:self.rightViewController])
     {
         toState = PKRevealControllerShowsRightViewController;
-        toPoint = [self centerPointForState:toState];
+    }
+    else if (![controller isEqual:self.frontViewController])
+    {
+        [self pk_performBlock:^
+         {
+             if (completion)
+             {
+                 completion(NO);
+             }
+         } onMainThread:YES];
+        return;
     }
     
-    if (animated)
-    {
-        [self animateToState:toState completion:completion];
-    }
-    else
-    {
-        self.frontView.layer.position = toPoint;
-    }
+    [self changeState:toState animated:animated completion:completion];
 }
 
 - (void)enterPresentationModeForViewController:(UIViewController *)controller
@@ -312,7 +313,7 @@ typedef struct
         toState = PKRevealControllerShowsRightViewControllerInPresentationMode;
     }
     
-    [self animateToState:toState completion:completion];
+    [self changeState:toState animated:animated completion:completion];
 }
 
 - (void)enterPresentationModeAnimated:(BOOL)animated
@@ -356,7 +357,7 @@ typedef struct
         toState = PKRevealControllerShowsRightViewControllerInPresentationMode;
     }
     
-    [self animateToState:toState completion:completion];
+    [self changeState:toState animated:animated completion:completion];
 }
 
 - (void)resignPresentationModeEntirely:(BOOL)entirely
@@ -377,7 +378,7 @@ typedef struct
         }
     }
     
-    [self animateToState:toState completion:completion];
+    [self changeState:toState animated:animated completion:completion];
 }
 
 - (void)setFrontViewController:(UIViewController *)frontViewController
@@ -462,13 +463,16 @@ typedef struct
            maximumWidth:(CGFloat)maxWidth
       forViewController:(UIViewController *)controller
 {
+    NSUInteger location = MAX(0, minWidth);
+    NSRange range = NSMakeRange(location, MAX(0, (maxWidth - location)));
+    
     if ([controller isEqual:self.leftViewController])
     {
-        self.leftViewWidthRange = NSMakeRange(minWidth, (maxWidth - minWidth));
+        self.leftViewWidthRange = range;
     }
     else if ([controller isEqual:self.rightViewController])
     {
-        self.rightViewWidthRange = NSMakeRange(minWidth, (maxWidth - minWidth));
+        self.rightViewWidthRange = range;
     }
 }
 
@@ -578,6 +582,8 @@ typedef struct
     [self.view addSubview:self.frontView];
     
     [self addViewController:self.frontViewController container:self.frontView];
+    [self addViewController:self.leftViewController container:self.leftView];
+    [self addViewController:self.rightViewController container:self.rightView];
 }
 
 - (void)setupGestureRecognizers
@@ -592,6 +598,15 @@ typedef struct
     
     [self updatePanGestureRecognizerPresence];
     [self updateTapGestureRecognizerPrecence];
+}
+
+- (void)setRecognizesResetTapOnFrontViewInPresentationMode:(BOOL)recognizesResetTapOnFrontViewInPresentationMode
+{
+    if (_recognizesResetTapOnFrontViewInPresentationMode != recognizesResetTapOnFrontViewInPresentationMode)
+    {
+        _recognizesResetTapOnFrontViewInPresentationMode = recognizesResetTapOnFrontViewInPresentationMode;
+        [self updateTapGestureRecognizerPrecence];
+    }
 }
 
 - (void)setRecognizesResetTapOnFrontView:(BOOL)recognizesResetTapOnFrontView
@@ -1016,13 +1031,13 @@ typedef struct
 
 - (BOOL)isLeftViewVisible
 {
-    CALayer *layer = (CALayer *)[self.frontView.layer presentationLayer];
+    CALayer *layer = [self frontViewLayer];
     return (layer.position.x > CGRectGetMidX(self.view.bounds));
 }
 
 - (BOOL)isRightViewVisible
 {
-    CALayer *layer = (CALayer *)[self.frontView.layer presentationLayer];
+    CALayer *layer = [self frontViewLayer];
     return (layer.position.x < CGRectGetMidX(self.view.bounds));
 }
 
@@ -1269,6 +1284,39 @@ typedef struct
     {
         return PKRevealControllerTypeNone;
     }
+}
+
+- (void)changeState:(PKRevealControllerState)toState animated:(BOOL)animated completion:(PKDefaultCompletionHandler)completion
+{
+    if (animated)
+    {
+        [self animateToState:toState completion:completion];
+    }
+    else
+    {
+        [self updateRearViewVisibility];
+        CGPoint toPoint = [self centerPointForState:toState];
+        
+        self.frontView.layer.position = toPoint;
+        [(CALayer *)[self.frontView.layer presentationLayer] setPosition:toPoint];
+        
+        [self updateRearViewVisibility];
+        [self updateTapGestureRecognizerPrecence];
+        [self updatePanGestureRecognizerPresence];
+        
+        [self pk_performBlock:^
+         {
+             if (completion)
+             {
+                 completion(YES);
+             }
+         } onMainThread:YES];
+    }
+}
+
+- (CALayer *)frontViewLayer
+{
+    return [self.frontView.layer presentationLayer] ?: self.frontView.layer;
 }
 
 #pragma mark - Positioning & Sizing

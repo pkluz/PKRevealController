@@ -1,0 +1,6 @@
+language: objective-c
+before_install: gem install cocoapods xcpretty slather --no-ri --no-rdoc --no-ri --no-rdoc
+after_success: slather
+xcode_workspace: Source/PKRevealController.xcworkspace
+xcode_scheme: PKRevealController Tests
+xcode_sdk: iphonesimulator

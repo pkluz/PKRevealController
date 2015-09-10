@@ -27,6 +27,8 @@ You can support me by donating to my **coffee fund**! It'll remind me to stay hy
 
 [![Donate](http://imageshack.us/a/img600/1508/v2im.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LXHJYF3YYQQ4W)
 
+[![Coverage Status](https://coveralls.io/repos/pkluz/PKRevealController/badge.svg)](https://coveralls.io/r/pkluz/PKRevealController)
+
 ## Consulting
 
 If you need **additional support** or help **integrating** and/or **customizing** the controller for your project, feel free to get in touch ([Philip.Kluz@zuui.org](mailto:Philip.Kluz@zuui.org)). 
