@@ -1,21 +1,21 @@
 //
-//  SMPLAppDelegate.m
-//  Sample Application
+//  AppDelegate.m
+//  RevealSample
 //
-//  Created by Philip Kluz on 10/21/13.
-//  Copyright (c) 2013 zuui.org (Philip Kluz). All rights reserved.
+//  Created by Philip Kluz on 9/10/15.
+//  Copyright (c) 2015 nsexpcetional.com. All rights reserved.
 //
 
-#import "SMPLAppDelegate.h"
+#import "AppDelegate.h"
 
-@interface SMPLAppDelegate() <PKRevealing>
+@interface AppDelegate() <PKRevealing>
 
 #pragma mark - Properties
 @property (nonatomic, strong, readwrite) PKRevealController *revealController;
 
 @end
 
-@implementation SMPLAppDelegate
+@implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {

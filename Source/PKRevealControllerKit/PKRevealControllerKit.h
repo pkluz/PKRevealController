@@ -14,4 +14,5 @@ FOUNDATION_EXPORT double PKRevealControllerKitVersionNumber;
 //! Project version string for PKRevealControllerKit.
 FOUNDATION_EXPORT const unsigned char PKRevealControllerKitVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <PKRevealControllerKit/PublicHeader.h>
+#import "PKRevealController.h"
+#import "UIViewController+PKRevealController.h"

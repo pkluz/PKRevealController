@@ -31,6 +31,27 @@
 		F9621EA51815248E00469E41 /* CAAnimation+PKIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = F94A4E72178B351B003D323B /* CAAnimation+PKIdentifier.m */; };
 		F9621EA61815249000469E41 /* PKRevealControllerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B95F5C178885AC0052D84A /* PKRevealControllerView.m */; };
 		F96E4EE61BA1E7A60065DC73 /* PKRevealControllerKit.h in Headers */ = {isa = PBXBuildFile; fileRef = F96E4EE51BA1E7A60065DC73 /* PKRevealControllerKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9E860291BA1EF9E00689364 /* PKRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = F983809F177C967700BC5290 /* PKRevealController.m */; };
+		F9E8602A1BA1EFA400689364 /* PKRevealController.h in Headers */ = {isa = PBXBuildFile; fileRef = F983809E177C967700BC5290 /* PKRevealController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9E8602B1BA1EFAB00689364 /* PKRevealControllerView.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B95F5B178885AC0052D84A /* PKRevealControllerView.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		F9E8602C1BA1EFB500689364 /* PKRevealControllerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B95F5C178885AC0052D84A /* PKRevealControllerView.m */; };
+		F9E8602D1BA1EFBA00689364 /* PKLog.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B95F56178857C40052D84A /* PKLog.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		F9E8602E1BA1EFBD00689364 /* PKLog.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B95F57178857C40052D84A /* PKLog.m */; };
+		F9E8602F1BA1EFBF00689364 /* PKLayerAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = F9D4C98F177F44750084AE74 /* PKLayerAnimator.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		F9E860301BA1EFC300689364 /* PKLayerAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D4C990177F44750084AE74 /* PKLayerAnimator.m */; };
+		F9E860311BA1EFC600689364 /* PKAnimating.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B95F5F178A08E00052D84A /* PKAnimating.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		F9E860321BA1EFCA00689364 /* PKAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = F903801E17846F9E001A8B34 /* PKAnimation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		F9E860331BA1EFCD00689364 /* PKAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = F903801F17846F9E001A8B34 /* PKAnimation.m */; };
+		F9E860341BA1EFD300689364 /* PKSequentialAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = F951AE251782E177003631A6 /* PKSequentialAnimation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		F9E860351BA1EFD600689364 /* PKSequentialAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = F951AE261782E177003631A6 /* PKSequentialAnimation.m */; };
+		F9E860361BA1EFD900689364 /* UIViewController+PKRevealController.h in Headers */ = {isa = PBXBuildFile; fileRef = F98380AB177C973900BC5290 /* UIViewController+PKRevealController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9E860371BA1EFE400689364 /* UIViewController+PKRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = F98380AC177C973900BC5290 /* UIViewController+PKRevealController.m */; };
+		F9E860381BA1EFE700689364 /* NSObject+PKBlocks.h in Headers */ = {isa = PBXBuildFile; fileRef = F92AA83B17809D3E00740679 /* NSObject+PKBlocks.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		F9E860391BA1EFEC00689364 /* NSObject+PKBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = F92AA83C17809D3E00740679 /* NSObject+PKBlocks.m */; };
+		F9E8603A1BA1EFEE00689364 /* CALayer+PKConvenienceAnimations.h in Headers */ = {isa = PBXBuildFile; fileRef = F92AA8371780927100740679 /* CALayer+PKConvenienceAnimations.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		F9E8603B1BA1EFF300689364 /* CALayer+PKConvenienceAnimations.m in Sources */ = {isa = PBXBuildFile; fileRef = F92AA8381780927100740679 /* CALayer+PKConvenienceAnimations.m */; };
+		F9E8603C1BA1EFF600689364 /* CAAnimation+PKIdentifier.h in Headers */ = {isa = PBXBuildFile; fileRef = F94A4E71178B351B003D323B /* CAAnimation+PKIdentifier.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		F9E8603D1BA1EFF900689364 /* CAAnimation+PKIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = F94A4E72178B351B003D323B /* CAAnimation+PKIdentifier.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -260,6 +281,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				F96E4EE61BA1E7A60065DC73 /* PKRevealControllerKit.h in Headers */,
+				F9E860311BA1EFC600689364 /* PKAnimating.h in Headers */,
+				F9E8602B1BA1EFAB00689364 /* PKRevealControllerView.h in Headers */,
+				F9E8602A1BA1EFA400689364 /* PKRevealController.h in Headers */,
+				F9E860341BA1EFD300689364 /* PKSequentialAnimation.h in Headers */,
+				F9E8603A1BA1EFEE00689364 /* CALayer+PKConvenienceAnimations.h in Headers */,
+				F9E8603C1BA1EFF600689364 /* CAAnimation+PKIdentifier.h in Headers */,
+				F9E860361BA1EFD900689364 /* UIViewController+PKRevealController.h in Headers */,
+				F9E860321BA1EFCA00689364 /* PKAnimation.h in Headers */,
+				F9E8602F1BA1EFBF00689364 /* PKLayerAnimator.h in Headers */,
+				F9E8602D1BA1EFBA00689364 /* PKLog.h in Headers */,
+				F9E860381BA1EFE700689364 /* NSObject+PKBlocks.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -448,6 +480,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9E8602E1BA1EFBD00689364 /* PKLog.m in Sources */,
+				F9E8602C1BA1EFB500689364 /* PKRevealControllerView.m in Sources */,
+				F9E8603B1BA1EFF300689364 /* CALayer+PKConvenienceAnimations.m in Sources */,
+				F9E860391BA1EFEC00689364 /* NSObject+PKBlocks.m in Sources */,
+				F9E8603D1BA1EFF900689364 /* CAAnimation+PKIdentifier.m in Sources */,
+				F9E860371BA1EFE400689364 /* UIViewController+PKRevealController.m in Sources */,
+				F9E860291BA1EF9E00689364 /* PKRevealController.m in Sources */,
+				F9E860301BA1EFC300689364 /* PKLayerAnimator.m in Sources */,
+				F9E860351BA1EFD600689364 /* PKSequentialAnimation.m in Sources */,
+				F9E860331BA1EFCD00689364 /* PKAnimation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -738,6 +780,7 @@
 				F96E4EF61BA1E7A60065DC73 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F983808B177C967700BC5290 /* Build configuration list for PBXProject "PKRevealController" */ = {
 			isa = XCConfigurationList;
