@@ -27,9 +27,9 @@
 
 - (void)testAssigningRevealController
 {
-    UIViewController *controller = [UIViewController new];
+    UIViewController *controller = [[UIViewController alloc] init];
     
-    PKRevealController *revealController = [PKRevealController new];
+    PKRevealController *revealController = [[PKRevealController alloc] init];
     [controller setRevealController:revealController];
     
     XCTAssertEqualObjects(controller.revealController, revealController);
@@ -37,12 +37,12 @@
 
 - (void)testRetrievingRevealControllerForChildViewController
 {
-    UIViewController *controller = [UIViewController new];
+    UIViewController *controller = [[UIViewController alloc] init];
     [controller view];
-    PKRevealController *revealController = [PKRevealController new];
+    PKRevealController *revealController = [[PKRevealController alloc] init];
     [controller setRevealController:revealController];
     
-    UIViewController *childController = [UIViewController new];
+    UIViewController *childController = [[UIViewController alloc] init];
     [controller addChildViewController:childController];
 
     XCTAssertNotNil(childController.parentViewController);

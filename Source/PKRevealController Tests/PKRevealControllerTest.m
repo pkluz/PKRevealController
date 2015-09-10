@@ -51,7 +51,7 @@
 - (void)testInitWithFrontController
 {
     // given
-    UIViewController *frontVC = [UIViewController new];
+    UIViewController *frontVC = [[UIViewController alloc] init];
     
     // when
     self.revealController = [PKRevealController revealControllerWithFrontViewController:frontVC
@@ -83,9 +83,9 @@
 - (void)testInitWithLeftAndRightControllers
 {
     // given
-    UIViewController *frontVC = [UIViewController new];
-    UIViewController *leftVC = [UIViewController new];
-    UIViewController *rightVC = [UIViewController new];
+    UIViewController *frontVC = [[UIViewController alloc] init];
+    UIViewController *leftVC = [[UIViewController alloc] init];
+    UIViewController *rightVC = [[UIViewController alloc] init];
     
     // when
     self.revealController = [PKRevealController revealControllerWithFrontViewController:frontVC
@@ -103,8 +103,8 @@
 - (void)testInitWithRightController
 {
     // given
-    UIViewController *frontVC = [UIViewController new];
-    UIViewController *rightVC = [UIViewController new];
+    UIViewController *frontVC = [[UIViewController alloc] init];
+    UIViewController *rightVC = [[UIViewController alloc] init];
     
     // when
     self.revealController = [PKRevealController revealControllerWithFrontViewController:frontVC
@@ -123,8 +123,8 @@
 - (void)testInitWithLeftController
 {
     // given
-    UIViewController *frontVC = [UIViewController new];
-    UIViewController *leftVC = [UIViewController new];
+    UIViewController *frontVC = [[UIViewController alloc] init];
+    UIViewController *leftVC = [[UIViewController alloc] init];
     
     // when
     self.revealController = [PKRevealController revealControllerWithFrontViewController:frontVC
@@ -184,7 +184,7 @@
     [self.revealController showViewController:self.revealController.leftViewController animated:NO completion:nil];
     
     // when trying to show new controller (not left or right)
-    UIViewController *controller = [UIViewController new];
+    UIViewController *controller = [[UIViewController alloc] init];
     [self.revealController showViewController:controller animated:NO completion:nil];
     
     // then verify state not changed
@@ -218,7 +218,7 @@
 #pragma mark - Presentation mode
 - (void)testEnterPresentationModeFailureWithoutSideControllers
 {
-    self.revealController = [PKRevealController new];
+    self.revealController = [[PKRevealController alloc] init];
     [self.revealController view];
     
     [self enterPresentationModeAndVerifyActiveStatus:NO animated:YES];
@@ -400,9 +400,9 @@
 - (void)testRetrievingRevealControllerForManagedControllers
 {
     // given
-    UIViewController *frontVC = [UIViewController new];
-    UIViewController *leftVC = [UIViewController new];
-    UIViewController *rightVC = [UIViewController new];
+    UIViewController *frontVC = [[UIViewController alloc] init];
+    UIViewController *leftVC = [[UIViewController alloc] init];
+    UIViewController *rightVC = [[UIViewController alloc] init];
     
     self.revealController = [PKRevealController revealControllerWithFrontViewController:frontVC
                                                                      leftViewController:leftVC
@@ -581,9 +581,9 @@
 #pragma mark - Helpers
 - (void)defaultInitializerWithSideControllersLeft:(BOOL)useLeft right:(BOOL)useRight
 {
-    UIViewController *frontVC = [UIViewController new];
-    UIViewController *leftVC = useLeft ? [UIViewController new] : nil;
-    UIViewController *rightVC = useRight ? [UIViewController new] : nil;
+    UIViewController *frontVC = [[UIViewController alloc] init];
+    UIViewController *leftVC = useLeft ? [[UIViewController alloc] init] : nil;
+    UIViewController *rightVC = useRight ? [[UIViewController alloc] init] : nil;
     
     self.revealController = [PKRevealController revealControllerWithFrontViewController:frontVC
                                                                      leftViewController:leftVC

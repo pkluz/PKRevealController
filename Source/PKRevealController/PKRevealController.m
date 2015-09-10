@@ -319,7 +319,19 @@ typedef struct
 - (void)enterPresentationModeAnimated:(BOOL)animated
                            completion:(PKDefaultCompletionHandler)completion
 {
-    NSAssert([self hasLeftViewController] || [self hasRightViewController], @"%@ ERROR - %s : Cannot enter presentation mode without either left or right view controller.", [self class], __PRETTY_FUNCTION__);
+    if (![self hasLeftViewController] && ![self hasRightViewController]) {
+        PKLog(@"%@ ERROR - %s : Cannot enter presentation mode without either left or right view controller.", [self class], __PRETTY_FUNCTION__);
+
+        [self pk_performBlock:^
+         {
+             if (completion)
+             {
+                 completion(NO);
+             }
+         } onMainThread:YES];
+        
+        return;
+    }
     
     PKRevealControllerState toState = self.state;
     
