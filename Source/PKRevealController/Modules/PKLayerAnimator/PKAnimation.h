@@ -24,8 +24,9 @@
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import <Foundation/Foundation.h>
-#import <QuartzCore/QuartzCore.h>
+@import Foundation;
+@import QuartzCore;
+
 #import "PKAnimating.h"
 
 @interface PKAnimation : CABasicAnimation <PKAnimating>

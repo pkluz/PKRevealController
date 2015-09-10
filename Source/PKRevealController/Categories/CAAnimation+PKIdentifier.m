@@ -24,8 +24,9 @@
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import "CAAnimation+PKIdentifier.h"
 #import <objc/runtime.h>
+
+#import "CAAnimation+PKIdentifier.h"
 
 @implementation CAAnimation (PKIdentifier)
 

@@ -24,9 +24,10 @@
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#import <objc/runtime.h>
+
 #import "UIViewController+PKRevealController.h"
 #import "PKRevealController.h"
-#import <objc/runtime.h>
 
 @implementation UIViewController (PKRevealController)
 

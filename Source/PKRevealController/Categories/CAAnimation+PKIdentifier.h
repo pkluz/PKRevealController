@@ -24,7 +24,7 @@
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import <QuartzCore/QuartzCore.h>
+@import QuartzCore;
 
 @interface CAAnimation (PKIdentifier)
 
