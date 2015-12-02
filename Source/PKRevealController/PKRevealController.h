@@ -87,7 +87,7 @@ FOUNDATION_EXTERN NSString * const PKRevealControllerRecognizesResetTapOnFrontVi
 /// The view controller type. Deprecated because unnecessary. is -hasLeftViewController and hasRightViewController instead.
 @property (nonatomic, readonly) PKRevealControllerType type __deprecated;
 
-/// Returns YES if either the left or right view controller are revealed to thei max width.
+/// Returns YES if either the left or right view controller are revealed to their max width.
 @property (nonatomic, readonly) BOOL isPresentationModeActive;
 
 /// Contains the controllers configuration. Deprecated in favour of direct property manipulation.
