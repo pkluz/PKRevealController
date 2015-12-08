@@ -1017,7 +1017,7 @@ typedef struct
     self.leftView.hidden = YES;
     [self removeViewController:self.leftViewController];
     [self addViewController:self.rightViewController container:self.rightView];
-    [self.frontView setUserInteractionForContainedViewEnabled:NO];
+    [self.frontView setUserInteractionForContainedViewEnabled:!_disablesFrontViewInteraction];
 }
 
 - (void)showLeftView
@@ -1026,7 +1026,7 @@ typedef struct
     self.leftView.hidden = NO;
     [self removeViewController:self.rightViewController];
     [self addViewController:self.leftViewController container:self.leftView];
-    [self.frontView setUserInteractionForContainedViewEnabled:NO];
+    [self.frontView setUserInteractionForContainedViewEnabled:!_disablesFrontViewInteraction];
 }
 
 - (BOOL)isLeftViewVisible
