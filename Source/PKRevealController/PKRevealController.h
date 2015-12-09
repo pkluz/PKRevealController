@@ -108,6 +108,9 @@ FOUNDATION_EXTERN NSString * const PKRevealControllerRecognizesResetTapOnFrontVi
 /// Whether to allow the user to draw further than the respective controllers min width. Dampened to stop at its max width. Defaults to YES.
 @property (nonatomic, assign, readwrite) BOOL allowsOverdraw;
 
+/// Whether to allow the front view draw shadow.
+@property (nonatomic, assign, readwrite) BOOL allowsShadow;
+
 /// Whether to disable front view interaction whenever the controller's state does not equal PKRevealControllerShowsFrontViewController. Recommended for smaller screens.
 @property (nonatomic, assign, readwrite) BOOL disablesFrontViewInteraction;
 
