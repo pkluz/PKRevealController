@@ -556,6 +556,7 @@ typedef struct
     _leftViewWidthRange = DEFAULT_LEFT_VIEW_WIDTH_RANGE;
     _rightViewWidthRange = DEFAULT_RIGHT_VIEW_WIDTH_RANGE;
     _recognizesResetTapOnFrontViewInPresentationMode = DEFAULT_RECOGNIZES_RESET_TAP_ON_FRONT_VIEW_IN_PRESENTATION_MODE_VALUE;
+    _state = PKRevealControllerShowsFrontViewController;
 }
 
 - (void)setupContainerViews
