@@ -409,14 +409,14 @@ typedef struct
 {
     if (frontViewController != _frontViewController)
     {
-        if (_frontViewController)
+        if (_frontViewController && ![self isViewLoaded])
         {
             [self removeViewController:_frontViewController];
         }
         
         _frontViewController = frontViewController;
         
-        if (_frontViewController)
+        if (_frontViewController && ![self isViewLoaded])
         {
             [self addViewController:_frontViewController container:self.frontView];
         }
@@ -427,14 +427,14 @@ typedef struct
 {
     if (leftViewController != _leftViewController)
     {
-        if (_leftViewController)
+        if (_leftViewController && ![self isViewLoaded])
         {
             [self removeViewController:_leftViewController];
         }
         
         _leftViewController = leftViewController;
         
-        if (_leftViewController)
+        if (_leftViewController && ![self isViewLoaded])
         {
             [self addViewController:_leftViewController container:self.leftView];
         }
@@ -445,14 +445,14 @@ typedef struct
 {
     if (rightViewController != _rightViewController)
     {
-        if (_rightViewController)
+        if (_rightViewController && ![self isViewLoaded])
         {
             [self removeViewController:_rightViewController];
         }
         
         _rightViewController = rightViewController;
         
-        if (_rightViewController)
+        if (_rightViewController && ![self isViewLoaded])
         {
             [self addViewController:_rightViewController container:self.rightView];
         }
