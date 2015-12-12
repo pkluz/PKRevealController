@@ -50,7 +50,7 @@ NSString * const PKRevealControllerQuickSwipeToggleVelocityKey = @"quickSwipeVel
 NSString * const PKRevealControllerDisablesFrontViewInteractionKey = @"disablesFrontViewInteraction";
 NSString * const PKRevealControllerRecognizesPanningOnFrontViewKey = @"recognizesPanningOnFrontView";
 NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"recognizesResetTapOnFrontView";
-NSString * const PKRevealControllerRecognizesResetTapOnFrontViewInPresentationModeKey = @"recognizesResetTapOnFrontViewInPresentationMode";
+static NSString * const PKRevealControllerRecognizesResetTapOnFrontViewInPresentationModeKey = @"recognizesResetTapOnFrontViewInPresentationMode";
 
 static NSString *kPKRevealControllerFrontViewTranslationAnimationKey = @"frontViewTranslation";
 
