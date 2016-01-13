@@ -474,6 +474,7 @@ typedef struct
     {
         self.rightViewWidthRange = range;
     }
+    [self setContainerViewsSizes];
 }
 
 - (void)setOptions:(NSDictionary *)options
@@ -560,10 +561,11 @@ typedef struct
 
 - (void)setupContainerViews
 {
-    self.rightView = [[PKRevealControllerView alloc] initWithFrame:self.view.bounds];
-    self.leftView = [[PKRevealControllerView alloc] initWithFrame:self.view.bounds];
-    self.frontView = [[PKRevealControllerView alloc] initWithFrame:self.view.bounds];
-    
+    self.rightView = [PKRevealControllerView new];
+    self.leftView = [PKRevealControllerView new];
+    self.frontView = [PKRevealControllerView new];
+    [self setContainerViewsSizes];
+
     self.rightView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     self.leftView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     self.frontView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
@@ -584,6 +586,14 @@ typedef struct
     [self addViewController:self.frontViewController container:self.frontView];
     [self addViewController:self.leftViewController container:self.leftView];
     [self addViewController:self.rightViewController container:self.rightView];
+}
+
+- (void)setContainerViewsSizes
+{
+    CGRect superBounds = self.view.bounds;
+    self.leftView.frame = CGRectMake(superBounds.origin.x, superBounds.origin.y, [self leftViewMaxWidth], CGRectGetHeight(superBounds));
+    self.rightView.frame = CGRectMake(superBounds.origin.x, superBounds.origin.y, [self rightViewMaxWidth], CGRectGetHeight(superBounds));
+    self.frontView.frame = superBounds;
 }
 
 - (void)setupGestureRecognizers
