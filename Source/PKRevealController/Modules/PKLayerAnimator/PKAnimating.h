@@ -30,7 +30,7 @@
 typedef void(^PKAnimationStartBlock)();
 typedef void(^PKAnimationCompletionBlock)(BOOL finished);
 
-@protocol PKAnimating <NSObject>
+@protocol PKAnimating <NSObject, CAAnimationDelegate>
 
 @required
 

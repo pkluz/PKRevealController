@@ -27,7 +27,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
-@interface PKRevealControllerView : UIView
+@interface PKRevealControllerView : UIView <CAAnimationDelegate>
 
 #pragma mark - Properties
 @property (nonatomic, assign, readwrite, getter = hasShadow) BOOL shadow;

@@ -826,7 +826,7 @@ typedef struct
 {
     BOOL isNegative = (realValue < 0);
     
-    realValue = fabsf(realValue);
+    realValue = fabs(realValue);
     
     // PKLog(@"Range: [%u, %u], Real Value: %f", absoluteRange.location, (absoluteRange.location + absoluteRange.length), realValue);
     
@@ -1060,7 +1060,7 @@ typedef struct
 
 - (BOOL)shouldMoveFrontViewLeftwardsForVelocity:(CGFloat)velocity
 {
-    return (velocity < 0 && fabsf(velocity) > self.quickSwipeVelocity);
+    return (velocity < 0 && fabs(velocity) > self.quickSwipeVelocity);
 }
 
 #pragma mark - View Controller Containment
@@ -1365,7 +1365,7 @@ typedef struct
     }
 }
 
-- (NSUInteger)supportedInterfaceOrientations
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     if ([self hasLeftViewController] && [self hasRightViewController])
     {
