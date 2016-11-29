@@ -42,14 +42,14 @@
 {
     PKAnimation *animation = [super animation];
     animation.delegate = animation;
-    return animation;
+    return (PKAnimation *)animation;
 }
 
 + (instancetype)animationWithKeyPath:(NSString *)path
 {
     PKAnimation *animation = [super animationWithKeyPath:path];
     animation.delegate = animation;
-    return animation;
+    return (PKAnimation *)animation;
 }
 
 #pragma mark - NSCopying
