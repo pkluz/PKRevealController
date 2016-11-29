@@ -556,6 +556,8 @@ typedef struct
     _leftViewWidthRange = DEFAULT_LEFT_VIEW_WIDTH_RANGE;
     _rightViewWidthRange = DEFAULT_RIGHT_VIEW_WIDTH_RANGE;
     _recognizesResetTapOnFrontViewInPresentationMode = DEFAULT_RECOGNIZES_RESET_TAP_ON_FRONT_VIEW_IN_PRESENTATION_MODE_VALUE;
+    
+    self.restorationIdentifier = NSStringFromClass(self.class);
 }
 
 - (void)setupContainerViews
@@ -1470,6 +1472,26 @@ typedef struct
                                          duration:(NSTimeInterval)duration
 {
     [self.frontView updateShadowWithAnimationDuration:duration];
+}
+
+#pragma mark - State Restoration
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    [coder encodeObject:self.leftViewController forKey:@"leftViewController"];
+    [coder encodeObject:self.rightViewController forKey:@"rightViewController"];
+    [coder encodeObject:self.frontViewController forKey:@"frontViewController"];
+    
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    self.leftViewController = [coder decodeObjectForKey:@"leftViewController"];
+    self.rightViewController = [coder decodeObjectForKey:@"rightViewController"];
+    self.frontViewController = [coder decodeObjectForKey:@"frontViewController"];
+    
+    [super decodeRestorableStateWithCoder:coder];
 }
 
 @end
